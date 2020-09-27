@@ -1,0 +1,76 @@
+@font-face {
+	font-family: moon;
+	src: url('../assets/Moon2.0-Regular.otf') format("opentype");
+}
+@font-face {
+	font-family: alber;
+	src: url('../assets/AlberNew-Regular.ttf') format("truetype");
+}
+
+*,
+*:after,
+*:before {
+	box-sizing: border-box;
+	padding: 0;
+	margin: 0;
+}
+
+html, body {
+  font-family: moon;
+  font-size: 16px;
+}
+
+html {
+	/*chrome*/
+	--light1: #dee1e6;
+	--light2: #f1f3f4;
+	--light3: #ffffff;
+	--light4: #f5f5f5;
+	--dark1: #202124;
+	--dark2: #282c2f;
+	--dark3: #323639;
+	--dark4: #464a4d;
+	--col__red: #f63732;
+	--col__blue: #4285f4;
+	--col__green: #319d59;
+	--col__yellow: #ffcd41;
+	--col__ochre: #f0a200;
+	--col__white: #eeeeee;
+	--col__grey: #d6d6d6;
+	--col__black: #202124;
+
+	/*firefox*/
+	--dark1__ff: #0d0d0e;
+	--dark2__ff: #28282b;
+	--dark3__ff: #323234;
+	--dark4__ff: #474749;
+	--col__white__ff: #f1f1f2;
+	--col__grey__ff: #bebec0;
+	--col__red__ff: #ff1a0d;
+	--col__blue__ff: #00b9fb;
+	/*no firefox green*/
+	--col__yellow__ff: #fff208;
+	--col__ochre__ff: #ffbb00;
+
+	/* cursor: none; */
+	--eo__yellow: #f8b312;
+	--eo__blue: #0f8897;
+	--eo__black: #130e03;
+	--eo__white: #f8f7ea;
+}
+* {
+	outline: 1px dotted red;
+}
+
+body{
+	background-color: var(--eo__yellow);
+	display: flex;
+	justify-content: space-evenly;
+}
+html, 
+a {
+	color: var(--eo__black);
+}
+a {
+	text-decoration: none;
+}
