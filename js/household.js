@@ -49,14 +49,14 @@ function draw(){
   if( game_state.mode == "running" || game_state.mode == "dead" ){
     ctx.clearRect(0,0,canvas.width,canvas.height);
     
-    for(let i=0;i<monsters.length;i++){
-      monsters[i].draw();
-    }
-    
     for(let i=0;i<numTiles;i++){
       for(let j=0;j<numTiles;j++){
         getTile(i,j).draw();
       }
+    }
+
+    for(let i=0;i<monsters.length;i++){
+      monsters[i].draw();
     }
     
     player.draw();
