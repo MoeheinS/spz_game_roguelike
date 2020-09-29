@@ -20,6 +20,7 @@ numTiles = 24;
 game_state = {
   truesight: true,
   fov_enabled: false,
+  scrollCamera: true,
 
   mode: "loading",
   depth: 1,

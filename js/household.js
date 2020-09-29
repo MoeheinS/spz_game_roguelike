@@ -48,6 +48,11 @@ function shuffle(arr){
 function draw(){
   if( game_state.mode == "running" || game_state.mode == "dead" ){
     ctx.clearRect(0,0,canvas.width,canvas.height);
+    if( game_state.scrollCamera ){
+      // TODO: cleaner would be to save cameraOffset X and Y, so DOM can use these too, or that it can be used for inspect mode
+      ctx.resetTransform();
+      ctx.transform(1, 0, 0, 1, ((numTiles/2) - player.tile.x)*tileSize, ((numTiles/2) - player.tile.y)*tileSize);
+    }
     
     for(let i=0;i<numTiles;i++){
       for(let j=0;j<numTiles;j++){
