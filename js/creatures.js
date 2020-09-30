@@ -9,8 +9,10 @@ class Monster {
 		this.state_stunned = 0;
 		//this.hidden = true;
 		this.moves = 1;
+		this.moves_base = 1;
 		this.moves_inc = 1;
 		this.attacks = 1;
+		this.attacks_base = 1;
 		this.attacks_inc = 1;
 	}
 
@@ -21,6 +23,7 @@ class Monster {
 		return this.tile.y + this.offsetY;
 	} 
 	draw(){
+		if( ( game_state.fov_enabled && this.tile.visible ) || !game_state.fov_enabled || game_state.truesight ){
 		//if( !this.hidden ){
 			drawChar(this.sprite, this.getDisplayX(), this.getDisplayY());
 
@@ -36,6 +39,7 @@ class Monster {
 
 		this.offsetX -= Math.sign(this.offsetX)*(1/8);     
 		this.offsetY -= Math.sign(this.offsetY)*(1/8);
+		}
 	}
 
 	drawHp(){
@@ -76,11 +80,15 @@ class Monster {
 	tryMove(dx, dy){
 		let newTile = this.tile.getNeighbor(dx,dy);
 		if(newTile.passable){
-			if(!newTile.monster){
+			//if( !newTile.monster && Math.floor(this.moves) > 0 ){
+			if( Math.floor(this.moves) > 0 && !newTile.monster){
+				this.moves--;
 				this.move(newTile);
 			}else{
-				if(this.isPlayer != newTile.monster.isPlayer){
-					this.attackedThisTurn = true;
+				if(Math.floor(this.attacks) > 0 && newTile.monster && this.isPlayer != newTile.monster.isPlayer){
+				//if( ( this.isPlayer != newTile.monster.isPlayer ) && Math.floor(this.attacks) > 0 ){
+					//this.attackedThisTurn = true;
+					this.attacks--;
 					// TODO: use this.attack instead of hard 1?
 					newTile.monster.swing(1);
 
@@ -88,13 +96,24 @@ class Monster {
 					this.offsetY = (newTile.y - this.tile.y)/2; 
 				}
 			}
-			return true;
+			if( Math.floor(this.moves) > 0 && Math.floor(this.attacks) > 0 && !this.isPlayer ){
+				this.act();
+			}else{
+				return true;
+			}
+			//return true;
 		}else{ // this entire else is so you can bump into walls and pass a turn
 			//this.move(this.tile);
+			this.moves--;
 			// TODO: this might be where you bump a chest to open it, or try to push a boulder
 			this.offsetX = (newTile.x - this.tile.x)/2;         
 			this.offsetY = (newTile.y - this.tile.y)/2; 
-			return true;
+			if( Math.floor(this.moves) > 0 && Math.floor(this.attacks) > 0 && !this.isPlayer ){
+				this.act();
+			}else{
+				return true;
+			}
+			//return true;
 		}
 	}
 
@@ -129,7 +148,13 @@ class Monster {
 			this.state_stunned--;
 			return;
 		}
-		this.act();
+		this.moves += this.moves_inc;
+		this.moves = Math.min(this.moves, this.moves_base);
+		this.attacks += this.attacks_inc;
+		this.attacks = Math.min(this.attacks, this.attacks_base);
+		if( !this.isPlayer ){
+			this.act();
+		}
 	}
 
 	act(){
@@ -173,6 +198,7 @@ class Player extends Monster {
 				player.tryMove(1, 0);
 				break;
 			case '.':
+				player.moves = 0;
 				player.tryMove(0, 0);
 				break;
 			default:
@@ -185,7 +211,9 @@ class Player extends Monster {
 		if(super.tryMove(dx,dy)){
 			// world state ticks after each player movement
 			//this.calcLos();
-			tick();
+			if( Math.floor(this.moves) <= 0 || Math.floor(this.attacks) <= 0 ){
+				tick();
+			}
 		}
 	}
 
@@ -243,29 +271,37 @@ class Goblin extends Monster {
 class Zombie extends Monster {
 	constructor(tile){
 		super(tile, 90, 5); // Z
+		// instead of self-stunning every other turn, it builds up moves and attacks at a slower rate instead
+		this.moves_inc = 0.5;
+		this.attacks_inc = 0.5;
 	}
-	update(){
-		// order matters; Zombies self-stun every other turn
-		let startStunned = this.state_stunned;
-		super.update();
-		if(!startStunned){
-				this.state_stunned++;
-		}
-	}
+	// update(){
+	// 	// order matters; Zombies self-stun every other turn
+	// 	let startStunned = this.state_stunned;
+	// 	super.update();
+	// 	if(!startStunned){
+	// 			this.state_stunned++;
+	// 	}
+	// }
 }
 
 class Quickling extends Monster {
 	constructor(tile){
-		super(tile, 113, 1); // Z
+		super(tile, 113, 1); // q
+		// inc and base are high, so it builds up 2 moves per turn
+		// a monster with attacks_inc 1 and attacks_base 3 can "store" 3 attacks, and then gets to unleash them all
+		// TODO: that's actually perfect for the player, base 4
+		this.moves_inc = 2;
+		this.moves_base = 2;
 	}
-	act(){ // acts twice, but not attacking
-		this.attackedThisTurn = false;
-		super.act();
+	// act(){ // acts twice, but not attacking
+	// 	this.attackedThisTurn = false;
+	// 	super.act();
 
-		if(!this.attackedThisTurn){
-				super.act();
-		}
-	}
+	// 	if(!this.attackedThisTurn){
+	// 			super.act();
+	// 	}
+	// }
 }
 
 class Ghost extends Monster {
