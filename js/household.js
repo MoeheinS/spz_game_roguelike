@@ -51,7 +51,7 @@ function draw(){
     ctx.resetTransform();
     if( game_state.scrollCamera ){
       // TODO: cleaner would be to save cameraOffset X and Y, so DOM can use these too, or that it can be used for inspect mode
-      ctx.transform(1, 0, 0, 1, ((numTiles/2) - player.tile.x)*tileSize, ((numTiles/2) - player.tile.y)*tileSize);
+      ctx.transform(1, 0, 0, 1, ((numTiles/2) - player.getDisplayX())*tileSize, ((numTiles/2) - player.getDisplayY())*tileSize);
     }
     
     for(let i=0;i<numTiles;i++){
