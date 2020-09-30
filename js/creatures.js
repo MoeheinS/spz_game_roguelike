@@ -8,6 +8,10 @@ class Monster {
 
 		this.state_stunned = 0;
 		//this.hidden = true;
+		this.moves = 1;
+		this.moves_inc = 1;
+		this.attacks = 1;
+		this.attacks_inc = 1;
 	}
 
 	getDisplayX(){                     
@@ -177,10 +181,10 @@ class Player extends Monster {
 	}
 
 	tryMove(dx, dy){
+		this.calcFov();
 		if(super.tryMove(dx,dy)){
 			// world state ticks after each player movement
 			//this.calcLos();
-			this.calcFov();
 			tick();
 		}
 	}
