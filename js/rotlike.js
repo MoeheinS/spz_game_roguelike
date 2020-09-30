@@ -18,9 +18,9 @@ tileSize = 32;
 numTiles = 24;
 
 game_state = {
-  truesight: true,
+  truesight: false,
   fov_enabled: false,
-  scrollCamera: true,
+  scrollCamera: false,
 
   mode: "loading",
   depth: 1,

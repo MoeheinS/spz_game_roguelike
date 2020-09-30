@@ -90,6 +90,8 @@ function tick() {
 		}
   }
   
+  player.update();
+
   if(player.dead){    
     //flowControl('death');
     return game_state.mode = "dead";
@@ -126,5 +128,22 @@ function startLevel(playerHP) {
   player.hp = playerHP;
   if( game_state.fov_enabled ){
     player.calcFov();
+  }
+}
+
+function debug_toggle(p, v){
+  console.log(p,v);
+  switch (p) {
+    case 'truesight':
+      game_state.truesight = v;
+      break;
+    case 'fov':
+      game_state.fov_enabled = v;
+      break;
+    case 'scroll':
+      game_state.scrollCamera = v;
+      break;
+    default:
+      break;
   }
 }
