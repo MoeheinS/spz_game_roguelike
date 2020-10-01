@@ -110,11 +110,13 @@ class Monster {
 		this.sprite = 37; // %
 	}
 
-	move(tile){
+	move(tile, instant){
 		if( this.tile ){
 			this.tile.monster = null;
-			this.offsetX = this.tile.x - tile.x;    
-			this.offsetY = this.tile.y - tile.y;
+			if( !instant ){
+				this.offsetX = this.tile.x - tile.x;
+				this.offsetY = this.tile.y - tile.y;
+			}
 		}
 		this.tile = tile;
 		tile.monster = this;
@@ -277,8 +279,7 @@ class Ghost extends Monster {
 		super(tile, 71, 3); // G
 	}
 	swing(damage){ // teleports away when hit
-		this.tile.monster = null;
-		this.tile = randomPassableTile();
+		this.move(randomPassableTile(), true); //non-animated move
 		super.swing(damage);
 	}
 }
@@ -316,7 +317,7 @@ function generateMonsters() {
 }
 
 function spawnMonster() {
-	let monsterType = shuffle([Goblin])[0];//, Kobold, Zombie, Ghost, Quickling])[0];
+	let monsterType = shuffle([Goblin, Kobold, Zombie, Ghost, Quickling])[0];
 	// spawn from air
 	//let monster = new monsterType(randomPassableTile());
 	// spawn from next to a spawner wall

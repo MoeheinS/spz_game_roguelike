@@ -1,5 +1,5 @@
 abilities = {
   WOOP: function(monster){
-      monster.move(randomPassableTile());
+      monster.move(randomPassableTile(), true); // instant movement
   }
 };
