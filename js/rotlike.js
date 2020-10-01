@@ -13,6 +13,9 @@ const COLOR_RED_PURPLE = '#d30047';
 const COLOR_FUCHSIA = '#ff3993';
 
 COLOR_FOW = COLOR_FUCHSIA;
+COLOR_FILLSTYLE = COLOR_BLACK;
+COLOR_WALL = COLOR_BLACK;
+COLOR_WATER = COLOR_BLUE;
 
 tileSize = 32;
 numTiles = 24;
@@ -55,7 +58,7 @@ document.querySelector("html").onkeydown = function(e){
 function setupCanvas() {
   canvas = document.querySelector("canvas");
   ctx = canvas.getContext("2d");
-  ctx.fillStyle = COLOR_BLACK;
+  ctx.fillStyle = COLOR_FILLSTYLE;
 
   canvas.width = tileSize*numTiles;
   canvas.height = tileSize*numTiles;

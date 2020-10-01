@@ -86,7 +86,7 @@ class Wall extends Terrain {
 	draw(){
 		ctx.save();
 		
-		ctx.fillStyle = COLOR_BLACK;
+		ctx.fillStyle = COLOR_WALL;
 		ctx.fillRect(this.x*tileSize,this.y*tileSize,tileSize,tileSize);
 		
 		//ctx.fillStyle = COLOR_YELLOW;
@@ -101,7 +101,7 @@ class SpawnerWall extends Terrain {
 	draw(){
 		ctx.save();
 		
-		ctx.fillStyle = COLOR_BLACK;
+		ctx.fillStyle = COLOR_WALL;
 		ctx.fillRect(this.x*tileSize,this.y*tileSize,tileSize,tileSize);
 		
 		ctx.fillStyle = COLOR_YELLOW;
@@ -226,7 +226,7 @@ class Water extends Terrain { // fuck
 	draw(){ // white on blue
 		ctx.save();
 		
-		ctx.fillStyle = COLOR_BLUE;
+		ctx.fillStyle = COLOR_WATER;
 		ctx.fillRect(this.x*tileSize,this.y*tileSize,tileSize,tileSize);
 		
 		ctx.fillStyle = COLOR_WHITE;
