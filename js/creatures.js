@@ -240,12 +240,12 @@ class Goblin extends Monster {
 	}
 	update(){
 		this.cooldown++;
-		if( this.cooldown % 7 == 0 ){ // every 7th turn
-			// TODO: this should be an ability ; the spot must be a Floor with no monster on it
-			let freeSpace = shuffle(this.tile.getAdjacentPassableNeighbors().filter(t=>!t.monster && t.constructor.name == 'Floor'))[0];
-			if( freeSpace ){
-				freeSpace.replace(Trap);
-			}
+		// every 7th turn
+		// if you want only once, you can check this.cooldown == 7
+		// or wrap this.cooldown++ in a limiting if statement
+		if( this.cooldown % 7 == 0 ){ 
+			console.warn(`The ${this.constructor.name} cackles!`);
+			abilities.placeTrap(this);
 			this.moves = 0;
 			this.attacks = 0;
 		}else{
