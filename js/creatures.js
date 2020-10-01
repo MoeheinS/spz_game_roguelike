@@ -6,7 +6,6 @@ class Monster {
 		this.offsetX = 0;                                                   
 		this.offsetY = 0;
 
-		this.state_stunned = 0;
 		//this.hidden = true;
 		this.moves = 1;
 		this.moves_base = 1;
@@ -32,13 +31,12 @@ class Monster {
 		// ctx.drawImage(spritesheet, 0, 0, 62, 62, this.getDisplayX()*tileSize, this.getDisplayY()*tileSize, tileSize, tileSize);
 
 			this.drawHp();
-			this.drawStun();
 		//}else{
 		//	drawChar(63, this.getDisplayX(), this.getDisplayY());
 		//}
 
-		this.offsetX -= Math.sign(this.offsetX)*(1/8);     
-		this.offsetY -= Math.sign(this.offsetY)*(1/8);
+			this.offsetX -= Math.sign(this.offsetX)*(1/8);     
+			this.offsetY -= Math.sign(this.offsetY)*(1/8);
 		}
 	}
 
@@ -64,30 +62,14 @@ class Monster {
 		}
 	}
 
-	drawStun(){
-		if( this.state_stunned > 0 ){
-			ctx.save();
-
-			ctx.font = '16px calibri';
-			ctx.textAlign = 'right';
-			ctx.textBaseline = 'top';
-			ctx.fillText( this.state_stunned, this.getDisplayX()*tileSize+1*tileSize, this.getDisplayY()*tileSize);
-			
-			ctx.restore();
-		}
-	}
-
 	tryMove(dx, dy){
 		let newTile = this.tile.getNeighbor(dx,dy);
 		if(newTile.passable){
-			//if( !newTile.monster && Math.floor(this.moves) > 0 ){
-			if( Math.floor(this.moves) > 0 && !newTile.monster){
+			if( Math.floor(this.moves) > 0 && !newTile.monster ){
 				this.moves--;
 				this.move(newTile);
 			}else{
-				if(Math.floor(this.attacks) > 0 && newTile.monster && this.isPlayer != newTile.monster.isPlayer){
-				//if( ( this.isPlayer != newTile.monster.isPlayer ) && Math.floor(this.attacks) > 0 ){
-					//this.attackedThisTurn = true;
+				if( Math.floor(this.attacks) > 0 && newTile.monster && this.isPlayer != newTile.monster.isPlayer ){
 					this.attacks--;
 					// TODO: use this.attack instead of hard 1?
 					newTile.monster.swing(1);
@@ -96,32 +78,29 @@ class Monster {
 					this.offsetY = (newTile.y - this.tile.y)/2; 
 				}
 			}
-			if( Math.floor(this.moves) > 0 && Math.floor(this.attacks) > 0 && !this.isPlayer ){
+			if( !this.isPlayer && this.checkActions() ){
 				this.act();
 			}else{
 				return true;
 			}
-			//return true;
 		}else{ // this entire else is so you can bump into walls and pass a turn
-			//this.move(this.tile);
 			this.moves--;
 			// TODO: this might be where you bump a chest to open it, or try to push a boulder
 			this.offsetX = (newTile.x - this.tile.x)/2;         
 			this.offsetY = (newTile.y - this.tile.y)/2; 
-			if( Math.floor(this.moves) > 0 && Math.floor(this.attacks) > 0 && !this.isPlayer ){
+			if( !this.isPlayer && this.checkActions() ){
 				this.act();
 			}else{
 				return true;
 			}
-			//return true;
 		}
 	}
 
 	swing(damage){
 		// TODO: add swing-based accuracy instead of 100% accuracy
 		this.hp -= damage;
-		if(this.hp <= 0){
-				this.die();
+		if( this.hp <= 0 ){
+			this.die();
 		}
 	}
 
@@ -132,7 +111,7 @@ class Monster {
 	}
 
 	move(tile){
-		if(this.tile){
+		if( this.tile ){
 			this.tile.monster = null;
 			this.offsetX = this.tile.x - tile.x;    
 			this.offsetY = this.tile.y - tile.y;
@@ -144,10 +123,7 @@ class Monster {
 	}
 
 	update(){
-		if(this.state_stunned > 0){
-			this.state_stunned--;
-			return;
-		}
+		// stunned deprecated in favor of setting moves and attack to a negative value
 		this.moves += this.moves_inc;
 		this.moves = Math.min(this.moves, this.moves_base);
 		this.attacks += this.attacks_inc;
@@ -163,11 +139,16 @@ class Monster {
 	 
 	 	neighbors = neighbors.filter(t => !t.monster || t.monster.isPlayer);
 
-	 	if(neighbors.length){
+	 	if( neighbors.length ){
 			neighbors.sort((a,b) => a.dist(player.tile) - b.dist(player.tile));
 			let newTile = neighbors[0];
 			this.tryMove(newTile.x - this.tile.x, newTile.y - this.tile.y);
 		}
+	}
+
+	// returns true if you have actions or attacks remaining
+	checkActions(){
+		return Math.floor(this.moves) > 0 && Math.floor(this.attacks) > 0;
 	}
 }
 
@@ -208,10 +189,11 @@ class Player extends Monster {
 
 	tryMove(dx, dy){
 		this.calcFov();
-		if(super.tryMove(dx,dy)){
-			// world state ticks after each player movement
+		if( super.tryMove(dx,dy) ){
 			//this.calcLos();
-			if( Math.floor(this.moves) <= 0 || Math.floor(this.attacks) <= 0 ){
+			//if( Math.floor(this.moves) <= 0 || Math.floor(this.attacks) <= 0 ){
+			if( !this.checkActions() ){
+				// world state ticks after each player movement
 				tick();
 			}
 		}
@@ -256,14 +238,16 @@ class Goblin extends Monster {
 	}
 	update(){
 		this.cooldown++;
-		super.update();
 		if( this.cooldown % 7 == 0 ){ // every 7th turn
 			// TODO: this should be an ability ; the spot must be a Floor with no monster on it
 			let freeSpace = shuffle(this.tile.getAdjacentPassableNeighbors().filter(t=>!t.monster && t.constructor.name == 'Floor'))[0];
 			if( freeSpace ){
 				freeSpace.replace(Trap);
 			}
-			this.state_stunned++;
+			this.moves = 0;
+			this.attacks = 0;
+		}else{
+			super.update();
 		}
 	}
 }
@@ -275,14 +259,6 @@ class Zombie extends Monster {
 		this.moves_inc = 0.5;
 		this.attacks_inc = 0.5;
 	}
-	// update(){
-	// 	// order matters; Zombies self-stun every other turn
-	// 	let startStunned = this.state_stunned;
-	// 	super.update();
-	// 	if(!startStunned){
-	// 			this.state_stunned++;
-	// 	}
-	// }
 }
 
 class Quickling extends Monster {
@@ -294,14 +270,6 @@ class Quickling extends Monster {
 		this.moves_inc = 2;
 		this.moves_base = 2;
 	}
-	// act(){ // acts twice, but not attacking
-	// 	this.attackedThisTurn = false;
-	// 	super.act();
-
-	// 	if(!this.attackedThisTurn){
-	// 			super.act();
-	// 	}
-	// }
 }
 
 class Ghost extends Monster {
@@ -348,7 +316,7 @@ function generateMonsters() {
 }
 
 function spawnMonster() {
-	let monsterType = shuffle([Goblin, Kobold, Zombie, Ghost, Quickling])[0];
+	let monsterType = shuffle([Goblin])[0];//, Kobold, Zombie, Ghost, Quickling])[0];
 	// spawn from air
 	//let monster = new monsterType(randomPassableTile());
 	// spawn from next to a spawner wall
@@ -364,7 +332,8 @@ function spawnMonster() {
 		}
 		if( spawnSpots.length ){
 			let monster = new monsterType(shuffle(spawnSpots)[0]);
-			monster.state_stunned = 1;
+					monster.moves = 0;
+					monster.attacks = 0;
 
 			monsters.push(monster);
 		}else{
