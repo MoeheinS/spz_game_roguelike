@@ -246,8 +246,9 @@ class Goblin extends Monster {
 		if( this.cooldown % 7 == 0 ){ 
 			console.warn(`The ${this.constructor.name} cackles!`);
 			abilities.placeTrap(this);
-			this.moves = 0;
-			this.attacks = 0;
+			abilities.endTurn(this);
+			//this.moves = 0;
+			//this.attacks = 0;
 		}else{
 			super.update();
 		}
@@ -304,6 +305,7 @@ class Ghost extends Monster {
 	= samurai ; on taking damage, enrage, then attack all adjacent squares next turn (fun times if you fill a room with samurai)
 	= hydra ; gains hp from regular attacks
 	= necromancer ; summon a DARK FLY from a corpse
+	= wight ; sets monster's attacks to 0 on hit
 
 	= bosses ; abilities
 */
@@ -333,8 +335,9 @@ function spawnMonster() {
 		}
 		if( spawnSpots.length ){
 			let monster = new monsterType(shuffle(spawnSpots)[0]);
-					monster.moves = 0;
-					monster.attacks = 0;
+			abilities.endTurn(monster);
+					//monster.moves = 0;
+					//monster.attacks = 0;
 
 			monsters.push(monster);
 		}else{
