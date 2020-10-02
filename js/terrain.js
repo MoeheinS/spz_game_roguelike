@@ -64,8 +64,11 @@ class Terrain {
 
 	draw(){
 		if( !this.hidden || game_state.truesight ){
-			//drawChar(this.glyph, this.x, this.y);
-			drawSprite(this.sprite, this.x, this.y);
+			if( game_state.text_mode ){
+				drawChar(this.glyph, this.x, this.y);
+			}else{
+				drawSprite(this.sprite, this.x, this.y);
+			}
 
 			if( !this.visible && !game_state.truesight && game_state.fov_enabled ){
 				ctx.save();
@@ -222,7 +225,11 @@ class Water extends Terrain { // fuck
 		ctx.fillRect(this.x*tileSize.x,this.y*tileSize.y,tileSize.x,tileSize.y);
 		
 		ctx.fillStyle = COLOR_WHITE;
-		drawSprite(this.sprite, this.x, this.y);
+		if( game_state.text_mode ){
+			drawChar(this.glyph, this.x, this.y);
+		}else{
+			drawSprite(this.sprite, this.x, this.y);
+		}
 
 		super.draw();
 

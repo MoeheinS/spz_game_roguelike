@@ -26,6 +26,7 @@ game_state = {
   truesight: false,
   fov_enabled: false,
   scrollCamera: false,
+  text_mode: false,
 
   mode: "loading",
   depth: 1,

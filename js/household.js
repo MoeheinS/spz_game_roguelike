@@ -166,6 +166,9 @@ function debug_toggle(p, v){
     case 'scroll':
       game_state.scrollCamera = v;
       break;
+    case 'tiles':
+      game_state.text_mode = v;
+      break;
     default:
       break;
   }

@@ -24,8 +24,11 @@ class Monster {
 	draw(){
 		if( ( game_state.fov_enabled && this.tile.visible ) || !game_state.fov_enabled || game_state.truesight ){
 		//if( !this.hidden ){
-			//drawChar(this.glyph, this.getDisplayX(), this.getDisplayY());
-			drawSprite(this.sprite, this.getDisplayX(), this.getDisplayY());
+			if( game_state.text_mode ){
+				drawChar(this.glyph, this.getDisplayX(), this.getDisplayY());
+			}else{
+				drawSprite(this.sprite, this.getDisplayX(), this.getDisplayY());
+			}
 
 			this.drawHp();
 		//}else{
