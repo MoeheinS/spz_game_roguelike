@@ -64,13 +64,14 @@ class Terrain {
 
 	draw(){
 		if( !this.hidden || game_state.truesight ){
-			drawChar(this.sprite, this.x, this.y);
+			//drawChar(this.glyph, this.x, this.y);
+			drawSprite(this.sprite, this.x, this.y);
 
 			if( !this.visible && !game_state.truesight && game_state.fov_enabled ){
 				ctx.save();
 		
 				ctx.fillStyle = COLOR_FOW;
-				ctx.fillRect(this.x*tileSize,this.y*tileSize,tileSize,tileSize);
+				ctx.fillRect(this.x*tileSize.x,this.y*tileSize.y,tileSize.x,tileSize.y);
 			
 				ctx.restore();
 			}
@@ -81,38 +82,21 @@ class Terrain {
 
 class Wall extends Terrain {
   constructor(x, y){
-    super(x, y, 35, false); // 9608 █
-	}
-	draw(){
-		ctx.save();
-		
-		ctx.fillStyle = COLOR_WALL;
-		ctx.fillRect(this.x*tileSize,this.y*tileSize,tileSize,tileSize);
-		
-		//ctx.fillStyle = COLOR_YELLOW;
-		//drawChar(this.sprite, this.x, this.y);
-		ctx.restore();
+		super(x, y, {x: 11, y: 13}, false);
+		this.glyph = 35;
 	}
 }
 class SpawnerWall extends Terrain {
   constructor(x, y){
-		super(x, y, 35, false); // 9608 █
-	}
-	draw(){
-		ctx.save();
-		
-		ctx.fillStyle = COLOR_WALL;
-		ctx.fillRect(this.x*tileSize,this.y*tileSize,tileSize,tileSize);
-		
-		ctx.fillStyle = COLOR_YELLOW;
-		drawChar(this.sprite, this.x, this.y);
-		ctx.restore();
+		super(x, y, {x: 8, y: 0}, false);
+		this.glyph = 35;
 	}
 }
 
-class Chest extends Wall {
+class Chest extends Terrain {
   constructor(x, y, treasure){
-		super(x, y, 8962); // 8962⌂ 9580╬
+		super(x, y, {x: 15, y: 7}, false);
+		this.glyph = 8962;
 		this.treasure = treasure;
 	}
 	// on enter block movement and yield treasure
@@ -121,13 +105,15 @@ class Chest extends Wall {
 
 class Floor extends Terrain {
   constructor(x, y){
-    super(x, y, 32, true); // or a space
+		super(x, y, {x: 0, y: 0}, true);
+		this.glyph = 32;
 	}
 }
 
 class Stairs_down extends Terrain {
   constructor(x, y){
-    super(x, y, 62, true); // >
+		super(x, y, {x: 14, y: 3}, true); // >
+		this.glyph = 62;
 	}
 	stepOn(monster){
 		if(monster.isPlayer){
@@ -139,7 +125,8 @@ class Stairs_down extends Terrain {
 
 class Stairs_up extends Terrain {
   constructor(x, y){
-    super(x, y, 60, true); // <
+		super(x, y, {x: 12, y: 3}, true); // <
+		this.glyph = 60;
 	}
 	stepOn(monster){
 		if(monster.isPlayer){
@@ -151,7 +138,8 @@ class Stairs_up extends Terrain {
 
 class Pit extends Terrain {
 	constructor(x, y){
-		super(x, y, 9632, true); // ■
+		super(x, y, {x: 10, y: 2}, true); // ■
+		this.glyph = 9632;
 		this.hidden = true;
 	}
 	stepOn(monster){
@@ -172,7 +160,8 @@ class Pit extends Terrain {
 
 class Trap extends Terrain { // different kinds of traps? Rock fall trap, explosive trap, giga bomberman trap?
 	constructor(x, y, trap){
-		super(x, y, 94, true); // ^
+		super(x, y, {x: 14, y: 5}, true); // ^
+		this.glyph = 94;
 		this.hidden = true;
 		this.trap = trap;
 	}
@@ -191,7 +180,8 @@ class Trap extends Terrain { // different kinds of traps? Rock fall trap, explos
 
 class Hazard extends Terrain {
   constructor(x, y){
-    super(x, y, 9617, true); // ░
+		super(x, y, {x: 0, y: 11}, true); // ░
+		this.glyph = 9617;
 	}
 	stepOn(monster){
 		if(monster.isPlayer){
@@ -208,7 +198,8 @@ class Hazard extends Terrain {
 
 class Mud extends Terrain {
   constructor(x, y){
-    super(x, y, 9618, true); // ▒
+		super(x, y, {x: 1, y: 11}, true); // ▒
+		this.glyph = 9618;
 	}
 	stepOn(monster){
 		if(monster.isPlayer){
@@ -221,16 +212,17 @@ class Mud extends Terrain {
 }
 class Water extends Terrain { // fuck
 	constructor(x, y){
-		super(x, y, 126, true); // ~
+		super(x, y, {x: 7, y: 15}, true); // ~
+		this.glyph = 126;
 	}
 	draw(){ // white on blue
 		ctx.save();
 		
 		ctx.fillStyle = COLOR_WATER;
-		ctx.fillRect(this.x*tileSize,this.y*tileSize,tileSize,tileSize);
+		ctx.fillRect(this.x*tileSize.x,this.y*tileSize.y,tileSize.x,tileSize.y);
 		
 		ctx.fillStyle = COLOR_WHITE;
-		drawChar(this.sprite, this.x, this.y);
+		drawSprite(this.sprite, this.x, this.y);
 
 		super.draw();
 

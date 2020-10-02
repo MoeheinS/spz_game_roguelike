@@ -17,7 +17,7 @@ COLOR_FILLSTYLE = COLOR_BLACK;
 COLOR_WALL = COLOR_BLACK;
 COLOR_WATER = COLOR_BLUE;
 
-tileSize = 32;
+tileSize = {x: 24, y: 32};
 numTiles = 24;
 
 game_state = {
@@ -34,8 +34,8 @@ game_state = {
 
 const fov = new Mrpas(numTiles, numTiles, (x, y) => tiles[x][y].passable);
 
-// spritesheet = new Image();
-// spritesheet.src = 'spritesheet.png';
+spritesheet = new Image();
+spritesheet.src = './assets/12x16_b.png';
 // spritesheet.onload = showTitle; // flowControl('title')?
 
 document.querySelector("html").onkeydown = function(e){
@@ -60,14 +60,16 @@ function setupCanvas() {
   ctx = canvas.getContext("2d");
   ctx.fillStyle = COLOR_FILLSTYLE;
 
-  canvas.width = tileSize*numTiles;
-  canvas.height = tileSize*numTiles;
+  canvas.width = tileSize.x*numTiles;
+  canvas.height = tileSize.y*numTiles;
   canvas.style.width = canvas.width + 'px';
   canvas.style.height = canvas.height + 'px';
 
-  ctx.font = tileSize+"px calibri";
+  ctx.font = tileSize.y+"px calibri";
   ctx.textAlign = 'center';
   ctx.textBaseline = 'top';
+
+  ctx.imageSmoothingEnabled = false;
 
   window.requestAnimationFrame(draw);
 }

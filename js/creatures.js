@@ -24,11 +24,8 @@ class Monster {
 	draw(){
 		if( ( game_state.fov_enabled && this.tile.visible ) || !game_state.fov_enabled || game_state.truesight ){
 		//if( !this.hidden ){
-			drawChar(this.sprite, this.getDisplayX(), this.getDisplayY());
-
-		// let spritesheet = new Image();
-		// spritesheet.src = this.sprite; //'assets/merman.gif';
-		// ctx.drawImage(spritesheet, 0, 0, 62, 62, this.getDisplayX()*tileSize, this.getDisplayY()*tileSize, tileSize, tileSize);
+			//drawChar(this.glyph, this.getDisplayX(), this.getDisplayY());
+			drawSprite(this.sprite, this.getDisplayX(), this.getDisplayY());
 
 			this.drawHp();
 		//}else{
@@ -47,16 +44,16 @@ class Monster {
 			ctx.font = '16px calibri';
 			ctx.textAlign = 'left';
 			ctx.textBaseline = 'top';
-			ctx.fillText( this.hp, this.getDisplayX()*tileSize, this.getDisplayY()*tileSize);
+			ctx.fillText( this.hp, this.getDisplayX()*tileSize.x, this.getDisplayY()*tileSize.y);
 			
 			// bottom left ; attack value?
 			// ctx.textBaseline = 'bottom';
-			// ctx.fillText( this.hp, this.tile.x*tileSize, this.tile.y*tileSize+1*tileSize);
+			// ctx.fillText( this.hp, this.tile.x*tileSize.x, this.tile.y*tileSize.y+1*tileSize.y);
 
 			// bottom right ; defense value?
 			// ctx.textAlign = 'right';
 			// ctx.textBaseline = 'bottom';
-			// ctx.fillText( this.hp, this.tile.x*tileSize+1*tileSize, this.tile.y*tileSize+1*tileSize);
+			// ctx.fillText( this.hp, this.tile.x*tileSize.x+1*tileSize.x, this.tile.y*tileSize.y+1*tileSize.y);
 
 			ctx.restore();
 		}
@@ -156,7 +153,8 @@ class Monster {
 
 class Player extends Monster {
 	constructor(tile){
-		super(tile, 64, 3); // @
+		super(tile, {x: 0, y: 4}, 3); // @
+		this.glyph = 64;
 		this.isPlayer = true;
 		//this.hidden = false;
 	}
@@ -229,13 +227,15 @@ class Player extends Monster {
 
 class Kobold extends Monster {
 	constructor(tile){
-		super(tile, 107, 2); // k
+		super(tile, {x: 11, y: 6}, 2); // k
+		this.glyph = 107;
 	}
 }
 
 class Goblin extends Monster {
 	constructor(tile){
-		super(tile, 103, 1); // g
+		super(tile, {x: 7, y: 6}, 1); // g
+		this.glyph = 103;
 		this.cooldown = 0;
 	}
 	update(){
@@ -257,7 +257,8 @@ class Goblin extends Monster {
 
 class Zombie extends Monster {
 	constructor(tile){
-		super(tile, 90, 5); // Z
+		super(tile, {x: 10, y: 5}, 5); // Z
+		this.glyph = 90;
 		// instead of self-stunning every other turn, it builds up moves and attacks at a slower rate instead
 		this.moves_inc = 0.5;
 		this.attacks_inc = 0.5;
@@ -266,7 +267,8 @@ class Zombie extends Monster {
 
 class Quickling extends Monster {
 	constructor(tile){
-		super(tile, 113, 1); // q
+		super(tile, {x: 1, y: 7}, 1); // q
+		this.glyph = 113;
 		// inc and base are high, so it builds up 2 moves per turn
 		// a monster with attacks_inc 1 and attacks_base 3 can "store" 3 attacks, and then gets to unleash them all
 		// TODO: that's actually perfect for the player, base 4
@@ -277,7 +279,8 @@ class Quickling extends Monster {
 
 class Ghost extends Monster {
 	constructor(tile){
-		super(tile, 71, 3); // G
+		super(tile, {x: 7, y: 4}, 3); // G
+		this.glyph = 71;
 	}
 	swing(damage){ // teleports away when hit
 		this.move(randomPassableTile(), true); //non-animated move
