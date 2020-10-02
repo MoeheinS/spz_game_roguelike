@@ -18,6 +18,8 @@ COLOR_WALL = COLOR_BLACK;
 COLOR_WATER = COLOR_BLUE;
 
 tileSize = {x: 24, y: 32};
+const SCALE_FACTOR = 2;
+
 numTiles = 24;
 
 game_state = {

@@ -82,15 +82,25 @@ function drawChar(char, x, y) {
 }
 function drawSprite(coords, x, y) {
   //(image, sx, sy, sWidth, sHeight, dx, dy, dWidth, dHeight);
-  ctx.drawImage(spritesheet, 
-    coords.x * 12,
-    coords.y * 16,
-    12,
-    16,
+  // if background is already part of the spritesheet, and the glyphs are transparent
+  // you can use this to color the glyphs
+  // ctx.fillStyle = COLOR_BLACK;
+  // ctx.fillRect(
+  //   x*tileSize.x,
+  //   y*tileSize.y,
+  //   tileSize.x,
+  //   tileSize.y
+  // );
+  ctx.drawImage(
+    ( coords.spritesheet ? coords.spritesheet : spritesheet ),
+    coords.x,
+    coords.y,
+    ( coords.sx ? coords.sx : tileSize.x / SCALE_FACTOR ),
+    ( coords.sy ? coords.sy : tileSize.y / SCALE_FACTOR ),
     x*tileSize.x,
     y*tileSize.y,
-    tileSize.x,
-    tileSize.y
+    ( coords.dx ? coords.dx : tileSize.x ),
+    ( coords.dy ? coords.dy : tileSize.y )
   );
 }
 
