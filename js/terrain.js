@@ -82,20 +82,20 @@ class Terrain {
 
 class Wall extends Terrain {
   constructor(x, y){
-		super(x, y, {x: 11, y: 13}, false);
+		super(x, y, {x: 132, y: 208}, false);
 		this.glyph = 35;
 	}
 }
 class SpawnerWall extends Terrain {
   constructor(x, y){
-		super(x, y, {x: 8, y: 0}, false);
+		super(x, y, {x: 96, y: 0}, false);
 		this.glyph = 35;
 	}
 }
 
 class Chest extends Terrain {
   constructor(x, y, treasure){
-		super(x, y, {x: 15, y: 7}, false);
+		super(x, y, {x: 180, y: 112}, false);
 		this.glyph = 8962;
 		this.treasure = treasure;
 	}
@@ -112,7 +112,7 @@ class Floor extends Terrain {
 
 class Stairs_down extends Terrain {
   constructor(x, y){
-		super(x, y, {x: 14, y: 3}, true); // >
+		super(x, y, {x: 168, y: 48}, true); // >
 		this.glyph = 62;
 	}
 	stepOn(monster){
@@ -125,7 +125,7 @@ class Stairs_down extends Terrain {
 
 class Stairs_up extends Terrain {
   constructor(x, y){
-		super(x, y, {x: 12, y: 3}, true); // <
+		super(x, y, {x: 144, y: 48}, true); // <
 		this.glyph = 60;
 	}
 	stepOn(monster){
@@ -138,7 +138,7 @@ class Stairs_up extends Terrain {
 
 class Pit extends Terrain {
 	constructor(x, y){
-		super(x, y, {x: 10, y: 2}, true); // ■
+		super(x, y, {x: 156, y: 224}, true); // ■
 		this.glyph = 9632;
 		this.hidden = true;
 	}
@@ -160,7 +160,7 @@ class Pit extends Terrain {
 
 class Trap extends Terrain { // different kinds of traps? Rock fall trap, explosive trap, giga bomberman trap?
 	constructor(x, y, trap){
-		super(x, y, {x: 14, y: 5}, true); // ^
+		super(x, y, {x: 168, y: 80}, true); // ^
 		this.glyph = 94;
 		this.hidden = true;
 		this.trap = trap;
@@ -180,7 +180,7 @@ class Trap extends Terrain { // different kinds of traps? Rock fall trap, explos
 
 class Hazard extends Terrain {
   constructor(x, y){
-		super(x, y, {x: 0, y: 11}, true); // ░
+		super(x, y, {x: 0, y: 176}, true); // ░
 		this.glyph = 9617;
 	}
 	stepOn(monster){
@@ -198,7 +198,7 @@ class Hazard extends Terrain {
 
 class Mud extends Terrain {
   constructor(x, y){
-		super(x, y, {x: 1, y: 11}, true); // ▒
+		super(x, y, {x: 12, y: 176}, true); // ▒
 		this.glyph = 9618;
 	}
 	stepOn(monster){
@@ -212,7 +212,7 @@ class Mud extends Terrain {
 }
 class Water extends Terrain { // fuck
 	constructor(x, y){
-		super(x, y, {x: 7, y: 15}, true); // ~
+		super(x, y, {x: 84, y: 240}, true); // ~
 		this.glyph = 126;
 	}
 	draw(){ // white on blue

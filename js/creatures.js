@@ -44,6 +44,10 @@ class Monster {
 			ctx.font = '16px calibri';
 			ctx.textAlign = 'left';
 			ctx.textBaseline = 'top';
+
+			ctx.strokeStyle = COLOR_YELLOW;
+			ctx.lineWidth = 4;
+			ctx.strokeText( this.hp, this.getDisplayX()*tileSize.x, this.getDisplayY()*tileSize.y);
 			ctx.fillText( this.hp, this.getDisplayX()*tileSize.x, this.getDisplayY()*tileSize.y);
 			
 			// bottom left ; attack value?
@@ -153,7 +157,7 @@ class Monster {
 
 class Player extends Monster {
 	constructor(tile){
-		super(tile, {x: 0, y: 4}, 3); // @
+		super(tile, {x: 0, y: 64}, 3); // @
 		this.glyph = 64;
 		this.isPlayer = true;
 		//this.hidden = false;
@@ -227,14 +231,14 @@ class Player extends Monster {
 
 class Kobold extends Monster {
 	constructor(tile){
-		super(tile, {x: 11, y: 6}, 2); // k
+		super(tile, {x: 132, y: 96}, 2); // k
 		this.glyph = 107;
 	}
 }
 
 class Goblin extends Monster {
 	constructor(tile){
-		super(tile, {x: 7, y: 6}, 1); // g
+		super(tile, {x: 84, y: 96}, 1); // g
 		this.glyph = 103;
 		this.cooldown = 0;
 	}
@@ -257,7 +261,7 @@ class Goblin extends Monster {
 
 class Zombie extends Monster {
 	constructor(tile){
-		super(tile, {x: 10, y: 5}, 5); // Z
+		super(tile, {x: 120, y: 80}, 5); // Z
 		this.glyph = 90;
 		// instead of self-stunning every other turn, it builds up moves and attacks at a slower rate instead
 		this.moves_inc = 0.5;
@@ -267,7 +271,7 @@ class Zombie extends Monster {
 
 class Quickling extends Monster {
 	constructor(tile){
-		super(tile, {x: 1, y: 7}, 1); // q
+		super(tile, {x: 12, y: 112}, 1); // q
 		this.glyph = 113;
 		// inc and base are high, so it builds up 2 moves per turn
 		// a monster with attacks_inc 1 and attacks_base 3 can "store" 3 attacks, and then gets to unleash them all
@@ -279,7 +283,7 @@ class Quickling extends Monster {
 
 class Ghost extends Monster {
 	constructor(tile){
-		super(tile, {x: 7, y: 4}, 3); // G
+		super(tile, {x: 84, y: 64}, 3); // G
 		this.glyph = 71;
 	}
 	swing(damage){ // teleports away when hit
