@@ -6,6 +6,10 @@
 	font-family: alber;
 	src: url('../assets/AlberNew-Regular.ttf') format("truetype");
 }
+@font-face {
+	font-family: ega;
+	src: url('../assets/PxPlus_IBM_EGA_8x14.ttf') format("truetype");
+}
 
 *,
 *:after,

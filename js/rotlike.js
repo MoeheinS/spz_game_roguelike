@@ -17,7 +17,7 @@ COLOR_FILLSTYLE = COLOR_BLACK;
 COLOR_WALL = COLOR_BLACK;
 COLOR_WATER = COLOR_BLUE;
 
-tileSize = {x: 24, y: 32};
+tileSize = {x: 16, y: 28};
 const SCALE_FACTOR = 2;
 
 numTiles = 24;
@@ -26,7 +26,7 @@ game_state = {
   truesight: false,
   fov_enabled: false,
   scrollCamera: false,
-  text_mode: false,
+  text_mode: true,
 
   mode: "loading",
   depth: 1,
@@ -68,7 +68,8 @@ function setupCanvas() {
   canvas.style.width = canvas.width + 'px';
   canvas.style.height = canvas.height + 'px';
 
-  ctx.font = tileSize.y+"px calibri";
+  // https://int10h.org/oldschool-pc-fonts/fontlist/font?ibm_ega_8x14#-
+  ctx.font = tileSize.y+"px ega"; //calibri
   ctx.textAlign = 'center';
   ctx.textBaseline = 'top';
 

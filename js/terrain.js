@@ -99,7 +99,7 @@ class SpawnerWall extends Terrain {
 class Chest extends Terrain {
   constructor(x, y, treasure){
 		super(x, y, {x: 180, y: 112}, false);
-		this.glyph = 8962;
+		this.glyph = 8710;
 		this.treasure = treasure;
 	}
 	// on enter block movement and yield treasure
@@ -109,7 +109,7 @@ class Chest extends Terrain {
 class Floor extends Terrain {
   constructor(x, y){
 		super(x, y, {x: 0, y: 0}, true);
-		this.glyph = 32;
+		this.glyph = 46; // 32
 	}
 }
 
@@ -142,7 +142,7 @@ class Stairs_up extends Terrain {
 class Pit extends Terrain {
 	constructor(x, y){
 		super(x, y, {x: 156, y: 224}, true); // ■
-		this.glyph = 9632;
+		this.glyph = 8857;
 		this.hidden = true;
 	}
 	stepOn(monster){
@@ -164,7 +164,7 @@ class Pit extends Terrain {
 class Trap extends Terrain { // different kinds of traps? Rock fall trap, explosive trap, giga bomberman trap?
 	constructor(x, y, trap){
 		super(x, y, {x: 168, y: 80}, true); // ^
-		this.glyph = 94;
+		this.glyph = 632;
 		this.hidden = true;
 		this.trap = trap;
 	}
@@ -216,7 +216,7 @@ class Mud extends Terrain {
 class Water extends Terrain { // fuck
 	constructor(x, y){
 		super(x, y, {x: 84, y: 240}, true); // ~
-		this.glyph = 126;
+		this.glyph = 8776;
 	}
 	draw(){ // white on blue
 		ctx.save();

@@ -44,7 +44,7 @@ class Monster {
 		if( this.hp > 0 ){
 			ctx.save();
 
-			ctx.font = '16px calibri';
+			ctx.font = '16px ega'; // calibri
 			ctx.textAlign = 'left';
 			ctx.textBaseline = 'top';
 
