@@ -15,6 +15,7 @@ class Monster {
 		this.attacks = 1;
 		this.attacks_base = 1;
 		this.attacks_inc = 1;
+		//this.alerted = false;
 	}
 
 	getDisplayX(){                     
@@ -62,6 +63,14 @@ class Monster {
 			// ctx.strokeText( String.fromCharCode(this.tile.glyph), this.getDisplayX()*tileSize.x+1*tileSize.x, this.getDisplayY()*tileSize.y);
 			// ctx.fillText( String.fromCharCode(this.tile.glyph), this.getDisplayX()*tileSize.x+1*tileSize.x, this.getDisplayY()*tileSize.y);
 
+			// if( this.alerted ){
+			// 	ctx.textAlign = 'right';
+			// 	ctx.strokeStyle = COLOR_YELLOW;
+			// 	ctx.lineWidth = 4;
+			// 	ctx.strokeText( '!', this.getDisplayX()*tileSize.x+1*tileSize.x, this.getDisplayY()*tileSize.y);
+			// 	ctx.fillText( '!', this.getDisplayX()*tileSize.x+1*tileSize.x, this.getDisplayY()*tileSize.y);
+			// }
+
 			// bottom left ; attack value?
 			// ctx.textBaseline = 'bottom';
 			// ctx.fillText( this.hp, this.tile.x*tileSize.x, this.tile.y*tileSize.y+1*tileSize.y);
@@ -76,6 +85,9 @@ class Monster {
 	}
 
 	tryMove(dx, dy){
+		// if( !this.alerted && !this.isPlayer ){
+		// 	return true;
+		// }
 		let newTile = this.tile.getNeighbor(dx,dy);
 		if(newTile.passable){
 			if( Math.floor(this.moves) > 0 && !newTile.monster ){
@@ -206,8 +218,8 @@ class Player extends Monster {
 
 	tryMove(dx, dy){
 		this.calcFov();
+		//this.calcLos();
 		if( super.tryMove(dx,dy) ){
-			//this.calcLos();
 			//if( Math.floor(this.moves) <= 0 || Math.floor(this.attacks) <= 0 ){
 			if( !this.checkActions() ){
 				// world state ticks after each player movement
@@ -216,11 +228,18 @@ class Player extends Monster {
 		}
 	}
 
-	// calcLos(){
+	calcLos(){
+	// proximity based trigger
 	// 	for( let i=0; i<monsters.length; i++ ){
 	// 		monsters[i].hidden = ( monsters[i].tile.dist(player.tile) < 6 ? false : true);
 	// 	}
-	// }
+		let x = this.tile.x;
+		let y = this.tile.y;
+		fov.compute(x, y, 6, 
+			function(x, y){ tiles[x][y].passable },
+			function(x, y){ if( tiles[x][y].monster && !tiles[x][y].monster.isPlayer ){ tiles[x][y].monster.alerted = true; } }
+		);
+	}
 
 	calcFov(){
 		if( game_state.truesight || !game_state.fov_enabled ){
