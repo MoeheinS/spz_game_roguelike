@@ -26,6 +26,10 @@ class Terrain {
 	// pass a class as arg
 	replace(newTileType){
 		tiles[this.x][this.y] = new newTileType(this.x, this.y);
+		// experimental
+		if( tiles[this.x][this.y].monster ){
+			tiles[this.x][this.y].monster.move(getTile(this.x, this.y));
+		}
 		return tiles[this.x][this.y];
 	}
 
