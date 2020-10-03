@@ -2,7 +2,7 @@ class Monster {
 	constructor(tile, sprite, hp){
 		this.move(tile);
 		this.sprite = sprite;
-		this.glyphColor = COLOR_BLACK;
+		this.fillStyle = COLOR_BLACK;
 
 		this.hp = hp;
 		this.offsetX = 0;                                                   
@@ -183,7 +183,7 @@ class Player extends Monster {
 	constructor(tile){
 		super(tile, {x: 0, y: 64}, 3); // @
 		this.glyph = 64;
-		this.glyphColor = COLOR_BLACK;
+		this.fillStyle = COLOR_BLACK; // COLOR_RED , COLOR_BLUE
 		this.isPlayer = true;
 		//this.hidden = false;
 	}
