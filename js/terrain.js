@@ -118,8 +118,8 @@ class Wall extends Terrain {
 class SpawnerWall extends Terrain {
   constructor(x, y){
 		super(x, y, {x: 96, y: 0}, false);
-		this.glyph = 8226; //9619; //35;
-		this.fillStyle = COLOR_YELLOW;
+		this.glyph = 34; //8226; //9619; //35;
+		this.fillStyle = COLOR_RED;
 		this.renderOverride = { fillStyle: COLOR_BLACK };
 	}
 }
