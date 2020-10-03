@@ -68,8 +68,12 @@ html {
 
 body{
 	background-color: var(--eo__yellow);
+	color: var(--eo__black);
 	display: flex;
-	justify-content: space-evenly;
+	justify-content: center;
+	align-items: center;
+	width: 100vw;
+	height: 100vh;
 }
 html, 
 a {
