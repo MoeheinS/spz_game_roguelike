@@ -175,7 +175,7 @@ class Pit extends Terrain {
 		this.hidden = true;
 	}
 	draw(){
-		this.glyph = ( this.hidden ? 8729 : 8857 );
+		this.glyph = ( this.hidden && !game_state.truesight ? 8729 : 8857 );
 		super.draw();
 	}
 	stepOn(monster){
@@ -199,21 +199,26 @@ class Trap extends Terrain { // different kinds of traps? Rock fall trap, explos
 		super(x, y, {x: 168, y: 80}, true); // ^
 		this.glyph = 8729;
 		this.hidden = true;
-		this.trap = trap;
+		this.trap = true; // "explosive", "teleporter" etc
 	}
 	draw(){
-		this.glyph = ( this.hidden ? 8729 : 632 );
+		this.glyph = ( this.hidden && !game_state.truesight ? 8729 : ( this.trap ? 632 : 8729 ) );
 		super.draw();
 	}
 	stepOn(monster){
+		if( !this.trap ){
+			return;
+		}
 		if(monster.isPlayer){ // should traps also trigger for monsters?
 			console.warn('KABOOM');
 			monster.swing(1); // this could be a different effect
-			this.replace(Floor); // TODO: this replace Water + degrade armor -> rust trap
+			this.trap = false;
+			//this.replace(Floor); // TODO: this replace Water + degrade armor -> rust trap
 		}else{
 			console.warn('You hear a KABOOM');
 			monster.swing(1); // this could be a different effect
-			this.replace(Floor); // TODO: this replace Water + degrade armor -> rust trap
+			this.trap = false;
+			//this.replace(Floor); // TODO: this replace Water + degrade armor -> rust trap
 		}
 	}
 }
