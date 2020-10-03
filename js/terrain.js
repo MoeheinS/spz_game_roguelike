@@ -81,10 +81,26 @@ class Terrain {
 				}else{
 					drawChar( this, this.x, this.y, this.renderOverride);
 				}
+
+				if(this.effectCounter){    
+					this.effectCounter--;
+					ctx.globalAlpha = this.effectCounter/15;
+					drawChar( {fillStyle: this.effect.effectColor, glyph: this.effect.glyph}, this.x, this.y, { fillStyle: this.effect.effectFill });
+					ctx.globalAlpha = 1;
+				}
+
 			}else{
 				drawSprite(this.sprite, this.x, this.y);
 			}
 		}
+	}
+
+	setEffect(effectGlyph, effectColor, effectFill){
+		this.effect = new Object;
+		this.effect.glyph = effectGlyph;
+		this.effect.effectColor = effectColor;
+		this.effect.effectFill = effectFill;
+		this.effectCounter = 30;
 	}
 }
 
