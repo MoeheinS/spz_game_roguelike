@@ -2,6 +2,8 @@ class Monster {
 	constructor(tile, sprite, hp){
 		this.move(tile);
 		this.sprite = sprite;
+		this.glyphColor = COLOR_BLACK;
+
 		this.hp = hp;
 		this.offsetX = 0;                                                   
 		this.offsetY = 0;
@@ -25,7 +27,7 @@ class Monster {
 		if( ( game_state.fov_enabled && this.tile.visible ) || !game_state.fov_enabled || game_state.truesight ){
 		//if( !this.hidden ){
 			if( game_state.text_mode ){
-				drawChar(this.glyph, this.getDisplayX(), this.getDisplayY());
+				drawChar(this, this.getDisplayX(), this.getDisplayY());
 			}else{
 				drawSprite(this.sprite, this.getDisplayX(), this.getDisplayY());
 			}
@@ -44,7 +46,7 @@ class Monster {
 		if( this.hp > 0 ){
 			ctx.save();
 
-			ctx.font = '16px ega'; // calibri
+			ctx.font = '8px ega'; // calibri
 			ctx.textAlign = 'left';
 			ctx.textBaseline = 'top';
 
@@ -162,6 +164,7 @@ class Player extends Monster {
 	constructor(tile){
 		super(tile, {x: 0, y: 64}, 3); // @
 		this.glyph = 64;
+		this.glyphColor = COLOR_BLACK;
 		this.isPlayer = true;
 		//this.hidden = false;
 	}

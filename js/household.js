@@ -76,9 +76,23 @@ function draw(){
   window.requestAnimationFrame(draw);
 }
 
-function drawChar(char, x, y) {
-  ctx.fillText( String.fromCharCode(char), x*tileSize.x + 0.5*tileSize.x, y*tileSize.y, tileSize.y);
+function drawChar(ent, x, y, rect) {
+  ctx.save();
+
+  if( rect ){
+    ctx.fillStyle = rect.fillStyle;
+    ctx.fillRect(
+      x*tileSize.x,
+      y*tileSize.y,
+      tileSize.x,
+      tileSize.y
+    );
+  }
+
+  ctx.fillStyle = ent.fillStyle;
+  ctx.fillText( String.fromCharCode(ent.glyph), x*tileSize.x + 0.5*tileSize.x, y*tileSize.y+game_state.fontSize.offset, tileSize.y);
   // char.charCodeAt(0)
+  ctx.restore();
 }
 function drawSprite(coords, x, y) {
   //(image, sx, sy, sWidth, sHeight, dx, dy, dWidth, dHeight);
@@ -168,6 +182,8 @@ function debug_toggle(p, v){
       break;
     case 'tiles':
       game_state.text_mode = v;
+      tileSize = {x: ( v ? 24 : 24 ), y: ( v ? 24 : 32 )};
+      SCALE_FACTOR = ( v ? 3 : 2 );
       break;
     default:
       break;

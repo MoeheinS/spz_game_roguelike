@@ -2,6 +2,8 @@ class Terrain {
 	constructor(x, y, sprite, passable) {
 		this.x = x;
 		this.y = y;
+		this.fillStyle = COLOR_BLACK;
+		this.renderOverride = false;
 		this.sprite = sprite;
 		this.passable = passable;
 	}
@@ -63,9 +65,13 @@ class Terrain {
 	}
 
 	draw(){
-		if( !this.hidden || game_state.truesight ){
+		//if( !this.hidden || game_state.truesight ){
 			if( game_state.text_mode ){
-				drawChar(this.glyph, this.x, this.y);
+				if( this.monster ){
+					drawChar( this.monster, this.monster.offsetX - this.x, this.monster.offsetY - this.y, this.renderOverride);
+				}else{
+					drawChar( this, this.x, this.y, this.renderOverride);
+				}
 			}else{
 				drawSprite(this.sprite, this.x, this.y);
 			}
@@ -79,20 +85,23 @@ class Terrain {
 				ctx.restore();
 			}
 			
-		}
+		//}
 	}
 }
 
 class Wall extends Terrain {
   constructor(x, y){
 		super(x, y, {x: 132, y: 208}, false);
-		this.glyph = 35;
+		this.glyph = 9618; //35;
+		this.renderOverride = { fillStyle: ( inBounds(x,y) ? COLOR_BLACK+Math.floor(13+Math.random()*3).toString(16)+Math.floor(13+Math.random()*3).toString(16) : COLOR_BLACK ) };
 	}
 }
 class SpawnerWall extends Terrain {
   constructor(x, y){
 		super(x, y, {x: 96, y: 0}, false);
-		this.glyph = 35;
+		this.glyph = 8226; //9619; //35;
+		this.fillStyle = COLOR_YELLOW;
+		this.renderOverride = { fillStyle: COLOR_BLACK };
 	}
 }
 
@@ -109,7 +118,8 @@ class Chest extends Terrain {
 class Floor extends Terrain {
   constructor(x, y){
 		super(x, y, {x: 0, y: 0}, true);
-		this.glyph = 46; // 32
+		this.glyph = 8729; // 32
+		this.fillStyle = COLOR_BLACK+Math.floor(4+Math.random()*12).toString(16)+Math.floor(4+Math.random()*12).toString(16);
 	}
 }
 
@@ -145,6 +155,10 @@ class Pit extends Terrain {
 		this.glyph = 8857;
 		this.hidden = true;
 	}
+	draw(){
+		this.glyph = ( this.hidden ? 8729 : 8857 );
+		super.draw();
+	}
 	stepOn(monster){
 		if(monster.isPlayer){ // should traps also trigger for monsters?
 			console.warn('The ground gives way!');
@@ -164,9 +178,13 @@ class Pit extends Terrain {
 class Trap extends Terrain { // different kinds of traps? Rock fall trap, explosive trap, giga bomberman trap?
 	constructor(x, y, trap){
 		super(x, y, {x: 168, y: 80}, true); // ^
-		this.glyph = 632;
+		this.glyph = 8729;
 		this.hidden = true;
 		this.trap = trap;
+	}
+	draw(){
+		this.glyph = ( this.hidden ? 8729 : 632 );
+		super.draw();
 	}
 	stepOn(monster){
 		if(monster.isPlayer){ // should traps also trigger for monsters?
@@ -185,6 +203,17 @@ class Hazard extends Terrain {
   constructor(x, y){
 		super(x, y, {x: 0, y: 176}, true); // ░
 		this.glyph = 9617;
+		this.fillStyle = COLOR_FUCHSIA;
+		this.renderOverride = { fillStyle: COLOR_GREEN_NEON };
+	}
+	draw(){
+		ctx.save();
+		
+		ctx.fillStyle = this.renderOverride.fillStyle;
+		ctx.fillRect(this.x*tileSize.x,this.y*tileSize.y,tileSize.x,tileSize.y);
+		super.draw();
+
+		ctx.restore();
 	}
 	stepOn(monster){
 		if(monster.isPlayer){
@@ -203,6 +232,16 @@ class Mud extends Terrain {
   constructor(x, y){
 		super(x, y, {x: 12, y: 176}, true); // ▒
 		this.glyph = 9618;
+		this.renderOverride = { fillStyle: COLOR_BLUE };
+	}
+	draw(){
+		ctx.save();
+		
+		ctx.fillStyle = this.renderOverride.fillStyle;
+		ctx.fillRect(this.x*tileSize.x,this.y*tileSize.y,tileSize.x,tileSize.y);
+		super.draw();
+
+		ctx.restore();
 	}
 	stepOn(monster){
 		if(monster.isPlayer){
@@ -216,21 +255,15 @@ class Mud extends Terrain {
 class Water extends Terrain { // fuck
 	constructor(x, y){
 		super(x, y, {x: 84, y: 240}, true); // ~
-		this.glyph = 8776;
+		this.glyph = 8776; //8776;
+		this.fillStyle = COLOR_WHITE;
+		this.renderOverride = { fillStyle: COLOR_BLUE };
 	}
-	draw(){ // white on blue
+	draw(){
 		ctx.save();
 		
-		ctx.fillStyle = COLOR_WATER;
+		ctx.fillStyle = this.renderOverride.fillStyle;
 		ctx.fillRect(this.x*tileSize.x,this.y*tileSize.y,tileSize.x,tileSize.y);
-		
-		ctx.fillStyle = COLOR_WHITE;
-		if( game_state.text_mode ){
-			drawChar(this.glyph, this.x, this.y);
-		}else{
-			drawSprite(this.sprite, this.x, this.y);
-		}
-
 		super.draw();
 
 		ctx.restore();

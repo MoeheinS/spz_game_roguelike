@@ -12,13 +12,14 @@ const COLOR_GREEN_NEON = '#d7fd12';
 const COLOR_RED_PURPLE = '#d30047';
 const COLOR_FUCHSIA = '#ff3993';
 
-COLOR_FOW = COLOR_FUCHSIA;
-COLOR_FILLSTYLE = COLOR_BLACK;
-COLOR_WALL = COLOR_BLACK;
+COLOR_FOW = COLOR_BLUE;
+COLOR_FILLSTYLE = COLOR_WHITE;
+COLOR_WALL = COLOR_WHITE;
 COLOR_WATER = COLOR_BLUE;
 
-tileSize = {x: 16, y: 28};
-const SCALE_FACTOR = 2;
+tileSize = {x: 32, y: 32};
+
+SCALE_FACTOR = 3;
 
 numTiles = 24;
 
@@ -27,6 +28,7 @@ game_state = {
   fov_enabled: false,
   scrollCamera: false,
   text_mode: true,
+  fontSize: {size: 24, offset: 4},
 
   mode: "loading",
   depth: 1,
@@ -69,7 +71,7 @@ function setupCanvas() {
   canvas.style.height = canvas.height + 'px';
 
   // https://int10h.org/oldschool-pc-fonts/fontlist/font?ibm_ega_8x14#-
-  ctx.font = tileSize.y+"px ega"; //calibri
+  ctx.font = game_state.fontSize.size+"px ega"; //calibri
   ctx.textAlign = 'center';
   ctx.textBaseline = 'top';
 
