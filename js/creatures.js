@@ -55,6 +55,13 @@ class Monster {
 			ctx.strokeText( this.hp, this.getDisplayX()*tileSize.x, this.getDisplayY()*tileSize.y);
 			ctx.fillText( this.hp, this.getDisplayX()*tileSize.x, this.getDisplayY()*tileSize.y);
 			
+			// To render the tile you're standing on in the corner;
+			// ctx.textAlign = 'right';
+			// ctx.strokeStyle = COLOR_YELLOW;
+			// ctx.lineWidth = 4;
+			// ctx.strokeText( String.fromCharCode(this.tile.glyph), this.getDisplayX()*tileSize.x+1*tileSize.x, this.getDisplayY()*tileSize.y);
+			// ctx.fillText( String.fromCharCode(this.tile.glyph), this.getDisplayX()*tileSize.x+1*tileSize.x, this.getDisplayY()*tileSize.y);
+
 			// bottom left ; attack value?
 			// ctx.textBaseline = 'bottom';
 			// ctx.fillText( this.hp, this.tile.x*tileSize.x, this.tile.y*tileSize.y+1*tileSize.y);
@@ -230,7 +237,7 @@ class Player extends Monster {
 		let y = this.tile.y;
 		fov.compute(x, y, 24, 
 			(x, y) => tiles[x][y].passable,
-    	(x, y) => tiles[x][y].visible = true
+    	function(x, y){ tiles[x][y].visible = true; tiles[x][y].spotted = true; }
 		);
 	}
 }

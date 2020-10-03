@@ -65,7 +65,16 @@ class Terrain {
 	}
 
 	draw(){
-		//if( !this.hidden || game_state.truesight ){
+		if( !this.visible && !game_state.truesight && game_state.fov_enabled ){
+			ctx.save();
+	
+			ctx.fillStyle = COLOR_FOW;
+			ctx.fillRect(this.x*tileSize.x,this.y*tileSize.y,tileSize.x,tileSize.y);
+		
+			ctx.restore();
+		}
+
+		if( this.spotted || game_state.truesight || !game_state.fov_enabled ){
 			if( game_state.text_mode ){
 				if( this.monster ){
 					drawChar( this.monster, this.monster.offsetX - this.x, this.monster.offsetY - this.y, this.renderOverride);
@@ -75,17 +84,7 @@ class Terrain {
 			}else{
 				drawSprite(this.sprite, this.x, this.y);
 			}
-
-			if( !this.visible && !game_state.truesight && game_state.fov_enabled ){
-				ctx.save();
-		
-				ctx.fillStyle = COLOR_FOW;
-				ctx.fillRect(this.x*tileSize.x,this.y*tileSize.y,tileSize.x,tileSize.y);
-			
-				ctx.restore();
-			}
-			
-		//}
+		}
 	}
 }
 
