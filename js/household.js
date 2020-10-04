@@ -159,7 +159,7 @@ function startLevel(playerHP) {
   spawnRate = 15;              
   spawnCounter = spawnRate;  
 
-  generateLevel(true);
+  generateLevel();
 
   player = new Player(randomPassableTile()); // {x: 0, y: 0}
   player.hp = playerHP;

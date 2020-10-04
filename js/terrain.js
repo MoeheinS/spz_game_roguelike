@@ -303,12 +303,16 @@ class Water extends Terrain { // fuck
 
 //TODO: can I make this async?
 // generateLevel(player.tile.x, player.tile.y)
-function generateLevel(){
-  tryTo('generate map', function(){
+function generateLevel(test){
+	if( test ){
+		return initMap();
+	}
+
+	tryTo('generate map', function(){
 		return generateTiles() == randomPassableTile().getConnectedTiles().length;
 		// && ( coords ? getTile(coords.x,coords.y).passable : true ); times out level gen
 	}, 3000);
-	
+
 	randomPassableTile('Floor').replace(Stairs_down);
 	if( game_state.depth > 1 ){
 		randomPassableTile('Floor').replace(Stairs_up); 
@@ -345,4 +349,57 @@ function generateTiles(){
 		}
   }
   return passableTiles;
+}
+
+function initMap(){
+	tiles = [];
+	for( let i=0; i<numTiles; i++ ){
+		tiles[i] = [];
+		for( let j=0; j<numTiles; j++ ){
+			tiles[i][j] = new Floor(i,j);
+		}
+	}
+}
+
+class Room {
+	constructor(wmin, hmin, wmax, hmax, tries, x, y) { // x and y coords are for overrides
+		var start_x = Math.floor( Math.random() * ( numTiles - wmax ) );
+		var start_y = Math.floor( Math.random() * ( numTiles - hmax ) );
+		console.warn(`Starting construction at ${start_x}, ${start_y}`);
+		var built_x = 0;
+		var built_y = 0;
+		
+		// test run
+		for( let i=start_x; i<start_x+wmax; i++ ){ // rows
+			built_x++;
+			built_y = 0;
+			for( let j=start_y; j<start_y+hmax; j++ ){ // columns
+				if( tiles[i][j].constructor.name == 'Wall' ){
+					built_y++;
+				}else{
+					if( built_y < hmin || built_x < wmin ){
+						if( tries > 0 ){
+							console.warn(`Could not place a room at ${start_x}, ${start_y}. ${tries} tries remaining!`);
+							return new Room( wmin, hmin, wmax, hmax, (tries-1) );
+						}else{
+							return;
+						}
+					}
+				}
+			}
+		}
+
+		console.error(`Space for a room ${built_x} by ${built_y} from ${wmax} by ${hmax} at ${start_x}, ${start_y}`);
+
+		//var start_x = Math.floor( Math.random() * ( wmax - built_x ) ) + wmin -1;
+		//var start_y = Math.floor( Math.random() * ( hmax - built_y ) ) + hmin -1;
+		// for realsies
+		for( let i=start_x+1; i<start_x+built_x-1; i++ ){ // rows
+			for( let j=start_y+1; j<start_y+built_y-1; j++ ){ // columns
+				tiles[i][j] = new Floor(i,j);
+			}
+		}
+
+		roomList.push({x: start_x+1, y: start_y+1, w:start_x+built_x-1, h:start_y+built_y-1});
+	}
 }
