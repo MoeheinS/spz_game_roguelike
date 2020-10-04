@@ -217,10 +217,7 @@ class Player extends Monster {
 	}
 
 	tryMove(dx, dy){
-		this.calcFov();
-		//this.calcLos();
 		if( super.tryMove(dx,dy) ){
-			//if( Math.floor(this.moves) <= 0 || Math.floor(this.attacks) <= 0 ){
 			if( !this.checkActions() ){
 				// world state ticks after each player movement
 				tick();
@@ -239,6 +236,11 @@ class Player extends Monster {
 			function(x, y){ tiles[x][y].passable },
 			function(x, y){ if( tiles[x][y].monster && !tiles[x][y].monster.isPlayer ){ tiles[x][y].monster.alerted = true; } }
 		);
+	}
+
+	update(){
+		this.calcFov();
+		super.update();
 	}
 
 	calcFov(){
