@@ -26,17 +26,14 @@ class Monster {
 	} 
 	draw(){
 		if( ( game_state.fov_enabled && this.tile.visible ) || !game_state.fov_enabled || game_state.truesight ){
-		//if( !this.hidden ){
-			if( game_state.text_mode ){
-				drawChar(this, this.getDisplayX(), this.getDisplayY());
-			}else{
-				drawSprite(this.sprite, this.getDisplayX(), this.getDisplayY());
-			}
+			// NOTE: moved rendering creatures to Terrain logic
+			// if( game_state.text_mode ){
+			// 	drawChar(this, this.getDisplayX(), this.getDisplayY());
+			// }else{
+			// 	drawSprite(this.sprite, this.getDisplayX(), this.getDisplayY());
+			// }
 
 			this.drawHp();
-		//}else{
-		//	drawChar(63, this.getDisplayX(), this.getDisplayY());
-		//}
 
 			this.offsetX -= Math.sign(this.offsetX)*(1/8);     
 			this.offsetY -= Math.sign(this.offsetY)*(1/8);
@@ -176,6 +173,54 @@ class Monster {
 	// returns true if you have actions or attacks remaining
 	checkActions(){
 		return Math.floor(this.moves) > 0 && Math.floor(this.attacks) > 0;
+	}
+}
+
+class Boulder extends Monster {
+	constructor(tile){
+		super(tile, {x: 0, y: 0}, 2); // k
+		this.glyph = 9679;
+	}
+
+	update(){
+		return;
+	}
+
+	draw(){
+		if( ( game_state.fov_enabled && this.tile.visible ) || !game_state.fov_enabled || game_state.truesight ){
+			if( game_state.text_mode ){
+				drawChar(this, this.getDisplayX(), this.getDisplayY());
+			}else{
+				drawSprite(this.sprite, this.getDisplayX(), this.getDisplayY());
+			}
+			this.offsetX -= Math.sign(this.offsetX)*(1/8);     
+			this.offsetY -= Math.sign(this.offsetY)*(1/8);
+		}
+	}
+
+	swing(){
+		// move when struck; might work for creatures as well if followed up with super.swing()?
+		let nx = this.tile.x - player.tile.x;
+		let ny = this.tile.y - player.tile.y;
+		console.warn(nx, ny);
+		if( Math.abs(nx) == 1 || Math.abs(ny) == 1 ){
+			console.warn('yas');
+			this.tryMove(nx, ny);
+		}
+	}
+
+	tryMove(dx, dy){
+		let newTile = this.tile.getNeighbor(dx,dy);
+		if(newTile.passable){
+			if( !newTile.monster ){
+				this.move(newTile);
+			}
+			return true;
+		}else{ // this entire else is so you can bump into walls and pass a turn
+			this.offsetX = (newTile.x - this.tile.x)/2;         
+			this.offsetY = (newTile.y - this.tile.y)/2; 
+			return true;
+		}
 	}
 }
 

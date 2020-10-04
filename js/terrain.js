@@ -81,7 +81,8 @@ class Terrain {
 		if( this.spotted || game_state.truesight || !game_state.fov_enabled ){
 			if( game_state.text_mode ){
 				if( this.monster ){
-					drawChar( this.monster, this.monster.offsetX - this.x, this.monster.offsetY - this.y, this.renderOverride);
+					// draw the tile if you're in fog of war
+					drawChar( ( this.visible || this.monster.isPlayer ? this.monster : this ), this.monster.offsetX + this.x, this.monster.offsetY + this.y, this.renderOverride);
 				}else{
 					drawChar( this, this.x, this.y, this.renderOverride);
 				}
@@ -188,7 +189,7 @@ class Pit extends Terrain {
 			}
 		}else{
 			console.warn('You hear something cry out!');
-			monster.swing(99);
+			monster.die();
 			this.hidden = false;
 		}
 	}
