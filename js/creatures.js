@@ -301,7 +301,7 @@ class Player extends Monster {
 
 		let x = this.tile.x;
 		let y = this.tile.y;
-		fov.compute(x, y, 24, 
+		fov.compute(x, y, 7, // 7 is a high end light source. 11+ gives issues with edges on large blocks 
 			(x, y) => tiles[x][y].passable,
     	function(x, y){ tiles[x][y].visible = true; tiles[x][y].spotted = true; }
 		);
