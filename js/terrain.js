@@ -80,9 +80,8 @@ class Terrain {
 
 		if( this.spotted || game_state.truesight || !game_state.fov_enabled ){
 			if( game_state.text_mode ){
-				if( this.monster ){
-					// draw the tile if you're in fog of war
-					drawChar( ( this.visible || this.monster.isPlayer ? this.monster : this ), this.monster.offsetX + this.x, this.monster.offsetY + this.y, this.renderOverride);
+				if( this.monster && this.visible ){
+					drawChar( this.monster, this.monster.offsetX + this.x, this.monster.offsetY + this.y, this.renderOverride);
 				}else{
 					drawChar( this, this.x, this.y, this.renderOverride);
 				}
