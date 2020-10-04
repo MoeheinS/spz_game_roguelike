@@ -132,7 +132,7 @@ class Monster {
 	die(){
 		this.dead = true;
 		this.tile.monster = null;
-		this.sprite = 37; // %
+		this.glyph = 37; // %
 	}
 
 	move(tile, instant){
