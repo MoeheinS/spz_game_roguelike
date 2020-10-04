@@ -17,8 +17,8 @@ COLOR_FILLSTYLE = COLOR_WHITE;
 COLOR_WALL = COLOR_WHITE;
 COLOR_WATER = COLOR_BLUE;
 
-tileSize = {x: 32, y: 32};
-
+tileSize = {x: 24, y: 24};
+// for tiled mode
 SCALE_FACTOR = 3;
 
 numTiles = 24;
@@ -28,7 +28,7 @@ game_state = {
   fov_enabled: false,
   scrollCamera: false,
   text_mode: true,
-  fontSize: {size: 24, offset: 4},
+  fontSize: {size: tileSize.y*0.75, offset: tileSize.y*0.25},
 
   mode: "loading",
   depth: 1,
