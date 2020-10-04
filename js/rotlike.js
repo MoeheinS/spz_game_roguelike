@@ -37,6 +37,9 @@ game_state = {
   maxHp: 6
 };
 
+monsters = [];
+spawners = [];
+
 const fov = new Mrpas(numTiles, numTiles, (x, y) => tiles[x][y].passable);
 
 spritesheet = new Image();
