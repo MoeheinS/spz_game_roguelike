@@ -266,3 +266,12 @@ function debug_painter(e){
       break;
   }
 }
+
+function transpose(matrix) {
+  let result = [];
+    for(let i = 0; i < matrix[0].length; i++) {
+        let row = matrix.map(e => e[i]).reverse();
+        result.push(row);
+    }
+    return result;
+}
