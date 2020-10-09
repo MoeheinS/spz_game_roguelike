@@ -374,45 +374,19 @@ function initMap(){
 	}
 }
 
-class Room {
-	constructor(wmin, hmin, wmax, hmax, tries, x, y) { // x and y coords are for overrides
-		var start_x = Math.floor( Math.random() * ( numTiles - wmax ) );
-		var start_y = Math.floor( Math.random() * ( numTiles - hmax ) );
-		console.warn(`Starting construction at ${start_x}, ${start_y}`);
-		var built_x = 0;
-		var built_y = 0;
+class Room { // new Room(0,0,tileMap);
+	constructor(x,y, allowedRooms) { // x and y coords are for overrides
+		var chosenRoom = shuffle(allowedRooms)[0];
+		var start_x = 1+ x * chosenRoom.length;
+		var start_y = 1+ y * chosenRoom.length;
 		
-		// test run
-		for( let i=start_x; i<start_x+wmax; i++ ){ // rows
-			built_x++;
-			built_y = 0;
-			for( let j=start_y; j<start_y+hmax; j++ ){ // columns
-				if( tiles[i][j].constructor.name == 'Wall' ){
-					built_y++;
-				}else{
-					if( built_y < hmin || built_x < wmin ){
-						if( tries > 0 ){
-							console.warn(`Could not place a room at ${start_x}, ${start_y}. ${tries} tries remaining!`);
-							return new Room( wmin, hmin, wmax, hmax, (tries-1) );
-						}else{
-							return;
-						}
-					}
-				}
+		for( let i=0; i<chosenRoom.length; i++ ){ // rows
+			for( let j=0; j<chosenRoom[i].length; j++ ){ // columns
+				let roomType = eval(chosenRoom[i][j]);
+				// optionally replace Walls for SpawnerWalls here?
+				//tiles[i][j] = new roomType(i,j);
+				tiles[start_x+i][start_y+j].replace(roomType);
 			}
 		}
-
-		console.error(`Space for a room ${built_x} by ${built_y} from ${wmax} by ${hmax} at ${start_x}, ${start_y}`);
-
-		//var start_x = Math.floor( Math.random() * ( wmax - built_x ) ) + wmin -1;
-		//var start_y = Math.floor( Math.random() * ( hmax - built_y ) ) + hmin -1;
-		// for realsies
-		for( let i=start_x+1; i<start_x+built_x-1; i++ ){ // rows
-			for( let j=start_y+1; j<start_y+built_y-1; j++ ){ // columns
-				tiles[i][j] = new Floor(i,j);
-			}
-		}
-
-		roomList.push({x: start_x+1, y: start_y+1, w:start_x+built_x-1, h:start_y+built_y-1});
 	}
 }
