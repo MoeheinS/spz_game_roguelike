@@ -42,17 +42,30 @@ class Terrain {
 		return getTile(this.x + dx, this.y + dy)
 	}
 	
-	getAdjacentNeighbors(){
-		return shuffle([
+	getAdjacentNeighbors(diagonals){
+		if( !diagonals ){
+			return shuffle([
 				this.getNeighbor(0, -1),
 				this.getNeighbor(0, 1),
 				this.getNeighbor(-1, 0),
 				this.getNeighbor(1, 0)
-		]);
+			]);
+		}else{
+			return shuffle([
+				this.getNeighbor(0, -1),
+				this.getNeighbor(0, 1),
+				this.getNeighbor(-1, 0),
+				this.getNeighbor(1, 0),
+				this.getNeighbor(1, 1),
+				this.getNeighbor(1, -1),
+				this.getNeighbor(-1, -1),
+				this.getNeighbor(-1, 1)
+			]);
+		}
 	}
 
-	getAdjacentPassableNeighbors(){
-		return this.getAdjacentNeighbors().filter(t => t.passable);
+	getAdjacentPassableNeighbors(diagonals){
+		return this.getAdjacentNeighbors(diagonals).filter(t => t.passable);
 	}
 
 	getConnectedTiles(){

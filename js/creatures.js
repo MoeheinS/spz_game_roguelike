@@ -16,6 +16,8 @@ class Monster {
 		this.attacks_base = 1;
 		this.attacks_inc = 1;
 		//this.alerted = false;
+
+		this.canDiagonal = true;
 	}
 
 	getDisplayX(){                     
@@ -159,7 +161,7 @@ class Monster {
 
 	act(){
 		// TODO: this is where we'd use easystar for smort pathfinding
-	 	let neighbors = this.tile.getAdjacentPassableNeighbors();
+	 	let neighbors = this.tile.getAdjacentPassableNeighbors(this.canDiagonal);
 	 
 	 	neighbors = neighbors.filter(t => !t.monster || t.monster.isPlayer);
 
@@ -251,6 +253,19 @@ class Player extends Monster {
 			case 'd':
 			case 'ArrowRight':
 				player.tryMove(1, 0);
+				break;
+			// diagonals
+			case 'u':
+				player.tryMove(-1, -1);
+				break;
+			case 'i':
+				player.tryMove(1, -1);
+				break;
+			case 'j':
+				player.tryMove(-1, 1);
+				break;
+			case 'k':
+				player.tryMove(1, 1);
 				break;
 			case '.':
 				player.moves = 0;
