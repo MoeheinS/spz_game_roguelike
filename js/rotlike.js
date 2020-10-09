@@ -21,9 +21,13 @@ tileSize = {x: 24, y: 24};
 // for tiled mode
 SCALE_FACTOR = 3;
 
-numTiles = 24;
+numTiles = 26;
 
 game_state = {
+
+  debug_mapper: false,
+  debug_mouseCoords: {x: 0, y: 0},
+
   truesight: false,
   fov_enabled: false,
   scrollCamera: false,
@@ -61,6 +65,24 @@ document.querySelector("html").onkeydown = function(e){
     default:
       break;
   }
+  if( game_state.debug_mapper ){
+    debug_painter(e);
+  }
+};
+
+document.querySelector("canvas").onmousemove = function(e){
+  var mouseCoord = {};
+      mouseCoord.x = Math.floor(e.offsetX/tileSize.x);
+      mouseCoord.y = Math.floor(e.offsetY/tileSize.y);
+
+  if( game_state.debug_mouseCoords.x != mouseCoord.x || game_state.debug_mouseCoords.y != mouseCoord.y ){
+    game_state.debug_mouseCoords.x = mouseCoord.x;
+    game_state.debug_mouseCoords.y = mouseCoord.y
+    //console.log(game_state.debug_mouseCoords);
+  }
+};
+document.querySelector("canvas").onmouseup = function(e){
+  console.table(getTile(game_state.debug_mouseCoords.x, game_state.debug_mouseCoords.y));
 };
 
 function setupCanvas() {

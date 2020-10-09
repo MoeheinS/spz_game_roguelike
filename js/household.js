@@ -53,7 +53,9 @@ function draw(){
       // TODO: cleaner would be to save cameraOffset X and Y, so DOM can use these too, or that it can be used for inspect mode
       ctx.transform(1, 0, 0, 1, ((numTiles/2) - player.getDisplayX())*tileSize.x, ((numTiles/2) - player.getDisplayY())*tileSize.y);
     }
-    
+    if( game_state.debug_mapper ){
+      render_mouse();
+    }
     for(let i=0;i<numTiles;i++){
       for(let j=0;j<numTiles;j++){
         getTile(i,j).draw();
@@ -159,7 +161,12 @@ function startLevel(playerHP) {
   spawnRate = 15;              
   spawnCounter = spawnRate;  
 
-  generateLevel();
+  if( game_state.debug_mapper ){
+    numTiles = Math.floor( ( numTiles-2 ) / 3 )+2;
+    initMap();
+  }else{
+    generateLevel();
+  }
 
   player = new Player(randomPassableTile()); // {x: 0, y: 0}
   player.hp = playerHP;
@@ -185,7 +192,77 @@ function debug_toggle(p, v){
       tileSize = {x: ( v ? 24 : 24 ), y: ( v ? 24 : 32 )};
       SCALE_FACTOR = ( v ? 3 : 2 );
       break;
+    case 'mapper':
+      game_state.debug_mapper = v;
+      break;
     default:
+      break;
+  }
+}
+
+function render_mouse(){
+  ctx.save();
+  ctx.strokeRect(game_state.debug_mouseCoords.x*tileSize.x, game_state.debug_mouseCoords.y*tileSize.y, tileSize.x, tileSize.y);
+  ctx.restore();
+}
+function debug_painter(e){
+  var i = game_state.debug_mouseCoords.x;
+  var j = game_state.debug_mouseCoords.y;
+
+  if( !inBounds(i,j) ){
+    return;
+  }
+
+  switch (e.key) {
+    case 'x': // export
+      var tileExport = [];
+      //console.log(tiles);
+      for (let c = 1; c < tiles.length-1; c++) {
+        tileExport[c-1] = [];
+        for (let r = 1; r < tiles[c].length-1; r++) {
+          tileExport[c-1].push(tiles[c][r].constructor.name);
+          //console.log(tiles[c][r])
+        }
+        //console.warn('end of column!');
+      }
+      //console.log(tileExport);
+      document.querySelector('.container__json').value = JSON.stringify(tileExport);
+      break;
+    case 'w': // wall
+      tiles[i][j] = new Wall(i,j);
+      break;
+    case 's': 
+      tiles[i][j] = new SpawnerWall(i,j);
+      break;
+    case 'c': 
+      tiles[i][j] = new Chest(i,j);
+      break;
+    case '.': 
+      tiles[i][j] = new Stairs_down(i,j);
+      break;
+    case ',': 
+      tiles[i][j] = new Stairs_up(i,j);
+      break;
+    case 'p': 
+      tiles[i][j] = new Pit(i,j);
+      break;
+    case 't': 
+      tiles[i][j] = new Trap(i,j);
+      break;
+    // case 'g': 
+    //   tiles[i][j] = new Generator(i,j);
+    //   break;
+    case 'h': 
+      tiles[i][j] = new Hazard(i,j);
+      break;
+    case 'm': 
+      tiles[i][j] = new Mud(i,j);
+      break;
+    case 'a': // AQUA
+      tiles[i][j] = new Water(i,j);
+      break;
+    default:
+      tiles[i][j] = new Floor(i,j);
       break;
   }
 }

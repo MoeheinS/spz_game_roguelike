@@ -23,15 +23,20 @@
         <input type='checkbox' name='scroll' oninput="debug_toggle('scroll', this.checked)">Toggle scrolling
       </li>
       <li>
-        <input type='checkbox' name='scroll' oninput="debug_toggle('tiles', this.checked)">Text mode
+        <input type='checkbox' name='tiles' oninput="debug_toggle('tiles', this.checked)">Text mode
+      </li>
+      <li>
+        <input type='checkbox' name='mapper' oninput="debug_toggle('mapper', this.checked)">Tile mapper
       </li>
     </ul>
     <section class='container__canvas'>
       <canvas></canvas>
     </section>
+    <textarea class='container__json' style='height: 100%;'></textarea>
   </body>
   <script src='js/household.js'></script>
   <script src='js/terrain.js'></script>
+  <script src='js/tilemap.js'></script>
   <script src='js/abilities.js'></script>
   <script src='js/creatures.js'></script>
   <script src='js/rotlike.js'></script>
