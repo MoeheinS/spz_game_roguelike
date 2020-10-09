@@ -376,7 +376,16 @@ function initMap(){
 
 class Room { // new Room(0,0,tileMap);
 	constructor(x,y, allowedRooms) { // x and y coords are for overrides
-		var chosenRoom = shuffle(allowedRooms)[0];
+		var orig_chosenRoom = shuffle(allowedRooms)[0];
+		var chosenRoom = orig_chosenRoom;
+		var rotations = Math.floor(Math.random()*4);
+		if( rotations ){ // 0, 1, 2, 3
+			for (let i = 0; i < rotations; i++) {
+				console.log('transposed!');
+				chosenRoom = transpose(chosenRoom);
+			}
+		}
+
 		var start_x = 1+ x * chosenRoom.length;
 		var start_y = 1+ y * chosenRoom.length;
 		
@@ -386,6 +395,17 @@ class Room { // new Room(0,0,tileMap);
 				// optionally replace Walls for SpawnerWalls here?
 				//tiles[i][j] = new roomType(i,j);
 				tiles[start_x+i][start_y+j].replace(roomType);
+			}
+		}
+	}
+}
+
+//randomizeMap(3,3,1)
+function randomizeMap(x, y, seed){
+	for (let i = 0; i < x; i++) {
+		for (let j = 0; j < y; j++) {
+			if( seed > Math.random() ){
+				new Room(i, j, tileMap);
 			}
 		}
 	}
