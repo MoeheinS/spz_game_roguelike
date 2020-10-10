@@ -16,6 +16,7 @@ class Monster {
 		this.attacks_base = 1;
 		this.attacks_inc = 1;
 		//this.alerted = false;
+		this.bonusAttack = 0; // TODO: this ties into the TSL-like combat system
 
 		this.lastMove = [0,0];  
 		this.canDiagonal = true;
@@ -98,7 +99,8 @@ class Monster {
 				if( Math.floor(this.attacks) > 0 && newTile.monster && this.isPlayer != newTile.monster.isPlayer ){
 					this.attacks--;
 					// TODO: use this.attack instead of hard 1?
-					newTile.monster.swing(1);
+					newTile.monster.swing(1 + this.bonusAttack);
+					this.bonusAttack = 0;
 
 					this.offsetX = (newTile.x - this.tile.x)/2;         
 					this.offsetY = (newTile.y - this.tile.y)/2; 

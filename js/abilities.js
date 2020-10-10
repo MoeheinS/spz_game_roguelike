@@ -72,5 +72,79 @@ abilities = {
         }
       });
     }
+  },
+  POWER: function(monster){
+    monster.bonusAttack=5;
+  },
+  BOLT_RAY(monster, damage){
+    if( monster.lastMove[0] == 0 && monster.lastMove[1] == 0 ){
+      console.warn(`${monster.constructor.name} beams the floor!`);
+      return;
+    }
+    let newTile = monster.tile;
+    while(true){
+      let testTile = newTile.getNeighbor(monster.lastMove[0], monster.lastMove[1]);
+      if(testTile.passable){
+        newTile = testTile;
+        if(newTile.monster){
+          newTile.monster.swing(damage);
+        }
+        newTile.setEffect(9788, COLOR_WHITE, COLOR_BLUE);
+      }else{
+        break;
+      }
+    }
+  },
+  CROSS: function(monster){
+    let directions = [
+      [0, -1],
+      [0, 1],
+      [-1, 0],
+      [1, 0]
+    ];
+    originalDirection = {};
+    originalDirection.x = monster.lastMove[0];
+    originalDirection.y = monster.lastMove[1];
+    for(let k=0;k<directions.length;k++){
+      monster.lastMove = directions[k];
+      abilities.BOLT_RAY(monster, 2);
+    }
+    monster.lastMove = [originalDirection.x, originalDirection.y];
+  },
+  EX: function(monster){
+    let directions = [
+      [-1, -1],
+      [1, 1],
+      [-1, 1],
+      [1, -1]
+    ];
+    originalDirection = {};
+    originalDirection.x = monster.lastMove[0];
+    originalDirection.y = monster.lastMove[1];
+    for(let k=0;k<directions.length;k++){
+      monster.lastMove = directions[k];
+      abilities.BOLT_RAY(monster, 2);
+    }
+    monster.lastMove = [originalDirection.x, originalDirection.y];
+  },
+  STARBURST: function(monster){
+    let directions = [
+      [0, -1],
+      [0, 1],
+      [-1, 0],
+      [1, 0],
+      [-1, -1],
+      [1, 1],
+      [-1, 1],
+      [1, -1]
+    ];
+    originalDirection = {};
+    originalDirection.x = monster.lastMove[0];
+    originalDirection.y = monster.lastMove[1];
+    for(let k=0;k<directions.length;k++){
+      monster.lastMove = directions[k];
+      abilities.BOLT_RAY(monster, 2);
+    }
+    monster.lastMove = [originalDirection.x, originalDirection.y];
   }
 };
