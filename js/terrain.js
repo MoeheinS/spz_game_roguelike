@@ -374,8 +374,8 @@ function initMap(){
 	}
 }
 
-class Room { // new Room(0,0,tileMap);
-	constructor(x,y, allowedRooms) { // x and y coords are for overrides
+class Room { // new Room(0,0,tileMap); // instead of tileMap use tileMap_down once and tileMap_up once
+	constructor(x,y, allowedRooms) {
 		var orig_chosenRoom = shuffle(allowedRooms)[0];
 		var chosenRoom = orig_chosenRoom;
 		var rotations = Math.floor(Math.random()*4);
@@ -392,6 +392,8 @@ class Room { // new Room(0,0,tileMap);
 		for( let i=0; i<chosenRoom.length; i++ ){ // rows
 			for( let j=0; j<chosenRoom[i].length; j++ ){ // columns
 				let roomType = eval(chosenRoom[i][j]);
+				// NOTE: if roomType == 'Gimme a Boulder yo', place monster boulder else eval
+				// also if Spawner wall, add to spawners list then eval and place
 				// optionally replace Walls for SpawnerWalls here?
 				//tiles[i][j] = new roomType(i,j);
 				tiles[start_x+i][start_y+j].replace(roomType);

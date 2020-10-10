@@ -419,6 +419,7 @@ class Ghost extends Monster {
 	= ghoul / vampire ; drain HP from another creature, leaving it at 1 and absorbing the difference into yourself. If you go over maxhp, empower attack instead
 	= sea serpent ; can only travel on water
 	= captain / squealer ; summon a monster on the down stairs tile
+	= spectre ; spawn on the up-stairs after X turns; invincible creeping death. Also a plot hook for why you're in the dungeon in the first place
 
 	= bosses ; abilities
 		-> DASH monsters into the player, if possible, otherwise YELL and DASH yourself. The YELL is to give an attack boost AND enable the player to sidestep

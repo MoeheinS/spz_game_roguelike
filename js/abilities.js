@@ -148,3 +148,15 @@ abilities = {
     monster.lastMove = [originalDirection.x, originalDirection.y];
   }
 };
+
+/*
+  Notes on items:
+    Consumable items should cast an ability
+    Potions : 1 charge, delete when 0 charges
+    Scrolls : like potions, but teaches you the skill
+    Wands : 1-X charges, stay when 0 charges
+      -> technically abilities cast using a wand should still consume mana ; the only of these that does consume mana
+      -> recharging using another ability is too much hassle to code, but possible
+    Rings : 1-3 charges, stay when 0 charges, recharge at depth change
+      -> abilities don't cost mana to use this way
+*/
