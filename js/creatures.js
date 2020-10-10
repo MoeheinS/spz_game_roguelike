@@ -395,24 +395,34 @@ class Ghost extends Monster {
 	=	creature that winds up when you're clean cardinal LoS, then stuns you for 1 turn if that's still true the next turn
 	= creature that, if it walks onto an item, throws that item in a cardinal direction closest to the player, with the chance of hitting other creatures
 	= strength and armor degrade-on-hitters (resets at stairs)
-	= gremlins ; enter water, fill each adjacent non-monster tile with NEW GREMLINS
+	= gremlins ; enter water, fill each adjacent non-monster tile with NEW GREMLINS -> turn the water into mud tho, to prevent infinity spawning
 	= creatures that teleport when hit
-	= siren ; ability to force player to move in her direction
+	= siren ; ability to force player to move in her direction (and lower moves by 1; do this every 3rd turn IF line of sight)
 	= squid ; can't disengage?
-	= death armor ; drops a random sword on death
-	= death sword ; same but for weapon
-	= enemy casters ; 1 spell, once 
-	= troll ; every 3 turns self-stuns and regenerates 1 hp
-	= ninja ; teleports away when hit, or teleports next to the player
-	= clown ; spawns looking like something else, reveals true shape on taking damage
-	= wyvern / bull ; if it has clean line of sight, mark that direction, then teleport in a line until it hits monster or terrain
-	= mummy ; if on fire, move randomly and become able to attack anything
-	= samurai ; on taking damage, enrage, then attack all adjacent squares next turn (fun times if you fill a room with samurai)
+	= death armor ; drops a random armor on death?
+	= death sword ; same but for swords
+	= enemy casters ; 1 spell, once -> "Summon zombie", "Summon ghost", "Bolt"
+	= troll ; every 3 turns self-stuns and regenerates 1 hp -> like AURA but less range
+	= ninja ; teleports away when hit, or teleports next to the player -> or swap places with another monster!
+	= clown ; spawns looking like something else, reveals true shape on taking damage -> 2 hp, Math.random glyph on constructor
+	= wyvern / bull ; if it has clean line of sight, mark that direction, then teleport in a line until it hits monster or terrain -> BOLT_travel / dash
+		-> if this.tile.x / y == player.tile.x / y ; check for ability
+	= mummy ; if on fire, move randomly and become able to attack anything -> very zelda-poi, pass
+	= samurai ; on taking damage, enrage, then attack all adjacent squares next turn (fun times if you fill a room with samurai) ; require a whirlwind ability
 	= hydra ; gains hp from regular attacks
-	= necromancer ; summon a DARK FLY from a corpse
-	= wight ; sets monster's attacks to 0 on hit
+	= necromancer ; summon a DARK FLY from a corpse -> requires corpse persistence, meh. Instead summon dark fly from MUD. Every turn until stopped?
+	= dark fly ; can only move diagonally
+	= wight ; sets monster's attacks to 0 on hit -> or gives -5 attack bonus on hit; do-able
+	= golem / brute ; when next to a boulder, make the boulder DASH
+		-> when cardinal to player , create boulder between you and player. when cardinal to boulder, boulder DASH. Seems like good BOSS mechanics
+		-> maybe also use it on creatures?
+	= ghoul / vampire ; drain HP from another creature, leaving it at 1 and absorbing the difference into yourself. If you go over maxhp, empower attack instead
+	= sea serpent ; can only travel on water
+	= captain / squealer ; summon a monster on the down stairs tile
 
 	= bosses ; abilities
+		-> DASH monsters into the player, if possible, otherwise YELL and DASH yourself. The YELL is to give an attack boost AND enable the player to sidestep
+		-> Self-stun when hitting a wall when dashing ; this should be inherent to dash tbh
 */
 
 function generateMonsters() {
