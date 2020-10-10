@@ -17,6 +17,7 @@ class Monster {
 		this.attacks_inc = 1;
 		//this.alerted = false;
 
+		this.lastMove = [0,0];  
 		this.canDiagonal = true;
 	}
 
@@ -89,6 +90,7 @@ class Monster {
 		// }
 		let newTile = this.tile.getNeighbor(dx,dy);
 		if(newTile.passable){
+			this.lastMove = [dx,dy];
 			if( Math.floor(this.moves) > 0 && !newTile.monster ){
 				this.moves--;
 				this.move(newTile);

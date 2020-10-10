@@ -45,5 +45,32 @@ abilities = {
     });
     player.tile.setEffect(9788, COLOR_BLACK, COLOR_GREEN_NEON);
     player.hp++;
+  },
+  DASH: function(monster){
+    if( monster.lastMove[0] == 0 && monster.lastMove[1] == 0 ){
+      console.warn(`${monster.constructor.name} does some squats!`);
+      return;
+    }
+    let newTile = monster.tile;
+    while(true){
+      let testTile = newTile.getNeighbor(monster.lastMove[0],monster.lastMove[1]);
+      if(testTile.passable && !testTile.monster){
+        // play an effect on the tile
+        testTile.setEffect(9788, COLOR_BLACK, COLOR_FUCHSIA);
+        newTile = testTile;
+      }else{
+        break;
+      }
+    }
+    if(monster.tile != newTile){
+      monster.move(newTile, true);
+      newTile.getAdjacentNeighbors().forEach(t => {
+        if(t.monster){
+          t.setEffect(9788, COLOR_BLACK, COLOR_FUCHSIA);
+          //t.monster.stunned = true;
+          t.monster.swing(1);
+        }
+      });
+    }
   }
 };
