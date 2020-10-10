@@ -20,6 +20,8 @@ class Monster {
 
 		this.lastMove = [0,0];  
 		this.canDiagonal = true;
+
+		this.fly = false;
 	}
 
 	getDisplayX(){                     
@@ -379,10 +381,11 @@ class Quickling extends Monster {
 	}
 }
 
-class Ghost extends Monster {
+class Ghost extends Monster { // TODO make walls passable for them
 	constructor(tile){
 		super(tile, {x: 84, y: 64}, 3); // G
 		this.glyph = 71;
+		this.fly = true;
 	}
 	swing(damage){ // teleports away when hit
 		this.move(randomPassableTile(), true); //non-animated move
@@ -420,10 +423,17 @@ class Ghost extends Monster {
 	= sea serpent ; can only travel on water
 	= captain / squealer ; summon a monster on the down stairs tile
 	= spectre ; spawn on the up-stairs after X turns; invincible creeping death. Also a plot hook for why you're in the dungeon in the first place
+	= nemesis ; they know all spells the player knows (when spawned) -> strong enough that they need to be created using an ability?
+	= fireball ; summoned by ability, lastMove direction is set by ability on summon -> can only move in that direction (creature intrinsic), casts EXPLODE if it hits a wall
 
 	= bosses ; abilities
 		-> DASH monsters into the player, if possible, otherwise YELL and DASH yourself. The YELL is to give an attack boost AND enable the player to sidestep
 		-> Self-stun when hitting a wall when dashing ; this should be inherent to dash tbh
+
+		-> the ability to set Spawncounter to 0 -> ie immediate reinforcements
+		-> or summon a monster at every spawner wall
+
+		-> the ability to make every monster cast Troll regen -> if the monsters are healing, shit's gonna get tough
 */
 
 function generateMonsters() {

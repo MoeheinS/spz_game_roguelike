@@ -193,16 +193,20 @@ class Pit extends Terrain {
 	}
 	stepOn(monster){
 		if(monster.isPlayer){ // should traps also trigger for monsters?
-			console.warn('The ground gives way!');
-			monster.swing(2);
-			if( monster.hp > 0 ){
-				game_state.depth++;
-				startLevel(player.hp);
+			if( !monster.fly ){
+				console.warn('The ground gives way!');
+				monster.swing(2);
+				if( monster.hp > 0 ){
+					game_state.depth++;
+					startLevel(player.hp);
+				}
 			}
 		}else{
-			console.warn('You hear something cry out!');
-			monster.die();
-			this.hidden = false;
+			if( !monster.fly ){
+				console.warn('You hear something cry out!');
+				monster.die();
+				this.hidden = false;
+			}
 		}
 	}
 }
@@ -219,7 +223,7 @@ class Trap extends Terrain { // different kinds of traps? Rock fall trap, explos
 		super.draw();
 	}
 	stepOn(monster){
-		if( !this.trap ){
+		if( !this.trap || monster.fly ){
 			return;
 		}
 		if(monster.isPlayer){ // should traps also trigger for monsters?
@@ -281,6 +285,9 @@ class Mud extends Terrain {
 		ctx.restore();
 	}
 	stepOn(monster){
+		if( monster.fly ){
+			return;
+		}
 		if(monster.isPlayer){
 			console.warn('GLOOP GLOOP');
 			tick();
@@ -306,6 +313,9 @@ class Water extends Terrain { // fuck
 		ctx.restore();
 	}
 	stepOn(monster){
+		if( monster.fly ){
+			return;
+		}
 		if(monster.isPlayer){
 			console.warn('SPLISH SPLASH');
 		}else{
