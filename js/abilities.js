@@ -146,6 +146,31 @@ abilities = {
       abilities.BOLT_RAY(monster, 2);
     }
     monster.lastMove = [originalDirection.x, originalDirection.y];
+  },
+  PHASE: function(monster){
+    if( monster.lastMove[0] == 0 && monster.lastMove[1] == 0 ){
+      console.warn(`${monster.constructor.name} flickers in place...`);
+      return;
+    }
+    let newTile = monster.tile;
+    newTile.setEffect(9788, COLOR_FUCHSIA, COLOR_GREEN_NEON);
+    let testTile = newTile.getNeighbor(monster.lastMove[0],monster.lastMove[1]).getNeighbor(monster.lastMove[0],monster.lastMove[1]);
+    if(!testTile.passable && !monster.phaseWall){
+      // teleport into a wall? That's YASD
+      console.warn(`The ${monster.constructor.name} was lost...`);
+      monster.die();
+    }else if( testTile.monster ){
+      // teleport into a monster? Healthier one survives
+      let myHP = monster.hp;
+      let thyHP = testTile.monster.hp;
+      testTile.monster.swing(myHP);
+      monster.swing(thyHP);
+    }
+    newTile = testTile;
+    if(monster.tile != newTile){
+      monster.move(newTile, true);
+      testTile.setEffect(9788, COLOR_FUCHSIA, COLOR_GREEN_NEON);
+    }
   }
 };
 
