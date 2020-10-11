@@ -22,6 +22,7 @@ class Monster {
 		this.canDiagonal = true;
 
 		this.fly = false;
+		this.phaseWalls = false; // lets ghost pass walls, lets player phase walls when DASHing, then set back to false
 	}
 
 	getDisplayX(){                     
@@ -92,7 +93,7 @@ class Monster {
 		// 	return true;
 		// }
 		let newTile = this.tile.getNeighbor(dx,dy);
-		if(newTile.passable){
+		if(newTile.passable || this.phaseWalls){
 			this.lastMove = [dx,dy];
 			if( Math.floor(this.moves) > 0 && !newTile.monster ){
 				this.moves--;
@@ -166,8 +167,12 @@ class Monster {
 	}
 
 	act(){
-		// TODO: this is where we'd use easystar for smort pathfinding
-	 	let neighbors = this.tile.getAdjacentPassableNeighbors(this.canDiagonal);
+		let neighbors = [];
+		if( this.phaseWalls ){
+			neighbors = this.tile.getAdjacentNeighbors(this.canDiagonal);
+		}else{
+			neighbors = this.tile.getAdjacentPassableNeighbors(this.canDiagonal);
+		}
 	 
 	 	neighbors = neighbors.filter(t => !t.monster || t.monster.isPlayer);
 
@@ -386,6 +391,7 @@ class Ghost extends Monster { // TODO make walls passable for them
 		super(tile, {x: 84, y: 64}, 3); // G
 		this.glyph = 71;
 		this.fly = true;
+		this.phaseWalls = true;
 	}
 	swing(damage){ // teleports away when hit
 		this.move(randomPassableTile(), true); //non-animated move
