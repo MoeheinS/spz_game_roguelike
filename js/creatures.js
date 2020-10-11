@@ -431,6 +431,9 @@ class Ghost extends Monster { // TODO make walls passable for them
 	= spectre ; spawn on the up-stairs after X turns; invincible creeping death. Also a plot hook for why you're in the dungeon in the first place
 	= nemesis ; they know all spells the player knows (when spawned) -> strong enough that they need to be created using an ability?
 	= fireball ; summoned by ability, lastMove direction is set by ability on summon -> can only move in that direction (creature intrinsic), casts EXPLODE if it hits a wall
+	= momentumer ; something that starts with 0.25 actions / attacks per turn, and every 5th turn it speeds up its action / attack _inc and cap
+		-> in that it's 15 turns before it's at 1 action / attack per turn, and after that things start getting dicey
+	= guardian ; 0 actions / attacks per turn. Something else (external) sets their actions / attacks per turn (taking a treasure? killing a specific creature?)
 
 	= bosses ; abilities
 		-> DASH monsters into the player, if possible, otherwise YELL and DASH yourself. The YELL is to give an attack boost AND enable the player to sidestep
