@@ -419,7 +419,7 @@ class Ghost extends Monster { // TODO make walls passable for them
 	= mummy ; if on fire, move randomly and become able to attack anything -> very zelda-poi, pass
 	= samurai ; on taking damage, enrage, then attack all adjacent squares next turn (fun times if you fill a room with samurai) ; require a whirlwind ability
 	= hydra ; gains hp from regular attacks
-	= necromancer ; summon a DARK FLY from a corpse -> requires corpse persistence, meh. Instead summon dark fly from MUD. Every turn until stopped?
+	= necromancer ; 8486 ; summon a DARK FLY from a corpse -> requires corpse persistence, meh. Instead summon dark fly from MUD. Every turn until stopped?
 	= dark fly ; can only move diagonally
 	= poisonous snake? ; 199 ; does a dash?
 	= wight ; sets monster's attacks to 0 on hit -> or gives -5 attack bonus on hit; do-able
@@ -437,6 +437,7 @@ class Ghost extends Monster { // TODO make walls passable for them
 	= guardian ; 0 actions / attacks per turn. Something else (external) sets their actions / attacks per turn (taking a treasure? killing a specific creature?)
 	= portal ; 8719 ; summons creatures periodically until you destroy it?
 	= magic ; 9834 1 note ; 9835 2 notes (harp?) ; 958 double lightning ; 950 single lightning ; 9829 charmed / ally
+	= fountain ; 8992 ; heal once? 63 scroll, 7839 ring, 33 potion, 47 wand
 
 	= bosses ; abilities
 		-> DASH monsters into the player, if possible, otherwise YELL and DASH yourself. The YELL is to give an attack boost AND enable the player to sidestep
