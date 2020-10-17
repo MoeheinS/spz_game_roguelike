@@ -389,7 +389,7 @@ class Quickling extends Monster {
 class Ghost extends Monster { // TODO make walls passable for them
 	constructor(tile){
 		super(tile, {x: 84, y: 64}, 3); // G
-		this.glyph = 918; //71;
+		this.glyph = 912; //71;
 		this.fly = true;
 		this.phaseWalls = true;
 	}
