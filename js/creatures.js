@@ -389,7 +389,7 @@ class Quickling extends Monster {
 class Ghost extends Monster { // TODO make walls passable for them
 	constructor(tile){
 		super(tile, {x: 84, y: 64}, 3); // G
-		this.glyph = 71;
+		this.glyph = 918; //71;
 		this.fly = true;
 		this.phaseWalls = true;
 	}
@@ -404,7 +404,7 @@ class Ghost extends Monster { // TODO make walls passable for them
 	=	creature that winds up when you're clean cardinal LoS, then stuns you for 1 turn if that's still true the next turn
 	= creature that, if it walks onto an item, throws that item in a cardinal direction closest to the player, with the chance of hitting other creatures
 	= strength and armor degrade-on-hitters (resets at stairs)
-	= gremlins ; enter water, fill each adjacent non-monster tile with NEW GREMLINS -> turn the water into mud tho, to prevent infinity spawning
+	= gremlins ; 268 ; enter water, fill each adjacent non-monster tile with NEW GREMLINS -> turn the water into mud tho, to prevent infinity spawning
 	= creatures that teleport when hit
 	= siren ; ability to force player to move in her direction (and lower moves by 1; do this every 3rd turn IF line of sight)
 	= squid ; can't disengage?
@@ -421,6 +421,7 @@ class Ghost extends Monster { // TODO make walls passable for them
 	= hydra ; gains hp from regular attacks
 	= necromancer ; summon a DARK FLY from a corpse -> requires corpse persistence, meh. Instead summon dark fly from MUD. Every turn until stopped?
 	= dark fly ; can only move diagonally
+	= poisonous snake? ; 199 ; does a dash?
 	= wight ; sets monster's attacks to 0 on hit -> or gives -5 attack bonus on hit; do-able
 	= golem / brute ; when next to a boulder, make the boulder DASH
 		-> when cardinal to player , create boulder between you and player. when cardinal to boulder, boulder DASH. Seems like good BOSS mechanics
@@ -428,12 +429,14 @@ class Ghost extends Monster { // TODO make walls passable for them
 	= ghoul / vampire ; drain HP from another creature, leaving it at 1 and absorbing the difference into yourself. If you go over maxhp, empower attack instead
 	= sea serpent ; can only travel on water
 	= captain / squealer ; summon a monster on the down stairs tile
-	= spectre ; spawn on the up-stairs after X turns; invincible creeping death. Also a plot hook for why you're in the dungeon in the first place
-	= nemesis ; they know all spells the player knows (when spawned) -> strong enough that they need to be created using an ability?
+	= spectre ; 8359 ; spawn on the up-stairs after X turns; invincible creeping death. Also a plot hook for why you're in the dungeon in the first place
+	= nemesis ; 9787 ; they know all spells the player knows (when spawned) -> strong enough that they need to be created using an ability?
 	= fireball ; summoned by ability, lastMove direction is set by ability on summon -> can only move in that direction (creature intrinsic), casts EXPLODE if it hits a wall
 	= momentumer ; something that starts with 0.25 actions / attacks per turn, and every 5th turn it speeds up its action / attack _inc and cap
 		-> in that it's 15 turns before it's at 1 action / attack per turn, and after that things start getting dicey
 	= guardian ; 0 actions / attacks per turn. Something else (external) sets their actions / attacks per turn (taking a treasure? killing a specific creature?)
+	= portal ; 8719 ; summons creatures periodically until you destroy it?
+	= magic ; 9834 1 note ; 9835 2 notes (harp?) ; 958 double lightning ; 950 single lightning ; 9829 charmed / ally
 
 	= bosses ; abilities
 		-> DASH monsters into the player, if possible, otherwise YELL and DASH yourself. The YELL is to give an attack boost AND enable the player to sidestep
@@ -441,6 +444,12 @@ class Ghost extends Monster { // TODO make walls passable for them
 
 		-> the ability to set Spawncounter to 0 -> ie immediate reinforcements
 		-> or summon a monster at every spawner wall
+
+		weak erim: 277
+		erim: 276
+		gades: 286
+		amon: 196
+		daos: 270
 
 		-> the ability to make every monster cast Troll regen -> if the monsters are healing, shit's gonna get tough
 */
