@@ -412,28 +412,24 @@ class Samurai extends Monster {
 	}
 }
 
-class Troll extends Monster { // every 3 turns self-stuns and regenerates 1 hp -> like AURA but less range
-	constructor(tile){
-		super(tile, {x: 0, y: 0}, 4); // T
-		this.glyph = 84;
-		this.attacks_inc = 0.5; // slow attacks
-		this.cooldown = 0;
-	}
-	update(){
-		this.cooldown++;
-		// every 7th turn
-		// if you want only once, you can check this.cooldown == 7
-		// or wrap this.cooldown++ in a limiting if statement
-		if( this.cooldown % this.hp == 0 && this.hp < 4 ){ 
-			console.warn(`The ${this.constructor.name} regenerates!`);
-			abilities.MEND(this);
-			//this.moves = 0;
-			//this.attacks = 0;
-		}else{
-			super.update();
-		}
-	}
-}
+// It works, but it's not FUN
+// class Troll extends Monster { // every 3 turns self-stuns and regenerates 1 hp -> like AURA but less range
+// 	constructor(tile){
+// 		super(tile, {x: 0, y: 0}, 4); // T
+// 		this.glyph = 84;
+// 		this.attacks_inc = 0.25; // ssssslow attacks?
+// 		this.cooldown = 0;
+// 	}
+// 	update(){
+// 		this.cooldown++;
+// 		if( this.cooldown % 8 == 0 && this.hp > 1 && this.hp < 4 ){ 
+// 			console.warn(`The ${this.constructor.name}'s flesh ripples! It looks healthier!`);
+// 			abilities.MEND(this);
+// 		}else{
+// 			super.update();
+// 		}
+// 	}
+// }
 
 // creature ideas
 /*
