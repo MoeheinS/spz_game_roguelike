@@ -386,7 +386,7 @@ class Quickling extends Monster {
 	}
 }
 
-class Ghost extends Monster { // TODO make walls passable for them
+class Ghost extends Monster {
 	constructor(tile){
 		super(tile, {x: 84, y: 64}, 3); // G
 		this.glyph = 912; //71;
@@ -399,9 +399,44 @@ class Ghost extends Monster { // TODO make walls passable for them
 	}
 }
 
+class Samurai extends Monster {
+	constructor(tile){
+		super(tile, {x: 0, y: 0}, 2); // s
+		this.glyph = 115;
+	}
+	swing(damage){ // unleashes a whirlwind attack when damaged, kek
+		super.swing(damage);
+		if( this.hp > 0 ){
+			abilities.WHIRLWIND(this);
+		}
+	}
+}
+
+class Troll extends Monster { // every 3 turns self-stuns and regenerates 1 hp -> like AURA but less range
+	constructor(tile){
+		super(tile, {x: 0, y: 0}, 4); // T
+		this.glyph = 84;
+		this.attacks_inc = 0.5; // slow attacks
+		this.cooldown = 0;
+	}
+	update(){
+		this.cooldown++;
+		// every 7th turn
+		// if you want only once, you can check this.cooldown == 7
+		// or wrap this.cooldown++ in a limiting if statement
+		if( this.cooldown % this.hp == 0 && this.hp < 4 ){ 
+			console.warn(`The ${this.constructor.name} regenerates!`);
+			abilities.MEND(this);
+			//this.moves = 0;
+			//this.attacks = 0;
+		}else{
+			super.update();
+		}
+	}
+}
+
 // creature ideas
 /*
-	=	creature that winds up when you're clean cardinal LoS, then stuns you for 1 turn if that's still true the next turn
 	= creature that, if it walks onto an item, throws that item in a cardinal direction closest to the player, with the chance of hitting other creatures
 	= strength and armor degrade-on-hitters (resets at stairs)
 	= gremlins ; 268 ; enter water, fill each adjacent non-monster tile with NEW GREMLINS -> turn the water into mud tho, to prevent infinity spawning
@@ -411,15 +446,15 @@ class Ghost extends Monster { // TODO make walls passable for them
 	= death armor ; drops a random armor on death?
 	= death sword ; same but for swords
 	= enemy casters ; 1 spell, once -> "Summon zombie", "Summon ghost", "Bolt"
-	= troll ; every 3 turns self-stuns and regenerates 1 hp -> like AURA but less range
 	= ninja ; teleports away when hit, or teleports next to the player -> or swap places with another monster!
 	= clown ; spawns looking like something else, reveals true shape on taking damage -> 2 hp, Math.random glyph on constructor
 	= wyvern / bull ; if it has clean line of sight, mark that direction, then teleport in a line until it hits monster or terrain -> BOLT_travel / dash
 		-> if this.tile.x / y == player.tile.x / y ; check for ability
+		-> YELL, then dash, so if you move away it YELLS again, building up its damage. But it'll DASH regardless of other monsters in the way, so you can use it to kill monsters
 	= mummy ; if on fire, move randomly and become able to attack anything -> very zelda-poi, pass
-	= samurai ; on taking damage, enrage, then attack all adjacent squares next turn (fun times if you fill a room with samurai) ; require a whirlwind ability
 	= hydra ; gains hp from regular attacks
 	= necromancer ; 8486 ; summon a DARK FLY from a corpse -> requires corpse persistence, meh. Instead summon dark fly from MUD. Every turn until stopped?
+		-> turn MUD into a mud puppet, replacing it with FLOOR. Range floor-wide or adjacent?
 	= dark fly ; can only move diagonally
 	= poisonous snake? ; 199 ; does a dash?
 	= wight ; sets monster's attacks to 0 on hit -> or gives -5 attack bonus on hit; do-able
@@ -464,7 +499,7 @@ function generateMonsters() {
 }
 
 function spawnMonster() {
-	let monsterType = shuffle([Goblin, Kobold, Zombie, Ghost, Quickling])[0];
+	let monsterType = shuffle([Goblin, Kobold, Zombie, Ghost, Quickling, Samurai])[0];
 	// spawn from air
 	//let monster = new monsterType(randomPassableTile());
 	// spawn from next to a spawner wall
