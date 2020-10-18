@@ -172,6 +172,28 @@ abilities = {
       monster.move(newTile, true);
       testTile.setEffect(9788, COLOR_FUCHSIA, COLOR_GREEN_NEON);
     }
+  },
+  WHIRLWIND: function(monster){
+    let directions = [
+      [0, -1],
+      [0, 1],
+      [-1, 0],
+      [1, 0],
+      [-1, -1],
+      [1, 1],
+      [-1, 1],
+      [1, -1]
+    ];
+    originalDirection = {};
+    originalDirection.x = monster.lastMove[0];
+    originalDirection.y = monster.lastMove[1];
+    for(let k=0;k<directions.length;k++){
+      var testTile = monster.tile.getNeighbor(directions[k][0],directions[k][1]);
+      if( testTile.monster ){
+        testTile.monster.swing(1);
+      }
+    }
+    monster.lastMove = [originalDirection.x, originalDirection.y];
   }
 };
 
