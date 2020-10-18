@@ -38,12 +38,12 @@ abilities = {
   },
   AURA: function(){
     player.tile.getAdjacentNeighbors().forEach(function(t){
-      t.setEffect(9788, COLOR_BLACK, COLOR_GREEN_NEON); // ☼
+      t.setEffect(9834, COLOR_BLUE, COLOR_GREEN_NEON); // ☼
       if(t.monster){
         t.monster.hp++;
       }
     });
-    player.tile.setEffect(9788, COLOR_BLACK, COLOR_GREEN_NEON);
+    player.tile.setEffect(9834, COLOR_BLUE, COLOR_GREEN_NEON);
     player.hp++;
   },
   DASH: function(monster){
@@ -56,7 +56,7 @@ abilities = {
       let testTile = newTile.getNeighbor(monster.lastMove[0],monster.lastMove[1]);
       if(testTile.passable && !testTile.monster){
         // play an effect on the tile
-        testTile.setEffect(9788, COLOR_BLACK, COLOR_FUCHSIA);
+        testTile.setEffect(monster.glyph, COLOR_BLACK, COLOR_FUCHSIA);
         newTile = testTile;
       }else{
         break;
@@ -66,7 +66,7 @@ abilities = {
       monster.move(newTile, true);
       newTile.getAdjacentNeighbors().forEach(t => {
         if(t.monster){
-          t.setEffect(9788, COLOR_BLACK, COLOR_FUCHSIA);
+          t.setEffect(monster.glyph, COLOR_BLACK, COLOR_FUCHSIA);
           //t.monster.stunned = true;
           t.monster.swing(1);
         }
@@ -75,6 +75,7 @@ abilities = {
   },
   POWER: function(monster){
     monster.bonusAttack=5;
+    monster.tile.setEffect(monster.glyph, COLOR_WHITE, COLOR_FUCHSIA);
   },
   BOLT_RAY(monster, damage){
     if( monster.lastMove[0] == 0 && monster.lastMove[1] == 0 ){
@@ -89,7 +90,7 @@ abilities = {
         if(newTile.monster){
           newTile.monster.swing(damage);
         }
-        newTile.setEffect(9788, COLOR_WHITE, COLOR_BLUE);
+        newTile.setEffect(950, COLOR_WHITE, COLOR_BLUE);
       }else{
         break;
       }
