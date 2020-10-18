@@ -36,15 +36,19 @@ abilities = {
       monsters[i].attacks = -2;
     }
   },
-  AURA: function(){
-    player.tile.getAdjacentNeighbors().forEach(function(t){
+  MEND: function(monster){
+    monster.tile.setEffect(9834, COLOR_BLUE, COLOR_GREEN_NEON);
+    monster.hp++;
+  },
+  AURA: function(monster){
+    monster.tile.getAdjacentNeighbors().forEach(function(t){
       t.setEffect(9834, COLOR_BLUE, COLOR_GREEN_NEON); // ☼
       if(t.monster){
         t.monster.hp++;
       }
     });
-    player.tile.setEffect(9834, COLOR_BLUE, COLOR_GREEN_NEON);
-    player.hp++;
+    monster.tile.setEffect(9834, COLOR_BLUE, COLOR_GREEN_NEON);
+    monster.hp++;
   },
   DASH: function(monster){
     if( monster.lastMove[0] == 0 && monster.lastMove[1] == 0 ){
