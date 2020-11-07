@@ -374,6 +374,78 @@ function generateTiles(){
   return passableTiles;
 }
 
+function generateWalls(){
+	let passableTiles=0;
+	tiles = [];
+  for( let i=0; i<numTiles; i++ ){
+		tiles[i] = [];
+		for( let j=0; j<numTiles; j++ ){
+			tiles[i][j] = new Wall(i,j);
+		}
+  }
+  return passableTiles;
+}
+
+function drunkWalk(tile){
+	var attempt = tile.getAdjacentNeighbors()[0];
+	// if( inBounds(attempt.x,attempt.y)){
+	// 	return attempt;
+	// }else{
+	// 	return tile;
+	// }
+	return ( inBounds(attempt.x,attempt.y) ? attempt : false );
+}
+
+function drunkWalker(seed, target, type_to){
+	var fails = 0;
+	var target_og = target;
+	while( target-- ){
+		if( fails > target_og ){
+			console.error('whoops, too many fails');
+			return seed;
+		}
+		let process = drunkWalk(seed);
+		if( !process ){
+			console.warn('cant drunkwalk');
+			target++;
+			fails++;
+		}else{
+			process.replace(type_to);
+			seed = process;
+		}
+		drunkWalk(seed);
+	}
+	if( target <= 0 ){
+		console.warn('out of booze, boss');
+		return seed;
+	}
+}
+
+// levelgen_dw(1200);
+function levelgen_dw(target){
+	generateWalls();
+	//var seed = randomTile('Wall');
+	// while( target-- ){
+	// 	let process = drunkWalk(seed);
+	// 	if( process == seed ){
+	// 		target++;
+	// 	}else{
+	// 		process.replace(Floor);
+	// 		seed = process;
+	// 	}
+	// 	drunkWalk(seed);
+	// }
+	// if( target <= 0 ){
+	// 	console.warn('Level carved, boss');
+	// }
+	//drunkWalker(seed, target, 'Wall', Floor);
+	var seed = randomTile('Wall');
+	var lastTile = drunkWalker(seed, target, Floor);
+	seed.replace(Stairs_up);
+	lastTile.replace(Stairs_down);
+	//randomPassableTile('Floor').replace(Stairs_down);
+}
+
 function initMap(){
 	tiles = [];
 	for( let i=0; i<numTiles; i++ ){
