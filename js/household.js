@@ -21,6 +21,17 @@ function randomPassableTile(className){
   return tile;
 }
 
+function randomTile(className){
+  let tile;
+  tryTo('get random tile', function(){
+    let x = randomRange(0,numTiles-1);
+    let y = randomRange(0,numTiles-1);
+    tile = getTile(x, y);
+    return ( className ? tile.constructor.name == className : true );
+  });
+  return tile;
+}
+
 function tryTo(description, callback, time){
   for(let timeout=( time ? time : 1000 );timeout>0;timeout--){
     if(callback()){
