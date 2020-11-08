@@ -331,6 +331,8 @@ function generateLevel(test){
 		return initMap(Floor);
 	}
 
+	// OLD levelgen
+	/*
 	tryTo('generate map', function(){
 		return generateTiles() == randomPassableTile().getConnectedTiles().length;
 		// && ( coords ? getTile(coords.x,coords.y).passable : true ); times out level gen
@@ -340,6 +342,9 @@ function generateLevel(test){
 	if( game_state.depth > 1 ){
 		randomPassableTile('Floor').replace(Stairs_up); 
 	}
+	*/
+
+	createSpawners();
 
 	randomPassableTile('Floor').replace(Water);
 	randomPassableTile('Floor').replace(Pit);
@@ -350,6 +355,22 @@ function generateLevel(test){
 	randomPassableTile('Floor').replace(Mud);
 
 	generateMonsters();
+}
+
+function createSpawners(){
+	spawners = [];
+  for( let i=0; i<numTiles; i++ ){
+		
+		var walls = tiles[i].filter(t => t.constructor.name == 'Wall' && t.getAdjacentPassableNeighbors().length && t.getAdjacentPassableNeighbors().length < 3);
+		if( walls.length ){
+			for( w of walls ){
+				if( Math.random() < 0.25 ){
+					w.replace(SpawnerWall);
+					spawners.push(w);
+				}
+			}
+		}
+  }
 }
 
 function generateTiles(){
@@ -383,10 +404,12 @@ function drunkWalk(tile, diagonals, allowedType){
 	// }else{
 	// 	return tile;
 	// }
-	return ( inBounds(attempt.x,attempt.y) ? ( attempt.constructor.name == allowedType ? attempt : false ) : false );
+	//return ( inBounds(attempt.x,attempt.y) ? ( attempt.constructor.name == allowedType.name ? attempt : false ) : false );
+	return ( inBounds(attempt.x,attempt.y) ? attempt : false );
 }
 
 function drunkWalker(seed, target, type_to){
+	var carves = 0;
 	var fails = 0;
 	var target_og = target;
 	while( target-- ){
@@ -394,31 +417,41 @@ function drunkWalker(seed, target, type_to){
 			console.error('whoops, too many fails');
 			return seed;
 		}
-		let process = drunkWalk(seed, true, 'Wall');
+		let process = drunkWalk(seed, true, Wall);
 		if( !process ){
 			console.warn('cant drunkwalk');
 			target++;
 			fails++;
 		}else{
+			if( process.constructor.name != type_to.name ){
+				carves++;
+			}
 			process.replace(type_to);
 			seed = process;
 		}
-		drunkWalk(seed, true, 'Wall');
+		drunkWalk(seed, true, Wall);
 	}
 	if( target <= 0 ){
-		console.warn('out of booze, boss');
+		console.warn(`out of booze after ${carves} carves with ${fails} fails, boss`);
 		return seed;
 	}
 }
 
-// levelgen_dw(1200);
-function levelgen_dw(target){
+// levelgen_dw(600, player.tile);
+// NOTE: do I need a direction? For going up / down?
+function levelgen_dw(target, seed, canUp){
 	initMap(Wall);
-	var seed = randomTile('Wall');
+	var seed = ( seed ? seed : randomTile('Wall') );
 	var lastTile = drunkWalker(seed, target, Floor);
-	seed.replace(Stairs_up);
-	lastTile.replace(Stairs_down);
-	//randomPassableTile('Floor').replace(Stairs_down);
+	if( canUp ){ 
+		seed.replace(Stairs_up);
+	}
+	if( seed == lastTile ){
+		console.warn('Back where we began');
+		randomPassableTile('Floor').replace(Stairs_down);
+	}else{
+		lastTile.replace(Stairs_down);
+	}
 }
 
 function initMap(tileType){
