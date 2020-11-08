@@ -174,7 +174,7 @@ function startLevel(playerHP) {
 
   if( game_state.debug_mapper ){
     numTiles = Math.floor( ( numTiles-2 ) / 3 )+2;
-    initMap();
+    initMap(Floor);
   }else{
     generateLevel();
   }

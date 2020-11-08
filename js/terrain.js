@@ -328,7 +328,7 @@ class Water extends Terrain { // fuck
 // generateLevel(player.tile.x, player.tile.y)
 function generateLevel(test){
 	if( test ){
-		return initMap();
+		return initMap(Floor);
 	}
 
 	tryTo('generate map', function(){
@@ -374,26 +374,16 @@ function generateTiles(){
   return passableTiles;
 }
 
-function generateWalls(){
-	let passableTiles=0;
-	tiles = [];
-  for( let i=0; i<numTiles; i++ ){
-		tiles[i] = [];
-		for( let j=0; j<numTiles; j++ ){
-			tiles[i][j] = new Wall(i,j);
-		}
-  }
-  return passableTiles;
-}
 
-function drunkWalk(tile){
-	var attempt = tile.getAdjacentNeighbors()[0];
+
+function drunkWalk(tile, diagonals, allowedType){
+	var attempt = tile.getAdjacentNeighbors(diagonals)[0];
 	// if( inBounds(attempt.x,attempt.y)){
 	// 	return attempt;
 	// }else{
 	// 	return tile;
 	// }
-	return ( inBounds(attempt.x,attempt.y) ? attempt : false );
+	return ( inBounds(attempt.x,attempt.y) ? ( attempt.constructor.name == allowedType ? attempt : false ) : false );
 }
 
 function drunkWalker(seed, target, type_to){
@@ -404,7 +394,7 @@ function drunkWalker(seed, target, type_to){
 			console.error('whoops, too many fails');
 			return seed;
 		}
-		let process = drunkWalk(seed);
+		let process = drunkWalk(seed, true, 'Wall');
 		if( !process ){
 			console.warn('cant drunkwalk');
 			target++;
@@ -413,7 +403,7 @@ function drunkWalker(seed, target, type_to){
 			process.replace(type_to);
 			seed = process;
 		}
-		drunkWalk(seed);
+		drunkWalk(seed, true, 'Wall');
 	}
 	if( target <= 0 ){
 		console.warn('out of booze, boss');
@@ -423,22 +413,7 @@ function drunkWalker(seed, target, type_to){
 
 // levelgen_dw(1200);
 function levelgen_dw(target){
-	generateWalls();
-	//var seed = randomTile('Wall');
-	// while( target-- ){
-	// 	let process = drunkWalk(seed);
-	// 	if( process == seed ){
-	// 		target++;
-	// 	}else{
-	// 		process.replace(Floor);
-	// 		seed = process;
-	// 	}
-	// 	drunkWalk(seed);
-	// }
-	// if( target <= 0 ){
-	// 	console.warn('Level carved, boss');
-	// }
-	//drunkWalker(seed, target, 'Wall', Floor);
+	initMap(Wall);
 	var seed = randomTile('Wall');
 	var lastTile = drunkWalker(seed, target, Floor);
 	seed.replace(Stairs_up);
@@ -446,12 +421,12 @@ function levelgen_dw(target){
 	//randomPassableTile('Floor').replace(Stairs_down);
 }
 
-function initMap(){
+function initMap(tileType){
 	tiles = [];
 	for( let i=0; i<numTiles; i++ ){
 		tiles[i] = [];
 		for( let j=0; j<numTiles; j++ ){
-			tiles[i][j] = new Floor(i,j);
+			tiles[i][j] = new tileType(i,j);
 		}
 	}
 }
