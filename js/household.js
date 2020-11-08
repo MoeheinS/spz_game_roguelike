@@ -24,8 +24,8 @@ function randomPassableTile(className){
 function randomTile(className){
   let tile;
   tryTo('get random tile', function(){
-    let x = randomRange(0,numTiles-1);
-    let y = randomRange(0,numTiles-1);
+    let x = randomRange(1,numTiles-1);
+    let y = randomRange(1,numTiles-1);
     tile = getTile(x, y);
     return ( className ? tile.constructor.name == className : true );
   });
