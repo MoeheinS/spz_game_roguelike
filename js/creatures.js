@@ -1,5 +1,6 @@
 class Monster {
 	constructor(tile, sprite, hp){
+		this.uid = randomUID();
 		this.move(tile);
 		this.sprite = sprite;
 		this.fillStyle = COLOR_BLACK;
@@ -139,6 +140,9 @@ class Monster {
 		this.dead = true;
 		this.tile.monster = null;
 		this.glyph = 37; // %
+		// TODO: optionally some creatures could turn into something else on death...
+		let myIndex = monsters.findIndex( t => t.uid == this.uid );
+		monsters.splice(myIndex, 1);
 	}
 
 	move(tile, instant){

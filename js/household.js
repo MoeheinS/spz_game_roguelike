@@ -135,9 +135,11 @@ function tick() {
 	for(let k=monsters.length-1;k>=0;k--){
 		if(!monsters[k].dead){
 			monsters[k].update();
-		}else{
-			monsters.splice(k,1);
-		}
+    }
+    // deprecated because splicing out now happens in the monster
+    //else{
+			//monsters.splice(k,1);
+		//}
   }
   
   player.update();
@@ -286,4 +288,8 @@ function transpose(matrix) {
         result.push(row);
     }
     return result;
+}
+
+function randomUID() {
+  return '_' + Math.random().toString(36).substr(2, 9);
 }
