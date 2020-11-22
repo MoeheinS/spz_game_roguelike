@@ -4,6 +4,7 @@ class Monster {
 		this.move(tile);
 		this.sprite = sprite;
 		this.fillStyle = COLOR_BLACK;
+		this.bloodColor = COLOR_RED;
 
 		this.hp = hp;
 		this.offsetX = 0;                                                   
@@ -137,6 +138,8 @@ class Monster {
 	}
 
 	die(){
+		// BLEED
+		this.tile.renderOverride = { fillStyle: this.bloodColor };
 		this.dead = true;
 		this.tile.monster = null;
 		this.glyph = 37; // %
@@ -400,6 +403,14 @@ class Ghost extends Monster {
 	swing(damage){ // teleports away when hit
 		this.move(randomPassableTile(), true); //non-animated move
 		super.swing(damage);
+	}
+	die(){ // copied because ghosts don't bleed
+		this.dead = true;
+		this.tile.monster = null;
+		this.glyph = 37; // %
+		// TODO: optionally some creatures could turn into something else on death...
+		let myIndex = monsters.findIndex( t => t.uid == this.uid );
+		monsters.splice(myIndex, 1);
 	}
 }
 
