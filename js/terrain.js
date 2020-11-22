@@ -6,6 +6,7 @@ class Terrain {
 		this.renderOverride = false;
 		this.sprite = sprite;
 		this.passable = passable;
+		this.transparent = true;
 	}
 	
 	stepOn(monster){
@@ -126,6 +127,7 @@ class Wall extends Terrain {
 		super(x, y, {x: 132, y: 208}, false);
 		this.glyph = 9618; //35;
 		this.renderOverride = { fillStyle: ( inBounds(x,y) ? COLOR_BLACK+Math.floor(13+Math.random()*3).toString(16)+Math.floor(13+Math.random()*3).toString(16) : COLOR_BLACK ) };
+		this.transparent = false;
 	}
 }
 class SpawnerWall extends Terrain {
@@ -134,6 +136,7 @@ class SpawnerWall extends Terrain {
 		this.glyph = 34; //8226; //9619; //35;
 		this.fillStyle = COLOR_RED;
 		this.renderOverride = { fillStyle: COLOR_BLACK };
+		this.transparent = false;
 	}
 }
 

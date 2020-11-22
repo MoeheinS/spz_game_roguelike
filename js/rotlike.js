@@ -44,7 +44,7 @@ game_state = {
 monsters = [];
 spawners = [];
 
-const fov = new Mrpas(numTiles, numTiles, (x, y) => tiles[x][y].passable);
+const fov = new Mrpas(numTiles, numTiles, (x, y) => tiles[x][y].transparent);
 
 spritesheet = new Image();
 spritesheet.src = './assets/12x16_b.png';
