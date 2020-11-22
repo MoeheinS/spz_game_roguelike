@@ -86,7 +86,7 @@ class Terrain {
 		if( !this.visible && !game_state.truesight && game_state.fov_enabled ){
 			ctx.save();
 	
-			ctx.fillStyle = COLOR_FOW;
+			ctx.fillStyle = ( inBounds(this.x, this.y) ? COLOR_FOW : COLOR_BLACK );
 			ctx.fillRect(this.x*tileSize.x,this.y*tileSize.y,tileSize.x,tileSize.y);
 		
 			ctx.restore();
