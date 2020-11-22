@@ -90,10 +90,18 @@ function setupCanvas() {
   ctx = canvas.getContext("2d");
   ctx.fillStyle = COLOR_FILLSTYLE;
 
+  let resize = Math.min( window.innerWidth, window.innerHeight );
+  // optional: tile to fill screen
+  //numTiles = Math.floor(resize / 24);
+
   canvas.width = tileSize.x*numTiles;
   canvas.height = tileSize.y*numTiles;
+
   canvas.style.width = canvas.width + 'px';
   canvas.style.height = canvas.height + 'px';
+  // optional: resize canvas to fill screen
+  //canvas.style.width = resize+'px';
+  //canvas.style.height = resize+'px';
 
   // https://int10h.org/oldschool-pc-fonts/fontlist/font?ibm_ega_8x14#-
   ctx.font = game_state.fontSize.size+"px ega"; //calibri
