@@ -79,6 +79,7 @@ function draw(){
     
     player.draw();
   }else if( game_state.mode == "title" || game_state.mode == "loading" ){
+    ctx.resetTransform();
     ctx.clearRect(0,0,canvas.width,canvas.height);
 
     ctx.save();
