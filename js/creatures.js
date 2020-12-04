@@ -44,6 +44,17 @@ class Monster {
 
 			this.drawHp();
 
+			// Experimental: Last-move direction indicator
+			ctx.save();
+			ctx.fillStyle = COLOR_GREEN_NEON;
+			ctx.fillRect(
+				this.getDisplayX()*tileSize.x + tileSize.x*0.5 + tileSize.x*this.lastMove[0]*0.5 - 2,
+				this.getDisplayY()*tileSize.y + tileSize.y*0.5 + tileSize.x*this.lastMove[1]*0.5 - 2,
+				4,
+				4
+			);
+			ctx.restore();
+
 			this.offsetX -= Math.sign(this.offsetX)*(1/8);     
 			this.offsetY -= Math.sign(this.offsetY)*(1/8);
 		}
