@@ -94,11 +94,8 @@ class Terrain {
 
 		if( this.spotted || game_state.truesight || !game_state.fov_enabled ){
 			if( game_state.text_mode ){
-				if( this.monster && this.visible ){
-					drawChar( this.monster, this.monster.offsetX + this.x, this.monster.offsetY + this.y, this.renderOverride);
-				}else{
-					drawChar( this, this.x, this.y, this.renderOverride);
-				}
+
+				drawChar( this, this.x, this.y, this.renderOverride);
 
 				if(this.effectCounter){    
 					this.effectCounter--;
