@@ -31,10 +31,12 @@ game_state = {
   truesight: false,
   fov_enabled: false,
   scrollCamera: false,
+  camera_offset: {x: 0, y: 0},
   text_mode: true,
   fontSize: {size: tileSize.y*0.75, offset: tileSize.y*0.25},
 
   mode: "loading",
+  interact_mode: "player",
   depth: 1,
   initial_spawn: -1,
   startHP: 3,

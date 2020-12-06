@@ -62,7 +62,9 @@ function draw(){
     ctx.clearRect(0,0,canvas.width,canvas.height);
     if( game_state.scrollCamera ){
       // TODO: cleaner would be to save cameraOffset X and Y, so DOM can use these too, or that it can be used for inspect mode
-      ctx.transform(1, 0, 0, 1, ((numTiles/2) - player.getDisplayX())*tileSize.x, ((numTiles/2) - player.getDisplayY())*tileSize.y);
+      ctx.transform(1, 0, 0, 1, 
+        ((numTiles/2) - player.getDisplayX())*tileSize.x - game_state.camera_offset.x*tileSize.x, 
+        ((numTiles/2) - player.getDisplayY())*tileSize.y - game_state.camera_offset.y*tileSize.y);
     }
     if( game_state.debug_mapper ){
       render_mouse();
@@ -78,6 +80,18 @@ function draw(){
     }
     
     player.draw();
+
+    if( game_state.interact_mode == 'camera' ){
+      ctx.save();
+      ctx.strokeStyle = COLOR_RED_PURPLE;
+      ctx.strokeRect(
+        player.getDisplayX()*tileSize.x + game_state.camera_offset.x*tileSize.x, 
+        player.getDisplayY()*tileSize.y + game_state.camera_offset.y*tileSize.y,
+        tileSize.x,
+        tileSize.y
+      );
+      ctx.restore();
+    }
   }else if( game_state.mode == "title" || game_state.mode == "loading" ){
     ctx.resetTransform();
     ctx.clearRect(0,0,canvas.width,canvas.height);

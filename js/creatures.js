@@ -266,42 +266,97 @@ class Player extends Monster {
 
 	inputHandler(e){
 		// can add diagonals, menu keys etc
-		switch (e.key) {
-			case 'w':
-			case 'ArrowUp':
-				player.tryMove(0, -1);
-				break;
-			case 's':
-			case 'ArrowDown':
-				player.tryMove(0, 1);
-				break;
-			case 'a':
-			case 'ArrowLeft':
-				player.tryMove(-1, 0);
-				break;
-			case 'd':
-			case 'ArrowRight':
-				player.tryMove(1, 0);
-				break;
-			// diagonals
-			case 'u':
-				player.tryMove(-1, -1);
-				break;
-			case 'i':
-				player.tryMove(1, -1);
-				break;
-			case 'j':
-				player.tryMove(-1, 1);
-				break;
-			case 'k':
-				player.tryMove(1, 1);
-				break;
-			case '.':
-				player.moves = 0;
-				player.tryMove(0, 0);
-				break;
-			default:
-				break;
+		if( game_state.interact_mode == 'player' ){
+			switch (e.key) {
+				case 'w':
+				case 'ArrowUp':
+					player.tryMove(0, -1);
+					break;
+				case 's':
+				case 'ArrowDown':
+					player.tryMove(0, 1);
+					break;
+				case 'a':
+				case 'ArrowLeft':
+					player.tryMove(-1, 0);
+					break;
+				case 'd':
+				case 'ArrowRight':
+					player.tryMove(1, 0);
+					break;
+				// diagonals
+				case 'u':
+					player.tryMove(-1, -1);
+					break;
+				case 'i':
+					player.tryMove(1, -1);
+					break;
+				case 'j':
+					player.tryMove(-1, 1);
+					break;
+				case 'k':
+					player.tryMove(1, 1);
+					break;
+				case '.':
+					player.moves = 0;
+					player.tryMove(0, 0);
+					break;
+				case 'l':
+					game_state.interact_mode = 'camera';
+					break;
+				default:
+					break;
+			}
+		}else if( game_state.interact_mode == 'camera' ){
+			switch (e.key) {
+				case 'w':
+				case 'ArrowUp':
+					game_state.camera_offset.y--;
+					break;
+				case 's':
+				case 'ArrowDown':
+					game_state.camera_offset.y++;
+					break;
+				case 'a':
+				case 'ArrowLeft':
+					game_state.camera_offset.x--;
+					break;
+				case 'd':
+				case 'ArrowRight':
+					game_state.camera_offset.x++;
+					break;
+				// diagonals
+				case 'u':
+					game_state.camera_offset.x--;
+					game_state.camera_offset.y--;
+					break;
+				case 'i':
+					game_state.camera_offset.x++;
+					game_state.camera_offset.y--;
+					break;
+				case 'j':
+					game_state.camera_offset.x--;
+					game_state.camera_offset.y++;
+					break;
+				case 'k':
+					game_state.camera_offset.x++;
+					game_state.camera_offset.y++;
+					break;
+				case '.':
+					game_state.camera_offset.x = 0;
+					game_state.camera_offset.y = 0;
+					break;
+				case 'l':
+					game_state.camera_offset.x = 0;
+					game_state.camera_offset.y = 0;
+					game_state.interact_mode = 'player';
+					break;
+				default:
+					break;
+			}
+			var inspectedTile = getTile(player.tile.x + game_state.camera_offset.x, player.tile.y + game_state.camera_offset.y);
+			console.log(inspectedTile);
+			console.log(`spotted:${inspectedTile.spotted}, visible:${inspectedTile.visible}`);
 		}
 	}
 
