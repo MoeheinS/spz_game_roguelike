@@ -61,7 +61,6 @@ function draw(){
     ctx.resetTransform();
     ctx.clearRect(0,0,canvas.width,canvas.height);
     if( game_state.scrollCamera ){
-      // TODO: cleaner would be to save cameraOffset X and Y, so DOM can use these too, or that it can be used for inspect mode
       ctx.transform(1, 0, 0, 1, 
         ((numTiles/2) - player.getDisplayX())*tileSize.x - game_state.camera_offset.x*tileSize.x, 
         ((numTiles/2) - player.getDisplayY())*tileSize.y - game_state.camera_offset.y*tileSize.y);
@@ -81,6 +80,7 @@ function draw(){
     
     player.draw();
 
+    // TODO: may move this to ui render function later
     if( game_state.interact_mode == 'camera' ){
       ctx.save();
       ctx.strokeStyle = COLOR_RED_PURPLE;
