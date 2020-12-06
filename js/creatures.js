@@ -233,9 +233,7 @@ class Boulder extends Monster {
 		// move when struck; might work for creatures as well if followed up with super.swing()?
 		let nx = this.tile.x - player.tile.x;
 		let ny = this.tile.y - player.tile.y;
-		console.warn(nx, ny);
 		if( Math.abs(nx) == 1 || Math.abs(ny) == 1 ){
-			console.warn('yas');
 			this.tryMove(nx, ny);
 		}
 	}
@@ -244,6 +242,7 @@ class Boulder extends Monster {
 		let newTile = this.tile.getNeighbor(dx,dy);
 		if(newTile.passable){
 			if( !newTile.monster ){
+				new Message(`The ${this.constructor.name} moves.`);
 				this.move(newTile);
 			}
 			return true;
@@ -426,7 +425,7 @@ class Goblin extends Monster {
 		// if you want only once, you can check this.cooldown == 7
 		// or wrap this.cooldown++ in a limiting if statement
 		if( this.cooldown % 7 == 0 ){ 
-			console.warn(`The ${this.constructor.name} cackles!`);
+			new Message(`The ${this.constructor.name} cackles!`);
 			abilities.placeTrap(this);
 			abilities.endTurn(this);
 			//this.moves = 0;
@@ -598,7 +597,7 @@ function spawnMonster() {
 
 			monsters.push(monster);
 		}else{
-			console.warn('The dungeon overflows!');
+			new Message('The dungeon overflows!');
 		}
 	}
 	

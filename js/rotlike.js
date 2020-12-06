@@ -40,7 +40,9 @@ game_state = {
   depth: 1,
   initial_spawn: -1,
   startHP: 3,
-  maxHp: 6
+  maxHp: 6,
+
+  message_history: []
 };
 
 monsters = [];

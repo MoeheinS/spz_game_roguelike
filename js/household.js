@@ -173,6 +173,7 @@ function flowControl(state) {
       game_state.mode = "title";
       break;
     case 'start':
+      Message.wipe();
       game_state.mode = "running";
       game_state.depth = 1;
       startLevel(game_state.startHP);
@@ -307,4 +308,22 @@ function transpose(matrix) {
 
 function randomUID() {
   return '_' + Math.random().toString(36).substr(2, 9);
+}
+class Message {
+  constructor(message) {
+    this.message = message;
+    game_state.message_history.unshift(message);
+    console.warn(message);
+  }
+  static latest() {
+    console.log(game_state.message_history[0]);
+    return game_state.message_history[0];
+  }
+  static list() {
+    console.table(game_state.message_history);
+    return game_state.message_history;
+  }
+  static wipe() {
+    game_state.message_history = [];
+  }
 }

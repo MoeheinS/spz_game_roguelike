@@ -16,7 +16,7 @@ abilities = {
     for( monster of monsters ){
       let numWalls = 4 - monster.tile.getAdjacentPassableNeighbors().length;
       monster.swing(numWalls*2);
-      console.warn(`The walls cave in on the ${monster.constructor.name} for ${numWalls*2} damage!`);
+      new Message(`The walls cave in on the ${monster.constructor.name}, dealing ${numWalls*2} damage!`);
     }
     if( monster.isPlayer ){
       player.moves = 0;
@@ -52,7 +52,7 @@ abilities = {
   },
   DASH: function(monster){
     if( monster.lastMove[0] == 0 && monster.lastMove[1] == 0 ){
-      console.warn(`${monster.constructor.name} does some squats!`);
+      new Message(`${monster.constructor.name} does some squats!`);
       return;
     }
     let newTile = monster.tile;
@@ -83,7 +83,7 @@ abilities = {
   },
   BOLT_RAY(monster, damage){
     if( monster.lastMove[0] == 0 && monster.lastMove[1] == 0 ){
-      console.warn(`${monster.constructor.name} beams the floor!`);
+      new Message(`${monster.constructor.name} makes the floor glow!`);
       return;
     }
     let newTile = monster.tile;
@@ -154,7 +154,7 @@ abilities = {
   },
   PHASE: function(monster){
     if( monster.lastMove[0] == 0 && monster.lastMove[1] == 0 ){
-      console.warn(`${monster.constructor.name} flickers in place...`);
+      new Message(`${monster.constructor.name} briefly disappears and reappears.`);
       return;
     }
     let newTile = monster.tile;
@@ -162,7 +162,7 @@ abilities = {
     let testTile = newTile.getNeighbor(monster.lastMove[0],monster.lastMove[1]).getNeighbor(monster.lastMove[0],monster.lastMove[1]);
     if(!testTile.passable && !monster.phaseWall){
       // teleport into a wall? That's YASD
-      console.warn(`The ${monster.constructor.name} was lost...`);
+      new Message(`The ${monster.constructor.name} was lost forever.`);
       monster.die();
     }else if( testTile.monster ){
       // teleport into a monster? Healthier one survives

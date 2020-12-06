@@ -21,7 +21,7 @@ class Terrain {
 
 	reveal(){
 		this.hidden = false;
-		console.warn('You spot a '+this.constructor.name);
+		new Message(`You spot a ${this.constructor.name}`);
 	}
 
 	// pass a class as arg
@@ -194,7 +194,7 @@ class Pit extends Terrain {
 	stepOn(monster){
 		if(monster.isPlayer){ // should traps also trigger for monsters?
 			if( !monster.fly ){
-				console.warn('The ground gives way!');
+				new Message('The ground gives way!');
 				monster.swing(2);
 				if( monster.hp > 0 ){
 					game_state.depth++;
@@ -203,7 +203,7 @@ class Pit extends Terrain {
 			}
 		}else{
 			if( !monster.fly ){
-				console.warn('You hear something cry out!');
+				new Message('You hear something cry out!');
 				monster.die();
 				this.hidden = false;
 			}
@@ -227,12 +227,12 @@ class Trap extends Terrain { // different kinds of traps? Rock fall trap, explos
 			return;
 		}
 		if(monster.isPlayer){ // should traps also trigger for monsters?
-			console.warn('KABOOM');
+			new Message('KABOOM!');
 			monster.swing(1); // this could be a different effect
 			this.trap = false;
 			//this.replace(Floor); // TODO: this replace Water + degrade armor -> rust trap
 		}else{
-			console.warn('You hear a KABOOM');
+			new Message('You hear an explosion.');
 			monster.swing(1); // this could be a different effect
 			this.trap = false;
 			//this.replace(Floor); // TODO: this replace Water + degrade armor -> rust trap
@@ -258,9 +258,9 @@ class Hazard extends Terrain {
 	}
 	stepOn(monster){
 		if(monster.isPlayer){
-			console.warn('It burns!');
+			new Message('It burns!');
 		}else{
-			console.warn(`A ${monster.constructor.name} hisses in pain!`);
+			new Message(`A ${monster.constructor.name} hisses in pain!`);
 		}
 		if( monster.hp > 1 ){
 			monster.swing(1); // this could be a different effect
@@ -289,10 +289,10 @@ class Mud extends Terrain {
 			return;
 		}
 		if(monster.isPlayer){
-			console.warn('GLOOP GLOOP');
+			new Message('GLOOP GLOOP.');
 			tick();
 		}else{
-			console.warn('You hear glooping...');
+			new Message('You hear a wet squelching sound...');
 		}
 	}
 }
@@ -317,9 +317,9 @@ class Water extends Terrain { // fuck
 			return;
 		}
 		if(monster.isPlayer){
-			console.warn('SPLISH SPLASH');
+			new Message('SPLISH SPLASH');
 		}else{
-			console.warn('You hear splashing...');
+			new Message('You hear splashing...');
 		}
 	}
 }
