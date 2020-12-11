@@ -360,6 +360,48 @@ class Player extends Monster {
 			var inspectedTile = getTile(player.tile.x + game_state.camera_offset.x, player.tile.y + game_state.camera_offset.y);
 			console.log(inspectedTile);
 			console.log(`spotted:${inspectedTile.spotted}, visible:${inspectedTile.visible}`);
+		}else if( game_state.interact_mode == 'input' ){
+			switch (e.key) {
+				case 'w':
+				case 'ArrowUp':
+					player.lastMove = [0, -1];
+					break;
+				case 's':
+				case 'ArrowDown':
+					player.lastMove = [0, 1];
+					break;
+				case 'a':
+				case 'ArrowLeft':
+					player.lastMove = [-1, 0];
+					break;
+				case 'd':
+				case 'ArrowRight':
+					player.lastMove = [1, 0];
+					break;
+				// diagonals
+				case 'u':
+					player.lastMove = [-1, -1];
+					break;
+				case 'i':
+					player.lastMove = [1, -1];
+					break;
+				case 'j':
+					player.lastMove = [-1, 1];
+					break;
+				case 'k':
+					player.lastMove = [1, 1];
+					break;
+				case '.':
+					player.lastMove = [0, 0];
+					break;
+				default:
+					game_state.callback = false;
+					break;
+			}
+			game_state.interact_mode = 'player';
+			if( game_state.callback ){
+				return game_state.callback(player);
+			}
 		}
 	}
 

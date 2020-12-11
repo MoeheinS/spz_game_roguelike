@@ -221,7 +221,13 @@ abilities = {
       monster.move(newTile, true);
       monster.stamina--;
     }
-  }
+  },
+  DIRECT: function(monster, callback){
+    new Message(`Press a direction key.`);
+    game_state.interact_mode = 'input';
+    game_state.callback = callback;
+  },
+  //TARGET: function(monster, callback){}
 };
 
 /*
