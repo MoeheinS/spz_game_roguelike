@@ -7,14 +7,22 @@ class Terrain {
 		this.sprite = sprite;
 		this.passable = passable;
 		this.transparent = true;
+		this.inventory = [];
 	}
 	
 	stepOn(monster){
-		//TODO: this does nothing, and rightfully so
 		if( monster.isPlayer ){
 			let hiddenNeighbors = this.getAdjacentNeighbors().filter(t => t.hidden);
 			for (let i = 0; i < hiddenNeighbors.length; i++) {
 				hiddenNeighbors[i].reveal();
+			}
+			// TODO: singular, plural to be implemented
+			if(this.inventory.length){
+				var itemMessage = '';
+				for( let d of this.inventory ){
+					itemMessage += `You see ${d.amount} ${d.name}. `;
+				}
+				new Message(itemMessage);
 			}
 		}
 	}
@@ -96,6 +104,30 @@ class Terrain {
 			if( game_state.text_mode ){
 
 				drawChar( this, this.x, this.y, this.renderOverride);
+				if( this.inventory.length ){
+					if( !this.monster ){
+						drawChar( {glyph: ( this.inventory.length == 1 ? this.inventory[0].glyph : 42), fillStyle: COLOR_BLACK}, this.x, this.y, this.renderOverride);
+					}else if( this.monster ){
+						if( this.visible || game_state.truesight || !game_state.fov_enabled ){
+							ctx.save();
+	
+							ctx.font = '8px ega'; // calibri
+							ctx.textBaseline = 'top';
+							ctx.textAlign = 'right';
+							ctx.fillStyle = COLOR_BLACK;
+							ctx.strokeStyle = COLOR_YELLOW;
+							ctx.lineWidth = 4;
+							ctx.strokeText( String.fromCharCode(( this.inventory.length == 1 ? this.inventory[0].glyph : 42)), 
+								this.monster.getDisplayX()*tileSize.x+1*tileSize.x, this.monster.getDisplayY()*tileSize.y);
+							ctx.fillText( String.fromCharCode(( this.inventory.length == 1 ? this.inventory[0].glyph : 42)), 
+								this.monster.getDisplayX()*tileSize.x+1*tileSize.x, this.monster.getDisplayY()*tileSize.y);
+		
+							ctx.restore();
+						}else{
+							drawChar( {glyph: ( this.inventory.length == 1 ? this.inventory[0].glyph : 42), fillStyle: COLOR_BLACK}, this.x, this.y, this.renderOverride);	
+						}
+					}
+				}
 
 				if(this.effectCounter){    
 					this.effectCounter--;

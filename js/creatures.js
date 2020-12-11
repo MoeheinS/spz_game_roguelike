@@ -28,6 +28,8 @@ class Monster {
 
 		this.fly = false;
 		this.phaseWalls = false; // lets ghost pass walls, lets player phase walls when DASHing, then set back to false
+
+		this.inventory = [];
 	}
 
 	getDisplayX(){                     
