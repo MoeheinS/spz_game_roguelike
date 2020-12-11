@@ -538,6 +538,13 @@ class Samurai extends Monster {
 	}
 }
 
+class Centipede extends Monster {
+	constructor(tile){
+		super(tile, {x: 0, y: 0}, 1); // c
+		this.glyph = 99;
+	}
+}
+
 // It works, but it's not FUN
 // class Troll extends Monster { // every 3 turns self-stuns and regenerates 1 hp -> like AURA but less range
 // 	constructor(tile){
