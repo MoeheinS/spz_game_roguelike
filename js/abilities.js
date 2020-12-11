@@ -198,6 +198,29 @@ abilities = {
       }
     }
     monster.lastMove = [originalDirection.x, originalDirection.y];
+  },
+  DODGE: function(monster){
+    if( monster.lastMove[0] == 0 && monster.lastMove[1] == 0 ){
+      new Message(`${monster.constructor.name} does a standing backflip!`);
+      return;
+    }
+    if( !monster.stamina ){
+      new Message(`${monster.constructor.name} is exhausted.`);
+      return;
+    }
+    let newTile = monster.tile;
+    let testTile = newTile.getNeighbor(monster.lastMove[0],monster.lastMove[1]);
+    if(testTile.passable && !testTile.monster){
+      // play an effect on the tile
+      testTile.setEffect(monster.glyph, COLOR_BLACK, COLOR_FUCHSIA);
+      newTile = testTile;
+    }else{
+      new Message(`${monster.constructor.name} couldn't roll due to an obstacle.`);
+    }
+    if(monster.tile != newTile){
+      monster.move(newTile, true);
+      monster.stamina--;
+    }
   }
 };
 
