@@ -20,6 +20,9 @@ class Monster {
 		//this.alerted = false;
 		this.bonusAttack = 0; // TODO: this ties into the TSL-like combat system
 
+		this.stamina = 3;
+		this.stamina_base = 3;
+
 		this.lastMove = [0,0];  
 		this.canDiagonal = true;
 
@@ -179,6 +182,7 @@ class Monster {
 		this.moves = Math.min(this.moves, this.moves_base);
 		this.attacks += this.attacks_inc;
 		this.attacks = Math.min(this.attacks, this.attacks_base);
+		this.stamina = Math.min(this.stamina+1, this.stamina_base);
 		if( !this.isPlayer ){
 			this.act();
 		}
