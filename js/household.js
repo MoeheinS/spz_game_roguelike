@@ -147,15 +147,15 @@ function drawSprite(coords, x, y) {
 }
 
 function tick() {
-  monsterPromises = [];
-	for(let k=monsters.length-1;k>=0;k--){
-		if(!monsters[k].dead){
-      console.log(`${monsters[k].uid} acting`);
-      monsterPromises.push(monsters[k].update());
-    }
-  }
   // update player last
-  Promise.all(monsterPromises)
+  Promise.all(
+    monsters.map(function(monster){
+      if(!monster.dead){
+        console.log(`${monster.uid} acting`);
+        return monster.update();
+      }
+    })
+  )
   .then(function(){
     console.warn('All monsters have acted');
     player.update().then(function(){
