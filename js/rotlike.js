@@ -37,6 +37,8 @@ game_state = {
 
   mode: "loading",
   interact_mode: "player",
+  allow_inputs: true,
+
   depth: 1,
   initial_spawn: -1,
   startHP: 3,
@@ -55,6 +57,9 @@ spritesheet.src = './assets/12x16_b.png';
 // spritesheet.onload = showTitle; // flowControl('title')?
 
 document.querySelector("html").onkeydown = function(e){
+  if( !game_state.allow_inputs ){
+    return console.error('inputs not allowed');
+  }
   switch (game_state.mode) {
     case 'loading':
     case 'title':
