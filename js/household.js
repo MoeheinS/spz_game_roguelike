@@ -155,15 +155,19 @@ function tick() {
     }
   }
   // update player last
-  Promise.all(monsterPromises).then(function(){
+  Promise.all(monsterPromises)
+  .then(function(){
     console.warn('All monsters have acted');
     player.update().then(function(){
       console.log('Player has acted');
-      if(player.dead){    
-        return game_state.mode = "dead";
-      }
-      spawnTicker();
     });
+  })
+  .finally(function(){
+    if(player.dead){    
+      return game_state.mode = "dead";
+    }else{
+      spawnTicker();
+    }
   });
 }
 
