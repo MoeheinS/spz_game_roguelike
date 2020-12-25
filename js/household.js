@@ -147,24 +147,24 @@ function drawSprite(coords, x, y) {
 }
 
 function tick() {
+  monsterPromises = [];
 	for(let k=monsters.length-1;k>=0;k--){
 		if(!monsters[k].dead){
-			monsters[k].update();
+      console.log(`${monsters[k].uid} acting`);
+      monsterPromises.push(monsters[k].update());
     }
-    // deprecated because splicing out now happens in the monster
-    //else{
-			//monsters.splice(k,1);
-		//}
   }
-  
-  player.update();
-
-  if(player.dead){    
-    //flowControl('death');
-    return game_state.mode = "dead";
-  }
-
-  spawnTicker();
+  // update player last
+  Promise.all(monsterPromises).then(function(){
+    console.warn('All monsters have acted');
+    player.update().then(function(){
+      console.log('Player has acted');
+      if(player.dead){    
+        return game_state.mode = "dead";
+      }
+      spawnTicker();
+    });
+  });
 }
 
 function flowControl(state) {

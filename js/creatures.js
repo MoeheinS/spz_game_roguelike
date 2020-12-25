@@ -157,11 +157,11 @@ class Monster {
 		// BLEED
 		this.tile.renderOverride = { fillStyle: this.bloodColor };
 		this.dead = true;
-		this.tile.monster = null;
 		this.glyph = 37; // %
 		// TODO: optionally some creatures could turn into something else on death...
 		let myIndex = monsters.findIndex( t => t.uid == this.uid );
 		monsters.splice(myIndex, 1);
+		this.tile.monster = null;
 	}
 
 	move(tile, instant){
@@ -178,7 +178,7 @@ class Monster {
 		tile.stepOn(this);
 	}
 
-	update(){
+	async update(){
 		// stunned deprecated in favor of setting moves and attack to a negative value
 		this.moves += this.moves_inc;
 		this.moves = Math.min(this.moves, this.moves_base);
@@ -219,7 +219,7 @@ class Boulder extends Monster {
 		this.glyph = 9679;
 	}
 
-	update(){
+	async update(){
 		return;
 	}
 
@@ -429,7 +429,7 @@ class Player extends Monster {
 		);
 	}
 
-	update(){
+	async update(){
 		this.calcFov();
 		super.update();
 	}
@@ -467,7 +467,7 @@ class Goblin extends Monster {
 		this.glyph = 103;
 		this.cooldown = 0;
 	}
-	update(){
+	async update(){
 		this.cooldown++;
 		// every 7th turn
 		// if you want only once, you can check this.cooldown == 7
