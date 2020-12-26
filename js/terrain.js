@@ -361,7 +361,7 @@ class Water extends Terrain { // fuck
 // generateLevel(player.tile.x, player.tile.y)
 function generateLevel(test){
 	if( test ){
-		return initMap(Floor);
+		return Map.flood(Floor);
 	}
 
 	// OLD levelgen
@@ -377,7 +377,7 @@ function generateLevel(test){
 	}
 	*/
 
-	createSpawners();
+	Map.createSpawners(0.25);
 
 	randomPassableTile('Floor').replace(Water);
 	randomPassableTile('Floor').replace(Pit);
@@ -388,22 +388,6 @@ function generateLevel(test){
 	randomPassableTile('Floor').replace(Mud);
 
 	generateMonsters();
-}
-
-function createSpawners(){
-	spawners = [];
-  for( let i=0; i<numTiles; i++ ){
-		
-		var walls = tiles[i].filter(t => t.constructor.name == 'Wall' && t.getAdjacentPassableNeighbors().length && t.getAdjacentPassableNeighbors().length < 3);
-		if( walls.length ){
-			for( w of walls ){
-				if( Math.random() < 0.25 ){
-					w.replace(SpawnerWall);
-					spawners.push(w);
-				}
-			}
-		}
-  }
 }
 
 function generateTiles(){
@@ -473,7 +457,7 @@ function drunkWalker(seed, target, type_to){
 // levelgen_dw(600, player.tile);
 // NOTE: do I need a direction? For going up / down?
 function levelgen_dw(target, seed, canUp){
-	initMap(Wall);
+	Map.flood(Wall);
 	var seed = ( seed ? seed : randomTile('Wall') );
 	var lastTile = drunkWalker(seed, target, Floor);
 	if( canUp ){ 
@@ -484,16 +468,6 @@ function levelgen_dw(target, seed, canUp){
 		randomPassableTile('Floor').replace(Stairs_down);
 	}else{
 		lastTile.replace(Stairs_down);
-	}
-}
-
-function initMap(tileType){
-	tiles = [];
-	for( let i=0; i<numTiles; i++ ){
-		tiles[i] = [];
-		for( let j=0; j<numTiles; j++ ){
-			tiles[i][j] = new tileType(i,j);
-		}
 	}
 }
 

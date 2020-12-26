@@ -200,7 +200,7 @@ function startLevel(playerHP) {
 
   if( game_state.debug_mapper ){
     numTiles = Math.floor( ( numTiles-2 ) / 3 )+2;
-    initMap(Floor);
+    Map.flood(Floor);
   }else{
     levelgen_dw(numTiles*numTiles, false, (game_state.depth > 1));
     generateLevel();

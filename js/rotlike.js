@@ -49,6 +49,7 @@ game_state = {
 
 monsters = [];
 spawners = [];
+tiles = [];
 
 const fov = new Mrpas(numTiles, numTiles, (x, y) => tiles[x][y].transparent);
 
