@@ -8,7 +8,8 @@ class Terrain {
 		this.passable = passable;
 		this.transparent = true;
 		this.inventory = [];
-		this.renderOverride = { fillStyle: COLOR_YELLOW };
+		// FIXME: this interferes with fog of war
+		//this.renderOverride = { fillStyle: COLOR_YELLOW };
 	}
 	
 	stepOn(monster){
