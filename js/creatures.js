@@ -159,6 +159,11 @@ class Monster {
 		this.dead = true;
 		this.glyph = 37; // %
 		// TODO: optionally some creatures could turn into something else on death...
+		this.void();
+	}
+
+	void(){
+		console.log(`A ${this.constructor.name} (${this.uid}) is destroyed`);
 		let myIndex = monsters.findIndex( t => t.uid == this.uid );
 		monsters.splice(myIndex, 1);
 		this.tile.monster = null;
