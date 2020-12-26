@@ -195,8 +195,7 @@ class Stairs_down extends Terrain {
 	}
 	stepOn(monster){
 		if(monster.isPlayer){
-			game_state.depth++;
-			startLevel(Math.min(game_state.maxHp, player.hp+1));
+			Map.descend(player.hp);
 		}
 	}
 }
@@ -208,8 +207,7 @@ class Stairs_up extends Terrain {
 	}
 	stepOn(monster){
 		if(monster.isPlayer){
-			game_state.depth--;
-			startLevel(player.hp);
+			Map.ascend(player.hp);
 		}
 	}
 }
@@ -230,8 +228,7 @@ class Pit extends Terrain {
 				new Message('The ground gives way!');
 				monster.swing(2);
 				if( monster.hp > 0 ){
-					game_state.depth++;
-					startLevel(player.hp);
+					Map.descend(player.hp-1);
 				}
 			}
 		}else{

@@ -4,6 +4,7 @@ class Map { // new Room(0,0,tileMap); // instead of tileMap use tileMap_down onc
   static generate(){
 
   }
+
   static flood(tileType){
     tiles = [];
     for( let i=0; i<numTiles; i++ ){
@@ -27,5 +28,15 @@ class Map { // new Room(0,0,tileMap); // instead of tileMap use tileMap_down onc
         }
       }
     }
+  }
+
+  static descend(hp){ // player.hp
+    game_state.depth++;
+    startLevel(Math.min(game_state.maxHp, hp+1));
+  }
+
+  static ascend(hp){ // player.hp
+    game_state.depth--;
+		startLevel(hp);
   }
 }
