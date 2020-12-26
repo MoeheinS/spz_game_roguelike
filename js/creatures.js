@@ -659,10 +659,15 @@ function spawnMonster() {
 }
 
 function spawnTicker() {
-	spawnCounter--;
-  if(spawnCounter <= 0){  
+	game_state.spawnCounter--;
+  if(game_state.spawnCounter <= 0){  
     spawnMonster();
-    spawnCounter = spawnRate;
-    spawnRate--;
+    game_state.spawnCounter = game_state.spawnRate;
+    game_state.spawnRate--;
   }
+}
+
+function spawnRateReset(rate) {
+	game_state.spawnRate = rate;              
+  game_state.spawnCounter = game_state.spawnRate;
 }

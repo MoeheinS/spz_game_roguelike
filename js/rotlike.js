@@ -43,6 +43,8 @@ game_state = {
   initial_spawn: -1,
   startHP: 3,
   maxHp: 6,
+  spawnRate: 15,
+  spawnCounter: 15,
 
   message_history: []
 };

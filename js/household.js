@@ -194,25 +194,6 @@ function flowControl(state) {
   }
 }
 
-function startLevel(playerHP) {
-  spawnRate = 15;              
-  spawnCounter = spawnRate;  
-
-  if( game_state.debug_mapper ){
-    numTiles = Math.floor( ( numTiles-2 ) / 3 )+2;
-    Map.flood(Floor);
-  }else{
-    levelgen_dw(numTiles*numTiles, false, (game_state.depth > 1));
-    generateLevel();
-  }
-
-  player = new Player(randomPassableTile()); // {x: 0, y: 0}
-  player.hp = playerHP;
-  if( game_state.fov_enabled ){
-    player.calcFov();
-  }
-}
-
 function debug_toggle(p, v){
   console.log(p,v);
   switch (p) {

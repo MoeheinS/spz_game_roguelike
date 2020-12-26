@@ -40,3 +40,21 @@ class Map { // new Room(0,0,tileMap); // instead of tileMap use tileMap_down onc
 		startLevel(hp);
   }
 }
+
+function startLevel(playerHP) {
+  spawnRateReset(15);
+
+  if( game_state.debug_mapper ){
+    numTiles = Math.floor( ( numTiles-2 ) / 3 )+2;
+    Map.flood(Floor);
+  }else{
+    levelgen_dw(numTiles*numTiles, false, (game_state.depth > 1));
+    generateLevel();
+  }
+
+  player = new Player(randomPassableTile()); // {x: 0, y: 0}
+  player.hp = playerHP;
+  if( game_state.fov_enabled ){
+    player.calcFov();
+  }
+}
