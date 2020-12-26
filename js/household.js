@@ -161,7 +161,9 @@ function tick() {
     })
   )
   .then(function(){
-    console.warn('All monsters have acted');
+    if( monsters.length ){
+      console.warn('All monsters have acted');
+    }
     player.update().then(function(){
       console.log('Player has acted');
     });
