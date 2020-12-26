@@ -625,7 +625,7 @@ function generateMonsters() {
 	monsters = [];
 	let numMonsters = game_state.depth+game_state.initial_spawn;
 	for(let i=0;i<numMonsters;i++){
-			spawnMonster();
+		spawnMonster();
 	}
 }
 
@@ -647,11 +647,10 @@ function spawnMonster() {
 		if( spawnSpots.length ){
 			let monster = new monsterType(shuffle(spawnSpots)[0]);
 			abilities.endTurn(monster);
-					//monster.moves = 0;
-					//monster.attacks = 0;
-
 			monsters.push(monster);
+			new Message(`Spawned a ${monster.constructor.name} (${monster.uid}) at ${monster.tile.x},${monster.tile.y}`, true);
 		}else{
+			new Message('Could not spawn more monsters; no or no open spawn spots', true);
 			new Message('The dungeon overflows!');
 		}
 	}
