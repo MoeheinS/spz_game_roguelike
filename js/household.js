@@ -300,18 +300,24 @@ function randomUID() {
   return '_' + Math.random().toString(36).substr(2, 9);
 }
 class Message {
-  constructor(message) {
+  constructor(message, hidden) {
     this.message = message;
-    game_state.message_history.unshift(message);
-    console.warn(message);
+    this.hidden = hidden || false;
+    game_state.message_history.unshift(this);
+    console.log(`%c${(this.hidden ? 'DEBUG: ':'')}${this.message}`,'color:#5CC0FA;font-family:Comic Sans MS;');
   }
-  static latest() {
-    console.log(game_state.message_history[0]);
-    return game_state.message_history[0];
+  static latest(all) {
+    let latest = ( all ? game_state.message_history : game_state.message_history.filter(t => !t.hidden) );
+    if( latest.length ){
+      return latest[0].message;
+    }else{
+      return 'No messages to show';
+    }
   }
-  static list() {
-    console.table(game_state.message_history);
-    return game_state.message_history;
+  static list(all) {
+    let listed = ( all ? game_state.message_history : game_state.message_history.filter(t => !t.hidden) );
+    console.table(listed);
+    return listed;
   }
   static wipe() {
     game_state.message_history = [];
