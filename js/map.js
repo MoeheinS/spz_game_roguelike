@@ -52,9 +52,6 @@ function startLevel(playerHP) {
     generateLevel();
   }
 
-  player = new Player(randomPassableTile()); // {x: 0, y: 0}
-  player.hp = playerHP;
-  if( game_state.fov_enabled ){
-    player.calcFov();
-  }
+  // TODO: move out of this function
+  spawnPlayer(playerHP, false);
 }

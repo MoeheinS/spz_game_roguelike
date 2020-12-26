@@ -658,6 +658,14 @@ function spawnMonster() {
 	
 }
 
+function spawnPlayer(hp, coordinate){
+  player = new Player(( coordinate ? coordinate : randomPassableTile() )); // {x: 0, y: 0}
+  player.hp = hp;
+  if( game_state.fov_enabled ){
+    player.calcFov();
+  }
+}
+
 function spawnTicker() {
 	game_state.spawnCounter--;
   if(game_state.spawnCounter <= 0){  
