@@ -57,51 +57,55 @@ function shuffle(arr){
 }
 
 function draw(){
+  ctx.resetTransform();
+  ctx.clearRect(0,0,canvas.width,canvas.height);
+
   if( game_state.mode == "running" || game_state.mode == "dead" ){
-    ctx.resetTransform();
-    ctx.clearRect(0,0,canvas.width,canvas.height);
     if( game_state.scrollCamera ){
       ctx.transform(1, 0, 0, 1, 
         ((numTiles/2) - player.getDisplayX())*tileSize.x - game_state.camera_offset.x*tileSize.x, 
         ((numTiles/2) - player.getDisplayY())*tileSize.y - game_state.camera_offset.y*tileSize.y);
-    }
-    if( game_state.debug_mapper ){
-      render_mouse();
     }
     for(let i=0;i<numTiles;i++){
       for(let j=0;j<numTiles;j++){
         getTile(i,j).draw();
       }
     }
-
     for(let i=0;i<monsters.length;i++){
       monsters[i].draw();
     }
-    
     player.draw();
 
     // TODO: may move this to ui render function later
     if( game_state.interact_mode == 'camera' ){
-      ctx.save();
-      ctx.strokeStyle = COLOR_RED_PURPLE;
-      ctx.strokeRect(
-        player.getDisplayX()*tileSize.x + game_state.camera_offset.x*tileSize.x, 
-        player.getDisplayY()*tileSize.y + game_state.camera_offset.y*tileSize.y,
-        tileSize.x,
-        tileSize.y
-      );
-      ctx.restore();
+      drawCamera();
+    }
+    if( game_state.debug_mapper ){
+      render_mouse();
     }
   }else if( game_state.mode == "title" || game_state.mode == "loading" ){
-    ctx.resetTransform();
-    ctx.clearRect(0,0,canvas.width,canvas.height);
-
-    ctx.save();
-    ctx.fillText( 'Spuzlike', (numTiles/2)*tileSize.x + 0.5*tileSize.x, (numTiles/2)*tileSize.y);
-    ctx.fillText( 'Press any key to play', (numTiles/2)*tileSize.x + 0.5*tileSize.x, (2+numTiles/2)*tileSize.y);
-    ctx.restore();
+    drawTitleScreen();
   }
   window.requestAnimationFrame(draw);
+}
+
+function drawTitleScreen(){
+  ctx.save();
+  ctx.fillText( 'Spuzlike', (numTiles/2)*tileSize.x + 0.5*tileSize.x, (numTiles/2)*tileSize.y);
+  ctx.fillText( 'Press any key to play', (numTiles/2)*tileSize.x + 0.5*tileSize.x, (2+numTiles/2)*tileSize.y);
+  ctx.restore();
+}
+
+function drawCamera(){
+  ctx.save();
+  ctx.strokeStyle = COLOR_RED_PURPLE;
+  ctx.strokeRect(
+    player.getDisplayX()*tileSize.x + game_state.camera_offset.x*tileSize.x, 
+    player.getDisplayY()*tileSize.y + game_state.camera_offset.y*tileSize.y,
+    tileSize.x,
+    tileSize.y
+  );
+  ctx.restore();
 }
 
 function drawChar(ent, x, y, rect) {
@@ -239,6 +243,7 @@ function render_mouse(){
   ctx.strokeRect(game_state.debug_mouseCoords.x*tileSize.x, game_state.debug_mouseCoords.y*tileSize.y, tileSize.x, tileSize.y);
   ctx.restore();
 }
+
 function debug_painter(e){
   var i = game_state.debug_mouseCoords.x;
   var j = game_state.debug_mouseCoords.y;
