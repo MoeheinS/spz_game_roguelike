@@ -229,7 +229,7 @@ class Pit extends Terrain {
 				new Message('The ground gives way!');
 				monster.swing(2);
 				if( monster.hp > 0 ){
-					Map.descend(player.hp-1);
+					Map.descend(player.hp-1, true);
 				}
 			}
 		}else{
