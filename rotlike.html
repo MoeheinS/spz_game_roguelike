@@ -6,32 +6,64 @@
     <script src='js/mrpas.js'></script>
 
     <link rel="stylesheet" type="text/css" href="css/rotlike.css">
+    <link rel="stylesheet" type="text/css" href="css/rotlike_windows.css">
   </head>
   <body>
-    <ul>
-      <li><a href='https://nluqo.github.io/broughlike-tutorial/stage6.html' target='_blank'>Treasure and score</a></li>
-      <li><a href='https://nluqo.github.io/broughlike-tutorial/stage7.html' target='_blank'>Sounds and screenshake</a></li>
-      <li><a href='https://alligator.io/js/class-composition/' target='_blank'>Class composition</a></li>
-      <li>
-        <input type='checkbox' name='truesight' oninput="debug_toggle('truesight', this.checked)">Toggle truesight
-      </li>
-      <li>
-        <input type='checkbox' name='fov' oninput="debug_toggle('fov', this.checked)">Toggle field of view
-      </li>
-      <li>
-        <input type='checkbox' name='scroll' oninput="debug_toggle('scroll', this.checked)">Toggle scrolling
-      </li>
-      <li>
-        <input type='checkbox' name='tiles' oninput="debug_toggle('tiles', this.checked)">Text mode
-      </li>
-      <li>
-        <input type='checkbox' name='mapper' oninput="debug_toggle('mapper', this.checked)">Tile mapper
-      </li>
-    </ul>
+    
     <section class='container__canvas'>
       <canvas></canvas>
     </section>
-    <textarea class='container__json' style='height: 100%;'></textarea>
+    
+
+    <section class='container__windows'>
+      <template id='template__window'>
+        <div class='draggable container__window'>
+          <input class='window__toggle' type='checkbox'>
+          <div class='window__title'></div>
+          <div class='window__body'></div>
+        </div>
+      </template>
+
+      <div class='draggable container__window' id='w1'>
+        <input class='window__toggle' type='checkbox'>
+        <div class='window__title'>
+          TODOs and debug toggles
+        </div>
+        <div class='window__body'>
+          <ul>
+            <li><a href='https://nluqo.github.io/broughlike-tutorial/stage6.html' target='_blank'>Treasure and score</a></li>
+            <li><a href='https://nluqo.github.io/broughlike-tutorial/stage7.html' target='_blank'>Sounds and screenshake</a></li>
+            <li><a href='https://alligator.io/js/class-composition/' target='_blank'>Class composition</a></li>
+            <li>
+              <input type='checkbox' name='truesight' oninput="debug_toggle('truesight', this.checked)">Toggle truesight
+            </li>
+            <li>
+              <input type='checkbox' name='fov' oninput="debug_toggle('fov', this.checked)">Toggle field of view
+            </li>
+            <li>
+              <input type='checkbox' name='scroll' oninput="debug_toggle('scroll', this.checked)">Toggle scrolling
+            </li>
+            <li>
+              <input type='checkbox' name='tiles' oninput="debug_toggle('tiles', this.checked)">Text mode
+            </li>
+            <li>
+              <input type='checkbox' name='mapper' oninput="debug_toggle('mapper', this.checked)">Tile mapper
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <div class='draggable container__window' id='w2'>
+        <input class='window__toggle' type='checkbox'>
+        <div class='window__title'>
+          Tile mapper export window
+        </div>
+        <div class='window__body'>
+          <textarea class='container__json' style='height: 5rem; width: 100%; resize: none;' re></textarea>
+        </div>
+      </div>
+    </section>
+
   </body>
   <script src='js/household.js'></script>
   <script src='js/terrain.js'></script>
@@ -41,4 +73,6 @@
   <script src='js/abilities.js'></script>
   <script src='js/creatures.js'></script>
   <script src='js/rotlike.js'></script>
+
+  <script src='js/dom_windows.js'></script>
 </html>

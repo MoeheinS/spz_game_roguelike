@@ -1,0 +1,64 @@
+.container__windows {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  pointer-events: none;
+}
+.container__windows > * {
+  pointer-events: all;
+}
+
+.draggable {}
+
+.container__window {
+  position: absolute;
+  top: 1rem;
+  left: 1rem;
+
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+
+  border: 0.125rem solid var(--eo__black);
+  box-shadow: 0px 0px 0px 0.125rem var(--eo__yellow);
+  background: var(--eo__yellow);
+}
+
+#w2 {
+  top: 85vh;
+}
+
+.container__window .window__toggle {
+  width: 1.5rem;
+
+  cursor: pointer;
+}
+
+.container__window .window__title {
+  background: var(--eo__black);
+  color: var(--eo__yellow);
+  flex-grow: 1;
+  padding: 0.25rem 0.5rem;
+  text-align: center;
+  line-height: 1.5rem;
+
+  cursor: pointer;
+}
+
+.container__window .window__body {
+  width: 100%;
+  padding: 0.25rem 0.5rem;
+}
+
+.container__window .window__toggle:checked {}
+
+.container__window .window__toggle:checked + .window__title {
+  background: var(--eo__blue);
+  color: var(--eo__white);
+}
+
+.container__window .window__toggle:checked ~ .window__body {
+  display: none;
+}
