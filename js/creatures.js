@@ -637,8 +637,9 @@ function generateMonsters() {
 	}
 }
 
-function spawnMonster() {
-	let monsterType = shuffle([Goblin, Kobold, Zombie, Ghost, Quickling, Samurai])[0];
+//for(let s of spawners){spawnMonster(Centipede)}
+function spawnMonster(type) {
+	let monsterType = type || shuffle([Goblin, Kobold, Zombie, Ghost, Quickling, Samurai])[0];
 	// spawn from air
 	//let monster = new monsterType(randomPassableTile());
 	// spawn from next to a spawner wall
