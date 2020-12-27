@@ -47,7 +47,7 @@ for( let d of document.querySelectorAll('.draggable') ){
 
 function createWindow() {
   let template = document.querySelector('#template__window');
-  let clone = template.content.cloneNode(true).querySelector('.draggable');
+  let clone = template.content.firstElementChild.cloneNode(true);//.querySelector('.draggable');
       clone.id = `w${document.querySelectorAll('.draggable').length+1}`;
   document.querySelector('.container__windows').appendChild(clone);
   for( let d of document.querySelectorAll('.draggable') ){
