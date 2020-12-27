@@ -27,7 +27,7 @@ abilities = {
     }
   },
   MULLIGAN: function(monster){
-    startLevel(1); // to remember spells; , monster.spells);
+    startLevel(1, false, true); // to remember spells; , monster.spells);
   },
   MAELSTROM: function(monster){
     for(let i=0;i<monsters.length;i++){

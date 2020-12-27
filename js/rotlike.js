@@ -40,6 +40,7 @@ game_state = {
   allow_inputs: true,
 
   depth: 1,
+  depth_max: 1,
   initial_spawn: -1,
   startHP: 3,
   maxHp: 6,

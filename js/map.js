@@ -35,26 +35,34 @@ class Map { // new Room(0,0,tileMap); // instead of tileMap use tileMap_down onc
     generateMonsters();
   }
 
-  static descend(hp){ // player.hp
+  static descend(hp, oneWay){ // player.hp
     // Promise.all(
     //   monsters.map(function(monster){
     //     monster.void();
     //   })
     // )
     // .then(function(){
-    //   console.table(monsters);
-      game_state.depth++;
-      startLevel(Math.min(game_state.maxHp, hp+1));  
+		//   console.table(monsters);
+			
+			game_state.depth++;
+			let hp_bonus = ( game_state.depth > game_state.depth_max ? 1 : 0 );
+			game_state.depth_max = Math.max( game_state.depth, game_state.depth_max );
+			startLevel(Math.min(game_state.maxHp, hp+hp_bonus), oneWay, true);
+			// TODO: track max depth so the +1 hp only happens when exceeding that
+			/* 
+				TODO: Pit now lands you in a level which doesn't have an Up Stairs, making it one-way down.
+				Perhaps we need a Rope ladder -> a one-way UP
+			*/
     // });
   }
 
-  static ascend(hp){ // player.hp
+  static ascend(hp, oneWay){ // player.hp
     game_state.depth--;
-		startLevel(hp);
+		startLevel(hp, oneWay, false);
   }
 }
 
-async function startLevel(playerHP) {
+async function startLevel(playerHP, oneWay, directionDown) {
   spawnRateReset(15);
 
   if( game_state.debug_mapper ){
@@ -63,14 +71,20 @@ async function startLevel(playerHP) {
     return spawnPlayer(playerHP, false);
   }
 
-  await levelgen_dw(numTiles*numTiles, false, (game_state.depth > 1))
+	let playerLoc = ( game_state.depth_max > 1 ? {x: player.tile.x, y: player.tile.y} : false );
+  await levelgen_dw( //target, seed, canReturn, directionDown
+		numTiles*numTiles, 
+		( game_state.depth_max > 1 ? player.tile : false ),
+		!oneWay, //( oneWay ? false : true ), //(game_state.depth > 1) ), 
+		directionDown
+	)
   .then(function(result){
     new Message(`Welcome to floor ${game_state.depth}`);
   });
 
-  decorateLevel();
   Map.populate();
-  spawnPlayer(playerHP, false);
+	spawnPlayer(playerHP, playerLoc);
+	decorateLevel();
 }
 
 function decorateLevel(){
@@ -123,22 +137,37 @@ async function drunkWalker(seed, target, type_to){
 	}
 }
 
-// levelgen_dw(600, player.tile);
-async function levelgen_dw(target, seed, canUp){
+async function levelgen_dw(target, seed, canReturn, directionDown){
 	console.log(`attempting ${target} carves`+( seed ? `from [${seed.x},${seed.y}]` : ''));
+	console.log(`canReturn:${canReturn}, down:${(directionDown)}`);
 	Map.flood(Wall);
 	var seed = ( seed ? seed : randomTile('Wall') );
 	var lastTile = await drunkWalker(seed, target, Floor);
-	if( canUp ){ 
-		seed.replace(Stairs_up);
+	
+	return await placeStairs(seed, lastTile, canReturn, directionDown);
+}
+
+async function placeStairs(seed, lastTile, canReturn, directionDown){
+	if( game_state.depth == 1 ){
+		if( directionDown ){
+			lastTile.replace(Stairs_down);
+		}else{
+			seed.replace(Stairs_down);
+		}
+	}else if( game_state.depth > 1 ){
+		if( seed == lastTile ){
+			console.warn('Drunkwalk improbability achieved, congrats');
+			randomPassableTile('Floor').replace(( directionDown ? Stairs_down : Stairs_up ));
+		}else{
+			lastTile.replace(( directionDown ? Stairs_down : Stairs_up ));
+		}
+
+		if( canReturn ){
+			seed.replace(( directionDown ? Stairs_up : Stairs_down ));
+		}
 	}
-	if( seed == lastTile ){
-		console.warn('Back where we began');
-		randomPassableTile('Floor').replace(Stairs_down);
-	}else{
-		lastTile.replace(Stairs_down);
-  }
-  return true;
+
+	return true;
 }
 
 //=================================[Room logic, for fixtures]=================================

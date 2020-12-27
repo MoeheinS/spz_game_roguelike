@@ -186,7 +186,8 @@ function flowControl(state) {
       Message.wipe();
       game_state.mode = "running";
       game_state.depth = 1;
-      startLevel(game_state.startHP);
+      game_state.depth_max = 1;
+      startLevel(game_state.startHP, false, true);
       break;
     case 'death':
       game_state.mode = "dead";
