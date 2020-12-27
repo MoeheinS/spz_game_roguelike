@@ -30,6 +30,7 @@ class Monster {
 		this.phaseWalls = false; // lets ghost pass walls, lets player phase walls when DASHing, then set back to false
 
 		this.inventory = [];
+		this.move(getTile(tile.x, tile.y), true, true); // to prevent ouroboros shenanigans
 	}
 
 	getDisplayX(){                     
@@ -169,7 +170,7 @@ class Monster {
 		this.tile.monster = null;
 	}
 
-	move(tile, instant){
+	move(tile, instant, debug_teleport){
 		if( this.tile ){
 			this.tile.monster = null;
 			if( !instant ){
@@ -180,7 +181,9 @@ class Monster {
 		this.tile = tile;
 		tile.monster = this;
 
-		tile.stepOn(this);
+		if( typeof tile.stepOn === 'function' && !debug_teleport){ // this is necessary because LOL ouroboros
+			tile.stepOn(this);
+		}
 	}
 
 	async update(){
