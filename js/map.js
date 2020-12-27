@@ -124,8 +124,8 @@ async function drunkWalker(seed, target, type_to){
 }
 
 // levelgen_dw(600, player.tile);
-// NOTE: do I need a direction? For going up / down?
 async function levelgen_dw(target, seed, canUp){
+	console.log(`attempting ${target} carves`+( seed ? `from [${seed.x},${seed.y}]` : ''));
 	Map.flood(Wall);
 	var seed = ( seed ? seed : randomTile('Wall') );
 	var lastTile = await drunkWalker(seed, target, Floor);
@@ -141,6 +141,7 @@ async function levelgen_dw(target, seed, canUp){
   return true;
 }
 
+//=================================[Room logic, for fixtures]=================================
 class Room { // new Room(0,0,tileMap); // instead of tileMap use tileMap_down once and tileMap_up once
 	constructor(x,y, allowedRooms) {
 		var orig_chosenRoom = shuffle(allowedRooms)[0];
