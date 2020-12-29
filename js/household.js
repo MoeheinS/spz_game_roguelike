@@ -56,7 +56,19 @@ function shuffle(arr){
   return arr;
 }
 
+function debounce(callback, wait) {
+  let timeout;
+  return (...args) => {
+      const context = this;
+      clearTimeout(timeout);
+      timeout = setTimeout(() => callback.apply(context, args), wait);
+  };
+}
+
 function draw(){
+  if( !game_state.activeDraw ){
+    return window.requestAnimationFrame(draw);
+  }
   ctx.resetTransform();
   ctx.clearRect(0,0,canvas.width,canvas.height);
 

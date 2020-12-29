@@ -27,6 +27,9 @@ game_state = {
 
   debug_mapper: false,
   debug_mouseCoords: {x: 0, y: 0},
+  // stop repainting the screen after 1 sec of inactivity
+  activeDraw: true,
+  inputTimeout: 1000,
 
   truesight: false,
   fov_enabled: false,
@@ -64,6 +67,7 @@ document.querySelector("html").onkeydown = function(e){
   if( !game_state.allow_inputs ){
     return console.error('inputs not allowed');
   }
+  game_state.activeDraw = true;
   switch (game_state.mode) {
     case 'loading':
     case 'title':
@@ -82,6 +86,11 @@ document.querySelector("html").onkeydown = function(e){
     debug_painter(e);
   }
 };
+
+window.addEventListener('keydown', debounce((e) => {
+  game_state.activeDraw = false;
+  console.log('%cNo more repaints','color:#5CC0FA;font-family:Comic Sans MS;');
+}, game_state.inputTimeout));
 
 document.querySelector("canvas").onmousemove = function(e){
   var mouseCoord = {};
