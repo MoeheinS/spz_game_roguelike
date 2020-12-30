@@ -56,14 +56,15 @@
   text-align: center;
   line-height: 1.5rem;
 
-  cursor: all-scroll;
-
   position: sticky;
   top: 0;
   left: 0;
 
   display: flex;
   align-items: center;
+}
+.container__window .window__title .window__title__text {
+  cursor: all-scroll;
 }
 
 .container__window .window__body {
@@ -83,6 +84,12 @@
 
 .container__window.closedWindow .window__body {
   display: none;
+}
+
+#window__messages .window__body {
+  display: flex;
+  flex-direction: column-reverse;
+  justify-content: flex-end;
 }
 
 /* temporary rules */

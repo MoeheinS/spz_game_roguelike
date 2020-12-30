@@ -19,7 +19,7 @@ function dragElement(elem) {
     // call a function whenever the cursor moves:
     document.onmousemove = elementDrag;
 
-    document.querySelector('.container__windows').appendChild(e.target.parentNode.parentNode);
+    document.querySelector('.container__windows').appendChild(e.target.closest('.draggable'));
   }
 
   function elementDrag(e) {
@@ -74,17 +74,19 @@ function dragElement(elem) {
 }
 
 function toggleWindowBody(e) {
-  e.parentNode.parentNode.classList.toggle('closedWindow');
+  e.closest('.draggable').classList.toggle('closedWindow');
 }
 
-function createWindow() {
+function createWindow(id, title) {
   let template = document.querySelector('#template__window');
   let clone = template.content.firstElementChild.cloneNode(true);//.querySelector('.draggable');
-      clone.id = `w${document.querySelectorAll('.draggable').length+1}`;
-      clone.querySelector('.window__title__text').innerText = `w${document.querySelectorAll('.draggable').length+1}`;
+      clone.id = id || `w${document.querySelectorAll('.draggable').length+1}`;
+      clone.querySelector('.window__title__text').innerText = title || `w${document.querySelectorAll('.draggable').length+1}`;
   document.querySelector('.container__windows').appendChild(clone);
   initWindowDragging();
+  return clone;
 }
+dom_messageWindow = createWindow('window__messages', 'Message history');
 
 function initWindowDragging(){
   for( let d of document.querySelectorAll('.draggable') ){
