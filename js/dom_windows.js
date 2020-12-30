@@ -2,7 +2,8 @@ function dragElement(elem) {
   var pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
   if (elem.querySelector('.window__title')) {
     /* if present, the title is where you move the DIV from:*/
-    elem.querySelector('.window__title').onmousedown = dragMouseDown;
+    elem.querySelector('.window__title__text').onmousedown = dragMouseDown;
+    elem.querySelector('.draggable__after').onmousedown = resizeMouseDown;
   } else {
     /* otherwise, move the DIV from anywhere inside the DIV:*/
     elem.onmousedown = dragMouseDown;
@@ -18,7 +19,7 @@ function dragElement(elem) {
     // call a function whenever the cursor moves:
     document.onmousemove = elementDrag;
 
-    document.querySelector('.container__windows').appendChild(e.target.parentNode);
+    document.querySelector('.container__windows').appendChild(e.target.parentNode.parentNode);
   }
 
   function elementDrag(e) {
@@ -39,18 +40,55 @@ function dragElement(elem) {
     document.onmouseup = null;
     document.onmousemove = null;
   }
+
+  // similar but for resizing
+  function resizeMouseDown(e) {
+    e = e || window.event;
+    e.preventDefault();
+    // get the mouse cursor position at startup:
+    pos3 = e.clientX;
+    pos4 = e.clientY;
+    document.onmouseup = closeResizeDragElement;
+    // call a function whenever the cursor moves:
+    document.onmousemove = elementResizeDrag;
+  }
+
+  function elementResizeDrag(e) {
+    e = e || window.event;
+    e.preventDefault();
+    // calculate the new cursor position:
+    pos1 = pos3 - e.clientX;
+    pos2 = pos4 - e.clientY;
+    pos3 = e.clientX;
+    pos4 = e.clientY;
+    // set the element's new dimensions:
+    elem.style.width = Math.max( elem.offsetWidth - pos1 , 200 ) + "px";
+    elem.style.height = Math.max( elem.offsetHeight - pos2, 60 ) + "px";
+  }
+
+  function closeResizeDragElement() {
+    /* stop resizing when mouse button is released:*/
+    document.onmouseup = null;
+    document.onmousemove = null;
+  }
 }
 
-for( let d of document.querySelectorAll('.draggable') ){
-  dragElement(d);
+function toggleWindowBody(e) {
+  e.parentNode.parentNode.classList.toggle('closedWindow');
 }
 
 function createWindow() {
   let template = document.querySelector('#template__window');
   let clone = template.content.firstElementChild.cloneNode(true);//.querySelector('.draggable');
       clone.id = `w${document.querySelectorAll('.draggable').length+1}`;
+      clone.querySelector('.window__title__text').innerText = `w${document.querySelectorAll('.draggable').length+1}`;
   document.querySelector('.container__windows').appendChild(clone);
+  initWindowDragging();
+}
+
+function initWindowDragging(){
   for( let d of document.querySelectorAll('.draggable') ){
     dragElement(d);
   }
 }
+initWindowDragging();

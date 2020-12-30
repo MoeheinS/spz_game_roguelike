@@ -18,16 +18,21 @@
     <section class='container__windows'>
       <template id='template__window'>
         <div class='draggable container__window'>
-          <input class='window__toggle' type='checkbox'>
-          <div class='window__title'></div>
+          <div class='window__title'>
+            <input class='window__toggle' type='checkbox' onclick='toggleWindowBody(this)'>
+            <div class='window__title__text'></div>
+          </div>
           <div class='window__body'></div>
+          <div class='draggable__after'></div>
         </div>
       </template>
 
       <div class='draggable container__window' id='w1'>
-        <input class='window__toggle' type='checkbox'>
         <div class='window__title'>
+          <input class='window__toggle' type='checkbox' onclick='toggleWindowBody(this)'>
+          <div class='window__title__text'>
           TODOs and debug toggles
+          </div>
         </div>
         <div class='window__body'>
           <ul>
@@ -51,16 +56,20 @@
             </li>
           </ul>
         </div>
+        <div class='draggable__after'></div>
       </div>
 
       <div class='draggable container__window' id='w2'>
-        <input class='window__toggle' type='checkbox'>
         <div class='window__title'>
-          Tile mapper export window
+          <input class='window__toggle' type='checkbox' onclick='toggleWindowBody(this)'>
+          <div class='window__title__text'>
+            Tile mapper export window
+          </div>
         </div>
         <div class='window__body'>
           <textarea class='container__json' style='height: 5rem; width: 100%; resize: none;' re></textarea>
         </div>
+        <div class='draggable__after'></div>
       </div>
     </section>
 

@@ -8,9 +8,24 @@
 }
 .container__windows > * {
   pointer-events: all;
+  user-select: none;
 }
 
 .draggable {}
+
+.draggable__after {
+  width: 100%;
+  height: 0.25rem;
+  padding: 0.125rem;
+  position: sticky; /*absolute*/
+  bottom: 0rem;
+  right: 0rem;
+
+  cursor: nwse-resize;
+
+  border-top: 0.25rem inset var(--eo__black);
+  background: var(--eo__yellow);
+}
 
 .container__window {
   position: absolute;
@@ -18,8 +33,11 @@
   left: 1rem;
 
   display: flex;
-  align-items: center;
-  flex-wrap: wrap;
+  justify-content: flex-start;
+  flex-wrap: nowrap;
+  flex-direction: column;
+
+  overflow: auto;
 
   border: 0.125rem solid var(--eo__black);
   box-shadow: 0px 0px 0px 0.125rem var(--eo__yellow);
@@ -31,7 +49,8 @@
 }
 
 .container__window .window__toggle {
-  width: 1.5rem;
+  margin: 0.25rem;
+  margin-right: 1rem;
 
   cursor: pointer;
 }
@@ -39,26 +58,35 @@
 .container__window .window__title {
   background: var(--eo__black);
   color: var(--eo__yellow);
-  flex-grow: 1;
   padding: 0.25rem 0.5rem;
   text-align: center;
   line-height: 1.5rem;
 
-  cursor: pointer;
+  cursor: all-scroll;
+
+  position: sticky;
+  top: 0;
+  left: 0;
+
+  display: flex;
+  align-items: center;
 }
 
 .container__window .window__body {
+  flex-grow: 1;
   width: 100%;
   padding: 0.25rem 0.5rem;
 }
 
-.container__window .window__toggle:checked {}
+.container__window.closedWindow {
+  height: unset!important;
+}
 
-.container__window .window__toggle:checked + .window__title {
+.container__window.closedWindow .window__title {
   background: var(--eo__blue);
   color: var(--eo__white);
 }
 
-.container__window .window__toggle:checked ~ .window__body {
+.container__window.closedWindow .window__body {
   display: none;
 }
