@@ -83,7 +83,7 @@
 }
 
 .container__window.closedWindow .window__body {
-  display: none;
+  display: none!important;
 }
 
 #window__messages .window__body {

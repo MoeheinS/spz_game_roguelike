@@ -349,6 +349,8 @@ class Message {
       return;
     }
     dom_messageWindow.querySelector('.window__title__text').innerText = Message.latest(false);
-    dom_messageWindow.querySelector('.window__body').append(m.message, document.createElement('p'));
+    let p = document.createElement('p');
+        p.innerText = m.message;
+    dom_messageWindow.querySelector('.window__body').append(p);
   }
 }
