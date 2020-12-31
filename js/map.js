@@ -87,24 +87,29 @@ async function startLevel(playerHP, oneWay, directionDown) {
 	decorateLevel();
 }
 
-function decorateLevel(){
+async function decorateLevel(){
 	let seed_water = randomPassableTile('Floor').replace(Water);
-	drunkWalker(seed_water, 25, Water, ['Water','Floor'], false);
+	await drunkWalker(seed_water, 25, Water, ['Water','Floor'], false);
 
 	let seed_water2 = randomPassableTile('Floor').replace(Water);
-	drunkWalker(seed_water2, 25, Water, ['Water','Floor'], false);
+	await drunkWalker(seed_water2, 25, Water, ['Water','Floor'], false);
 
 	randomPassableTile('Floor').replace(Pit);
 	randomPassableTile('Floor').replace(Trap);
 	randomPassableTile('Floor').replace(Trap);
 	randomPassableTile('Floor').replace(Trap);
-	randomPassableTile('Floor').replace(Hazard);
+	//randomPassableTile('Floor').replace(Hazard);
 	randomPassableTile('Floor').replace(Mud);
 
 	randomPassableTile('Floor').replace(Grass);
 	randomPassableTile('Floor').replace(Grass);
 	let seed_grass = randomPassableTile('Floor').replace(Grass);
-	drunkWalker(seed_grass, 25, Grass, ['Grass','Floor'], true);
+	await drunkWalker(seed_grass, 25, Grass, ['Grass','Floor'], true);
+
+	// let seed_chest = randomPassableTile('Floor').replace(Chest);
+	// seed_chest.treasure = 'copper';
+
+	randomPassableTile('Floor').replace(Generator);
 }
 
 // Former drunkWalk function

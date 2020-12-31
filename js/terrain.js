@@ -171,6 +171,34 @@ class SpawnerWall extends Terrain {
 	}
 }
 
+class Generator extends Terrain {
+  constructor(x, y){
+		super(x, y, {x: 132, y: 208}, false);
+		this.glyph = 9580;
+		this.renderOverride = { fillStyle: COLOR_WHITE };
+		this.transparent = false;
+
+		let directions = [
+      [0, -1],
+      [0, 1],
+      [-1, 0],
+      [1, 0]
+    ];
+    for(let k=0;k<directions.length;k++){
+			let newTile = this;
+			while(true){
+				let testTile = newTile.getNeighbor(directions[k][0], directions[k][1]);
+				if(testTile.passable){
+					newTile = testTile;
+					newTile.replace(Hazard);
+				}else{
+					break;
+				}
+			}
+		}
+	}
+}
+
 class Chest extends Terrain {
   constructor(x, y, treasure){
 		super(x, y, {x: 180, y: 112}, false);
