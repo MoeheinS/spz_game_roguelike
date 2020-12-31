@@ -88,38 +88,53 @@ async function startLevel(playerHP, oneWay, directionDown) {
 }
 
 function decorateLevel(){
-	randomPassableTile('Floor').replace(Water);
+	let seed_water = randomPassableTile('Floor').replace(Water);
+	drunkWalker(seed_water, 25, Water, ['Water','Floor'], false);
+
+	let seed_water2 = randomPassableTile('Floor').replace(Water);
+	drunkWalker(seed_water2, 25, Water, ['Water','Floor'], false);
+
 	randomPassableTile('Floor').replace(Pit);
 	randomPassableTile('Floor').replace(Trap);
 	randomPassableTile('Floor').replace(Trap);
 	randomPassableTile('Floor').replace(Trap);
 	randomPassableTile('Floor').replace(Hazard);
 	randomPassableTile('Floor').replace(Mud);
+
+	randomPassableTile('Floor').replace(Grass);
+	randomPassableTile('Floor').replace(Grass);
+	let seed_grass = randomPassableTile('Floor').replace(Grass);
+	drunkWalker(seed_grass, 25, Grass, ['Grass','Floor'], true);
 }
 
-async function drunkWalk(tile, diagonals, allowedType){
-	var attempt = tile.getAdjacentNeighbors(diagonals)[0];
-	// if( inBounds(attempt.x,attempt.y)){
-	// 	return attempt;
-	// }else{
-	// 	return tile;
-	// }
-	//return ( inBounds(attempt.x,attempt.y) ? ( attempt.constructor.name == allowedType.name ? attempt : false ) : false );
-	return ( inBounds(attempt.x,attempt.y) ? attempt : false );
+// Former drunkWalk function
+// async function _drunkWalk(tile, diagonals, allowedType){
+// 	var attempt = tile.getAdjacentNeighbors(diagonals)[0];
+// 	return ( inBounds(attempt.x,attempt.y) ? attempt : false );
+// }
+
+async function drunkWalk(tile, diagonals, allowedTypes){
+	var attempt = tile.getAdjacentNeighbors(diagonals).filter( t => allowedTypes.includes(t.constructor.name) );
+	if( attempt[0] ){
+		return ( inBounds(attempt[0].x,attempt[0].y) ? attempt[0] : false );
+	}else{
+		console.log(`Zero valids tiles found to traverse`);
+		return false;
+	}
 }
 
-async function drunkWalker(seed, target, type_to){
+async function drunkWalker(seed, target, type_to, type_from, diagonals){
 	var carves = 0;
 	var fails = 0;
 	var target_og = target;
 	while( target-- ){
 		if( fails > target_og ){
-			console.error('whoops, too many fails');
+			console.error(`Exceeded attempts to cultivate ${type_to.name}`);
 			return seed;
 		}
-		let process = await drunkWalk(seed, true, Wall);
+		let process = await drunkWalk(seed, diagonals, type_from);
 		if( !process ){
-			console.warn('cant drunkwalk');
+			console.warn(`Can't cultivate ${type_to.name}`);
 			target++;
 			fails++;
 		}else{
@@ -129,10 +144,10 @@ async function drunkWalker(seed, target, type_to){
 			process.replace(type_to);
 			seed = process;
 		}
-		await drunkWalk(seed, true, Wall);
+		await drunkWalk(seed, diagonals, type_from);
 	}
 	if( target <= 0 ){
-		console.warn(`out of booze after ${carves} carves with ${fails} fails, boss`);
+		console.warn(`Completed ${carves} conversions of ${type_to.name} with ${fails} fails, boss`);
 		return seed;
 	}
 }
@@ -142,7 +157,7 @@ async function levelgen_dw(target, seed, canReturn, directionDown){
 	console.log(`canReturn:${canReturn}, down:${(directionDown)}`);
 	Map.flood(Wall);
 	var seed = ( seed ? seed : randomTile('Wall') );
-	var lastTile = await drunkWalker(seed, target, Floor);
+	var lastTile = await drunkWalker(seed, target, Floor, ['Floor','Wall'], true);
 	
 	return await placeStairs(seed, lastTile, canReturn, directionDown);
 }
