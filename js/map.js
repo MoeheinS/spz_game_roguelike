@@ -28,6 +28,30 @@ class Map { // new Room(0,0,tileMap); // instead of tileMap use tileMap_down onc
         }
       }
     }
+	}
+	
+	static createGenerator(probability){
+    for( let i=0; i<numTiles; i++ ){
+      var walls = tiles[i].filter(t => t.constructor.name == 'Wall' && t.getAdjacentPassableNeighbors().length && t.getAdjacentPassableNeighbors().length == 3);
+      if( walls.length ){
+        for( let w of walls ){
+          if( Math.random() < probability ){
+            return w.replace(Generator);
+          }
+        }
+      }
+    }
+	}
+	
+	static placeMud(){
+    for( let i=0; i<numTiles; i++ ){
+      var floors = tiles[i].filter(t => t.constructor.name == 'Floor' && t.getAdjacentPassableNeighbors().length == 0);
+      if( floors.length ){
+        for( let f of floors ){
+					f.replace(Mud);
+        }
+      }
+    }
   }
 
   static populate(){
@@ -98,8 +122,10 @@ async function decorateLevel(){
 	randomPassableTile('Floor').replace(Trap);
 	randomPassableTile('Floor').replace(Trap);
 	randomPassableTile('Floor').replace(Trap);
-	//randomPassableTile('Floor').replace(Hazard);
-	randomPassableTile('Floor').replace(Mud);
+
+	let seed_mud = randomPassableTile('Floor').replace(Mud);
+	// THE SWAMP
+	//await drunkWalker(seed_mud, 1125, Mud, ['Mud','Floor'], true);
 
 	randomPassableTile('Floor').replace(Grass);
 	randomPassableTile('Floor').replace(Grass);
@@ -109,7 +135,8 @@ async function decorateLevel(){
 	// let seed_chest = randomPassableTile('Floor').replace(Chest);
 	// seed_chest.treasure = 'copper';
 
-	randomPassableTile('Floor').replace(Generator);
+	Map.placeMud();
+	Map.createGenerator(0.25);
 }
 
 // Former drunkWalk function

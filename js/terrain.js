@@ -175,7 +175,8 @@ class Generator extends Terrain {
   constructor(x, y){
 		super(x, y, {x: 132, y: 208}, false);
 		this.glyph = 9580;
-		this.renderOverride = { fillStyle: COLOR_WHITE };
+		this.fillStyle = COLOR_GREEN_NEON; // COLOR_FUCHSIA;
+		this.renderOverride = { fillStyle: COLOR_BLACK };
 		this.transparent = false;
 
 		let directions = [
@@ -342,6 +343,12 @@ class Hazard extends Terrain {
 		if( monster.hp > 1 ){
 			monster.swing(1); // this could be a different effect
 		}
+		// Bug zapper. TODO: split Hazard into Hazard and Forcefield
+		// if( monster.hp > 1 ){
+		// 	monster.hp = 1;
+		// }else{
+		// 	monster.swing(1);
+		// }
 	}
 }
 // class Hazard extends modifyHP ?
