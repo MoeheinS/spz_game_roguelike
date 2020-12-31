@@ -38,7 +38,7 @@
   overflow: auto;
 
   border: 0.125rem solid var(--eo__black);
-  box-shadow: 0px 0px 0px 0.125rem var(--eo__yellow);
+  box-shadow: 0px 0px 0px 0.25rem var(--eo__yellow);
   background: var(--eo__yellow);
 }
 
@@ -90,9 +90,13 @@
   display: flex;
   flex-direction: column-reverse;
   justify-content: flex-end;
+  max-height: 90vh;
 }
 
 /* temporary rules */
 #w2 {
   top: 85vh;
+}
+#window__messages {
+  top: 28vh;
 }
