@@ -189,6 +189,24 @@ class Floor extends Terrain {
 	}
 }
 
+class Grass extends Terrain {
+  constructor(x, y){
+		super(x, y, {x: 0, y: 0}, true);
+		this.glyph = 1522;
+		this.fillStyle = COLOR_BLACK;//+Math.floor(4+Math.random()*12).toString(16)+Math.floor(4+Math.random()*12).toString(16);
+	}
+	stepOn(monster){
+		if( !monster.fly ){
+			if( monster.isPlayer ){
+				new Message(`The ${this.constructor.name.toLowerCase()} softly rustles underfoot.`);
+			}else{
+				new Message(`You hear the soft swishing of ${this.constructor.name.toLowerCase()}.`);
+			}
+		}
+		super.stepOn(monster);
+	}
+}
+
 class Stairs_down extends Terrain {
   constructor(x, y){
 		super(x, y, {x: 168, y: 48}, true); // >
