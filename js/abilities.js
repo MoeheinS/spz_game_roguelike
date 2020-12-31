@@ -52,7 +52,6 @@ abilities = {
   },
   DASH: function(monster){
     if( monster.lastMove[0] == 0 && monster.lastMove[1] == 0 ){
-      new Message(`${monster.constructor.name} does some squats!`);
       return;
     }
     let newTile = monster.tile;
@@ -83,7 +82,6 @@ abilities = {
   },
   BOLT_RAY(monster, damage){
     if( monster.lastMove[0] == 0 && monster.lastMove[1] == 0 ){
-      new Message(`${monster.constructor.name} makes the floor glow!`);
       return;
     }
     let newTile = monster.tile;
@@ -154,7 +152,6 @@ abilities = {
   },
   PHASE: function(monster){
     if( monster.lastMove[0] == 0 && monster.lastMove[1] == 0 ){
-      new Message(`${monster.constructor.name} briefly disappears and reappears.`);
       return;
     }
     let newTile = monster.tile;
@@ -201,11 +198,10 @@ abilities = {
   },
   DODGE: function(monster){
     if( monster.lastMove[0] == 0 && monster.lastMove[1] == 0 ){
-      new Message(`${monster.constructor.name} does a standing backflip!`);
       return;
     }
     if( !monster.stamina ){
-      new Message(`${monster.constructor.name} is exhausted.`);
+      new Message(`The ${monster.constructor.name} is exhausted.`);
       return;
     }
     let newTile = monster.tile;
@@ -215,7 +211,7 @@ abilities = {
       testTile.setEffect(monster.glyph, COLOR_BLACK, COLOR_FUCHSIA);
       newTile = testTile;
     }else{
-      new Message(`${monster.constructor.name} couldn't roll due to an obstacle.`);
+      new Message(`The ${monster.constructor.name} couldn't roll due to an obstacle.`);
     }
     if(monster.tile != newTile){
       monster.move(newTile, true);

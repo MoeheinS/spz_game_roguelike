@@ -31,7 +31,7 @@ class Terrain {
 
 	reveal(){
 		this.hidden = false;
-		new Message(`You spot a ${this.constructor.name}`);
+		new Message(`You spot a ${this.constructor.name}.`);
 	}
 
 	// pass a class as arg
@@ -258,7 +258,7 @@ class Trap extends Terrain { // different kinds of traps? Rock fall trap, explos
 			return;
 		}
 		if(monster.isPlayer){ // should traps also trigger for monsters?
-			new Message('KABOOM!');
+			new Message('You are engulfed in a fiery explosion!');
 			monster.swing(1); // this could be a different effect
 			this.trap = false;
 			//this.replace(Floor); // TODO: this replace Water + degrade armor -> rust trap
@@ -289,7 +289,7 @@ class Hazard extends Terrain {
 	}
 	stepOn(monster){
 		if(monster.isPlayer){
-			new Message('It burns!');
+			new Message('You are overcome with pain!');
 		}else{
 			new Message(`A ${monster.constructor.name} hisses in pain!`);
 		}
@@ -320,7 +320,7 @@ class Mud extends Terrain {
 			return;
 		}
 		if(monster.isPlayer){
-			new Message('GLOOP GLOOP.');
+			new Message(`You are slowed down by the mud.`);
 			tick();
 		}else{
 			new Message('You hear a wet squelching sound...');
@@ -348,9 +348,9 @@ class Water extends Terrain { // fuck
 			return;
 		}
 		if(monster.isPlayer){
-			new Message('SPLISH SPLASH');
+			new Message('You move through the water.');
 		}else{
-			new Message('You hear splashing...');
+			new Message('You hear the sound of water splashing...');
 		}
 	}
 }

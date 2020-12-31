@@ -121,7 +121,7 @@ class Monster {
 				if( Math.floor(this.attacks) > 0 && newTile.monster && this.isPlayer != newTile.monster.isPlayer ){
 					this.attacks--;
 					// TODO: use this.attack instead of hard 1?
-					newTile.monster.swing(1 + this.bonusAttack);
+					newTile.monster.swing(1 + this.bonusAttack, this);
 					this.bonusAttack = 0;
 
 					this.offsetX = (newTile.x - this.tile.x)/2;         
@@ -146,9 +146,10 @@ class Monster {
 		}
 	}
 
-	swing(damage){
+	swing(damage, source){
 		// TODO: add swing-based accuracy instead of 100% accuracy
 		this.hp -= damage;
+		new Message(( source ? `The ${source.constructor.name} swings at the ${this.constructor.name}, dealing ${damage} damage.` : `The ${this.constructor.name} takes ${damage} damage.`));
 		if( this.hp <= 0 ){
 			this.die();
 		}
@@ -159,6 +160,7 @@ class Monster {
 		this.tile.renderOverride = { fillStyle: this.bloodColor };
 		this.dead = true;
 		this.glyph = 37; // %
+		new Message(`The ${this.constructor.name} ${shuffle(['dies.','perishes.','chokes on its own teeth.','is mangled.'])[0]}`);
 		// TODO: optionally some creatures could turn into something else on death...
 		this.void();
 	}
@@ -424,6 +426,15 @@ class Player extends Monster {
 		}
 	}
 
+	die(){
+		// BLEED
+		this.tile.renderOverride = { fillStyle: this.bloodColor };
+		this.dead = true;
+		this.glyph = 37; // %
+		new Message('You have died...');
+
+	}
+
 	calcLos(){
 	// proximity based trigger
 	// 	for( let i=0; i<monsters.length; i++ ){
@@ -543,6 +554,7 @@ class Samurai extends Monster {
 	swing(damage){ // unleashes a whirlwind attack when damaged, kek
 		super.swing(damage);
 		if( this.hp > 0 ){
+			new Message(`The ${this.constructor.name} swings wildly around itself!`);
 			abilities.WHIRLWIND(this);
 		}
 	}
@@ -657,10 +669,10 @@ function spawnMonster(type) {
 			let monster = new monsterType(shuffle(spawnSpots)[0]);
 			abilities.endTurn(monster);
 			monsters.push(monster);
-			new Message(`Spawned a ${monster.constructor.name} (${monster.uid}) at ${monster.tile.x},${monster.tile.y}`, true);
+			new Message(`Spawned a ${monster.constructor.name} (${monster.uid}) at ${monster.tile.x},${monster.tile.y}.`, true);
 		}else{
-			new Message('Could not spawn more monsters; no or no open spawn spots', true);
-			new Message('The dungeon overflows!');
+			new Message('Could not spawn more monsters; no or no open spawn spots.', true);
+			new Message('The dungeon overflows with creatures!');
 		}
 	}
 	

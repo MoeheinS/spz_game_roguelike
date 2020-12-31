@@ -36,7 +36,7 @@ class Drop {
     }
     if( tryTile.inventory.length ){
       let pickup = tryTile.inventory.shift();
-      new Message(`${tryTile.monster.constructor.name} picks up ${pickup.amount} ${pickup.name}.`);
+      new Message(`The ${tryTile.monster.constructor.name} picks up ${pickup.amount} ${pickup.name}.`);
       var invCheck = tryTile.monster.inventory.filter(t=>t.iname == pickup.iname);
       if( invCheck.length ){
         invCheck[0].amount += pickup.amount;
@@ -45,7 +45,7 @@ class Drop {
       }      
       console.table(tryTile.monster.inventory);
     }else{
-      new Message('Nothing to pick up.');
+      new Message('There is nothing to pick up.');
     }
   }
 }

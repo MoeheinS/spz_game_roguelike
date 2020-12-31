@@ -79,7 +79,7 @@ async function startLevel(playerHP, oneWay, directionDown) {
 		directionDown
 	)
   .then(function(result){
-    new Message(`Welcome to floor ${game_state.depth}`);
+    new Message(`Welcome to floor ${game_state.depth}.`);
   });
 
   Map.populate();
