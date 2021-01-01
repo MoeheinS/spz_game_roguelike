@@ -107,7 +107,7 @@ class Monster {
 		}
 	}
 
-	tryMove(dx, dy){
+	async tryMove(dx, dy){
 		// if( !this.alerted && !this.isPlayer ){
 		// 	return true;
 		// }
@@ -138,7 +138,10 @@ class Monster {
 			// TODO: this might be where you bump a chest to open it, or try to push a boulder
 			this.offsetX = (newTile.x - this.tile.x)/2;         
 			this.offsetY = (newTile.y - this.tile.y)/2; 
-			if( !this.isPlayer && this.checkActions() ){
+			if( TREASURE_HOLDERS.includes(newTile.constructor.name) ){
+				await Drop.loot(newTile, this);
+			}
+			if( !this.isPlayer && this.checkActions() ){	
 				this.act();
 			}else{
 				return true;
@@ -254,7 +257,7 @@ class Boulder extends Monster {
 		}
 	}
 
-	tryMove(dx, dy){
+	async tryMove(dx, dy){
 		let newTile = this.tile.getNeighbor(dx,dy);
 		if(newTile.passable){
 			if( !newTile.monster ){
@@ -318,6 +321,9 @@ class Player extends Monster {
 					break;
 				case 'l':
 					game_state.interact_mode = 'camera';
+					break;
+				case 'g':
+					Drop.pickup(player.tile.x, player.tile.y, player);
 					break;
 				default:
 					break;
@@ -417,8 +423,8 @@ class Player extends Monster {
 		}
 	}
 
-	tryMove(dx, dy){
-		if( super.tryMove(dx,dy) ){
+	async tryMove(dx, dy){
+		if( await super.tryMove(dx,dy) ){
 			if( !this.checkActions() ){
 				// world state ticks after each player movement
 				tick();
@@ -675,7 +681,23 @@ function spawnMonster(type) {
 			new Message('The dungeon overflows with creatures!');
 		}
 	}
-	
+}
+
+// TODO: maybe consolidate this with the other one...
+// summonMonster(shuffle([Zombie, Ghost])[0], randomPassableTile('Floor'))
+async function summonMonster(type, tile) {
+	let monsterType = type || shuffle([Goblin, Kobold, Zombie, Ghost, Quickling, Samurai])[0];
+	let tryTile = tile || randomPassableTile('Floor');
+	if( !tryTile.monster ){
+		let monster = new monsterType(tryTile);
+		abilities.endTurn(monster);
+		monsters.push(monster);
+		new Message(`Spawned a ${monster.constructor.name} (${monster.uid}) at ${monster.tile.x},${monster.tile.y}.`, true);
+		return monster;
+	}else{
+		new Message('Could not summon monster; spot is occupied.', true);
+		return false;
+	}
 }
 
 function spawnPlayer(hp, coordinate){

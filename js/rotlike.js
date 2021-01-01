@@ -17,6 +17,8 @@ COLOR_FILLSTYLE = COLOR_WHITE;
 COLOR_WALL = COLOR_WHITE;
 COLOR_WATER = COLOR_BLUE;
 
+TREASURE_HOLDERS = ['Chest','Crypt','Tomb','Jar','Barrel'];
+
 tileSize = {x: 24, y: 24};
 // for tiled mode
 SCALE_FACTOR = 3;
