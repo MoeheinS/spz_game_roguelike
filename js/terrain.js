@@ -106,7 +106,7 @@ class Terrain {
 			if( game_state.text_mode ){
 
 				drawChar( this, this.x, this.y, this.renderOverride);
-				if( this.inventory.length ){
+				if( this.inventory.length && this.passable ){
 					if( !this.monster ){
 						drawChar( {glyph: ( this.inventory.length == 1 ? this.inventory[0].glyph : 42), fillStyle: COLOR_BLACK}, this.x, this.y, this.renderOverride);
 					}else if( this.monster ){
@@ -201,13 +201,20 @@ class Generator extends Terrain {
 }
 
 class Chest extends Terrain {
-  constructor(x, y, treasure){
+  constructor(x, y){
 		super(x, y, {x: 180, y: 112}, false);
 		this.glyph = 8710;
-		this.treasure = treasure;
 	}
-	// on enter block movement and yield treasure
-	// TODO is a chest a Terrain or a Creature? Might be easier to have it be a creature
+	// this.treasure turned out to be unneccessary, so question below is extra relevant
+	// TODO: is a chest a Terrain or a Creature? Might be easier to have it be a creature
+	// A non-spawnlist creature that yields treasure when slain?
+}
+
+class Crypt extends Terrain {
+  constructor(x, y){
+		super(x, y, {x: 180, y: 112}, false);
+		this.glyph = 8745;
+	}
 }
 
 class Floor extends Terrain {
