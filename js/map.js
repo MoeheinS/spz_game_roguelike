@@ -43,6 +43,7 @@ class Map { // new Room(0,0,tileMap); // instead of tileMap use tileMap_down onc
     }
 	}
 	
+	// THE SWAMP
 	static placeMud(){
     for( let i=0; i<numTiles; i++ ){
       var floors = tiles[i].filter(t => t.constructor.name == 'Floor' && t.getAdjacentPassableNeighbors().length == 0);
@@ -52,7 +53,21 @@ class Map { // new Room(0,0,tileMap); // instead of tileMap use tileMap_down onc
         }
       }
     }
-  }
+	}
+	
+	// THE CEMETARY
+	static placeCrypt(){
+		for( let i=0; i<numTiles; i++ ){
+      var floors = tiles[i].filter(t => t.constructor.name == 'Floor' && t.getAdjacentPassableNeighbors(true).length == 6);
+      if( floors.length ){
+        for( let f of floors ){
+					f.replace(Crypt);
+					// var newCrypt = f.replace(Crypt);
+					// new Drop(newCrypt.x, newCrypt.y, 'copper', Math.floor(Math.random()*10101));
+        }
+      }
+    }
+	}
 
   static populate(){
     Map.createSpawners(0.25);
