@@ -132,8 +132,11 @@ async function decorateLevel(){
 	let seed_grass = randomPassableTile('Floor').replace(Grass);
 	await drunkWalker(seed_grass, 25, Grass, ['Grass','Floor'], true);
 
-	// let seed_chest = randomPassableTile('Floor').replace(Chest);
-	// seed_chest.treasure = 'copper';
+	let seed_chest = randomPassableTile('Floor').replace(Chest);
+	new Drop(seed_chest.x, seed_chest.y, 'copper', Math.floor(Math.random()*10101));
+
+	let seed_crypt = randomPassableTile('Floor').replace(Crypt);
+	new Drop(seed_crypt.x, seed_crypt.y, 'copper', Math.floor(Math.random()*10101));
 
 	Map.placeMud();
 	Map.createGenerator(0.25);
