@@ -45,62 +45,68 @@ class Map { // new Room(0,0,tileMap); // instead of tileMap use tileMap_down onc
 		)
 		.then(function(){
 			console.table(game_state.dungeon.mapgen);
-			Object.entries(game_state.dungeon.mapgen)
-			.filter(function([variant,value]){ return value == 0.1})
-			.map(async function([variant, value]){
-				switch (variant) {
-					case 'forest':
-						console.log(`%cCan't see the forest for the trees!`,'color:#c33399;font-family:Comic Sans MS;');
-						var seed_grass = randomPassableTile('Floor').replace(Grass);
-						await drunkWalker(seed_grass, numTiles*numTiles, Grass, ['Grass','Floor'], true);
-						Map.growWalls(Tree);
-						break;
-					case 'grass':
-						console.log('%cSome grass is nice!','color:#c33399;font-family:Comic Sans MS;');
-						randomPassableTile('Floor').replace(Grass);
-						randomPassableTile('Floor').replace(Grass);
-						var seed_grass = randomPassableTile('Floor').replace(Grass);
-						await drunkWalker(seed_grass, 25, Grass, ['Grass','Floor'], true);
-						break;
-					case 'water':
-						console.log('%cWatch the water!','color:#c33399;font-family:Comic Sans MS;');
-						var seed_water = randomPassableTile('Floor').replace(Water);
-						await drunkWalker(seed_water, 25, Water, ['Water','Floor'], false);
-						var seed_water2 = randomPassableTile('Floor').replace(Water);
-						await drunkWalker(seed_water2, 25, Water, ['Water','Floor'], false);
-						break;
-					case 'mud_corridors':
-						console.log('%cMuddy corridors!','color:#c33399;font-family:Comic Sans MS;');
-						Map.placeMud();
-						break;
-					case 'swamp':
-						console.log('%cWelcome to the Swamp!','color:#c33399;font-family:Comic Sans MS;');
-						var seed_mud = randomPassableTile('Floor').replace(Mud);
-						await drunkWalker(seed_mud, 1125, Mud, ['Mud','Floor'], true);
-						seedChest();
-						break;
-					case 'graveyard':
-						console.log(`%cLot's of bodies here!`,'color:#c33399;font-family:Comic Sans MS;');
-						Map.placeCrypt();
-						seedChest();
-						break;
-					case 'sokoban':
-						break; // FIXME: boulders don't play nice with replaces done later
-						// console.log(`%cWatch where you push those!`,'color:#c33399;font-family:Comic Sans MS;');
-						// Map.crumbleWalls();
-						// break;
-					case 'narrow':
-						console.log(`%cWelcome to the ice maze!`,'color:#c33399;font-family:Comic Sans MS;');
-						Map.growWalls(IceWall);
-						break;
-					case 'generator':
-						console.log('%cRandom generator!','color:#c33399;font-family:Comic Sans MS;');
-						Map.createGenerator(0.25);
-						break;
-					default:
-						break;
-				}
-			})
+			Promise.all(
+				Object.entries(game_state.dungeon.mapgen)
+				.filter(function([variant,value]){ return value == 0.1})
+				.map(async function([variant, value]){
+					switch (variant) {
+						case 'forest':
+							console.log(`%cCan't see the forest for the trees!`,'color:#c33399;font-family:Comic Sans MS;');
+							var seed_grass = randomPassableTile('Floor').replace(Grass);
+							await drunkWalker(seed_grass, numTiles*numTiles, Grass, ['Grass','Floor'], true);
+							Map.growWalls(Tree);
+							break;
+						case 'grass':
+							console.log('%cSome grass is nice!','color:#c33399;font-family:Comic Sans MS;');
+							randomPassableTile('Floor').replace(Grass);
+							randomPassableTile('Floor').replace(Grass);
+							var seed_grass = randomPassableTile('Floor').replace(Grass);
+							await drunkWalker(seed_grass, 25, Grass, ['Grass','Floor'], true);
+							break;
+						case 'water':
+							console.log('%cWatch the water!','color:#c33399;font-family:Comic Sans MS;');
+							var seed_water = randomPassableTile('Floor').replace(Water);
+							await drunkWalker(seed_water, 25, Water, ['Water','Floor'], false);
+							var seed_water2 = randomPassableTile('Floor').replace(Water);
+							await drunkWalker(seed_water2, 25, Water, ['Water','Floor'], false);
+							break;
+						case 'mud_corridors':
+							console.log('%cMuddy corridors!','color:#c33399;font-family:Comic Sans MS;');
+							Map.placeMud();
+							break;
+						case 'swamp':
+							console.log('%cWelcome to the Swamp!','color:#c33399;font-family:Comic Sans MS;');
+							var seed_mud = randomPassableTile('Floor').replace(Mud);
+							await drunkWalker(seed_mud, 1125, Mud, ['Mud','Floor'], true);
+							seedChest();
+							break;
+						case 'graveyard':
+							console.log(`%cLot's of bodies here!`,'color:#c33399;font-family:Comic Sans MS;');
+							Map.placeCrypt();
+							seedChest();
+							break;
+						case 'sokoban':
+							if( game_state.dungeon.mapgen.forest == 0.1 ){
+								console.log(`%cForest precludes sokoban`,'color:#c33399;font-family:Comic Sans MS;');
+								break;
+							}
+							console.log(`%cWatch where you push those!`,'color:#c33399;font-family:Comic Sans MS;');
+							Map.crumbleWalls();
+							break;
+						case 'narrow':
+							console.log(`%cWelcome to the ice maze!`,'color:#c33399;font-family:Comic Sans MS;');
+							Map.growWalls(IceWall);
+							break;
+						case 'generator':
+							console.log('%cRandom generator!','color:#c33399;font-family:Comic Sans MS;');
+							Map.createGenerator(0.25);
+							break;
+						default:
+							break;
+					}
+					return true;
+				})
+			)
 		})
 		.finally(function(){
 			// after all others are done, seed traps
@@ -283,7 +289,8 @@ function seedChest( tile, loot ){
 // }
 
 async function drunkWalk(tile, diagonals, allowedTypes){
-	var attempt = tile.getAdjacentNeighbors(diagonals).filter( t => allowedTypes.includes(t.constructor.name) );
+	// && !t.monster added to avoid the sokoban problem
+	var attempt = tile.getAdjacentNeighbors(diagonals).filter( t => allowedTypes.includes(t.constructor.name) && !t.monster );
 	if( attempt[0] ){
 		return ( inBounds(attempt[0].x,attempt[0].y) ? attempt[0] : false );
 	}else{
