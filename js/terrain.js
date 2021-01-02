@@ -200,6 +200,54 @@ class Generator extends Terrain {
 	}
 }
 
+class IceWall extends Terrain {
+	// TODO: fixtures walled by Ice; place anywhere, then drunkwalk Wall -> Ice untill Floor
+	// Make the ice meltable, and boom, ya done. Save this one for later-later
+  constructor(x, y){
+		super(x, y, {x: 132, y: 208}, false);
+		this.glyph = 9618;
+		this.fillStyle = COLOR_BLUE;
+		this.renderOverride = { fillStyle: COLOR_WHITE };
+		this.transparent = true;
+	}
+}
+
+/*
+	// TODO: Someday, perhaps. Doors.
+	// You'd need a walk-into that turns vert / hori into open
+	// Alternatively Doors could be monsters, that replace the tile they're on with Door_open
+	// And make transparent go from false -> true, but that complicates things if I decide to add
+	// door closing again...
+	// For now they're commented out, because they don't fit the current mapgen
+	// and also require more work than value added
+*/
+// class Door__open extends Terrain {
+//   constructor(x, y){
+// 		super(x, y, {x: 132, y: 208}, false);
+// 		this.glyph = 43;
+// 		this.fillStyle = COLOR_BLACK;
+// 		this.renderOverride = { fillStyle: COLOR_WHITE };
+// 		this.transparent = true;
+// 	}
+// }
+// class Door__vert extends Terrain {
+//   constructor(x, y){
+// 		super(x, y, {x: 132, y: 208}, false);
+// 		this.glyph = 9474; // |
+// 		this.fillStyle = COLOR_BLACK;
+// 		this.renderOverride = { fillStyle: COLOR_WHITE };
+// 		this.transparent = false;
+// 	}
+// }
+// class Door__hori extends Terrain {
+//   constructor(x, y){
+// 		super(x, y, {x: 132, y: 208}, false);
+// 		this.glyph = 9472; // -
+// 		this.fillStyle = COLOR_BLACK;
+// 		this.renderOverride = { fillStyle: COLOR_WHITE };
+// 		this.transparent = false;
+// 	}
+// }
 class Chest extends Terrain {
   constructor(x, y){
 		super(x, y, {x: 180, y: 112}, false);
