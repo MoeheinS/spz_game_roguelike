@@ -29,6 +29,91 @@ class Map { // new Room(0,0,tileMap); // instead of tileMap use tileMap_down onc
       }
     }
 	}
+
+	static async chooseVariant(){
+		Promise.all(
+			Object.entries(game_state.dungeon.mapgen).map(function([variant, value]){
+				let chance = Math.random();
+				if( chance <= value ){
+					game_state.dungeon.mapgen[variant] = 0.1;
+				}else{
+					// TODO: possibly implement weighting here; instead of /10, /20 for swamp etc
+					game_state.dungeon.mapgen[variant] += chance/10;
+				}
+				return game_state.dungeon.mapgen[variant];
+			})
+		)
+		.then(function(){
+			console.table(game_state.dungeon.mapgen);
+			Object.entries(game_state.dungeon.mapgen)
+			.filter(function([variant,value]){ return value == 0.1})
+			.map(async function([variant, value]){
+				switch (variant) {
+					case 'forest':
+						console.log(`%cCan't see the forest for the trees!`,'color:#c33399;font-family:Comic Sans MS;');
+						var seed_grass = randomPassableTile('Floor').replace(Grass);
+						await drunkWalker(seed_grass, numTiles*numTiles, Grass, ['Grass','Floor'], true);
+						Map.growWalls(Tree);
+						break;
+					case 'grass':
+						console.log('%cSome grass is nice!','color:#c33399;font-family:Comic Sans MS;');
+						randomPassableTile('Floor').replace(Grass);
+						randomPassableTile('Floor').replace(Grass);
+						var seed_grass = randomPassableTile('Floor').replace(Grass);
+						await drunkWalker(seed_grass, 25, Grass, ['Grass','Floor'], true);
+						break;
+					case 'water':
+						console.log('%cWatch the water!','color:#c33399;font-family:Comic Sans MS;');
+						var seed_water = randomPassableTile('Floor').replace(Water);
+						await drunkWalker(seed_water, 25, Water, ['Water','Floor'], false);
+						var seed_water2 = randomPassableTile('Floor').replace(Water);
+						await drunkWalker(seed_water2, 25, Water, ['Water','Floor'], false);
+						break;
+					case 'mud_corridors':
+						console.log('%cMuddy corridors!','color:#c33399;font-family:Comic Sans MS;');
+						Map.placeMud();
+						break;
+					case 'swamp':
+						console.log('%cWelcome to the Swamp!','color:#c33399;font-family:Comic Sans MS;');
+						var seed_mud = randomPassableTile('Floor').replace(Mud);
+						await drunkWalker(seed_mud, 1125, Mud, ['Mud','Floor'], true);
+						seedChest();
+						break;
+					case 'graveyard':
+						console.log(`%cLot's of bodies here!`,'color:#c33399;font-family:Comic Sans MS;');
+						Map.placeCrypt();
+						seedChest();
+						break;
+					case 'sokoban':
+						break; // FIXME: boulders don't play nice with replaces done later
+						// console.log(`%cWatch where you push those!`,'color:#c33399;font-family:Comic Sans MS;');
+						// Map.crumbleWalls();
+						// break;
+					case 'narrow':
+						console.log(`%cWelcome to the ice maze!`,'color:#c33399;font-family:Comic Sans MS;');
+						Map.growWalls(IceWall);
+						break;
+					case 'generator':
+						console.log('%cRandom generator!','color:#c33399;font-family:Comic Sans MS;');
+						Map.createGenerator(0.25);
+						break;
+					default:
+						break;
+				}
+			})
+		})
+		.finally(function(){
+			// after all others are done, seed traps
+			randomPassableTile('Floor').replace(Pit);
+			randomPassableTile('Floor').replace(Trap);
+			randomPassableTile('Floor').replace(Trap);
+			randomPassableTile('Floor').replace(Trap);
+
+			seedChest();
+
+			return true;
+		});
+	}
 	
 	static createGenerator(probability){
     for( let i=0; i<numTiles; i++ ){
@@ -38,6 +123,30 @@ class Map { // new Room(0,0,tileMap); // instead of tileMap use tileMap_down onc
           if( Math.random() < probability ){
             return w.replace(Generator);
           }
+        }
+      }
+    }
+	}
+
+	// Maze building. Works nice with IceWall, too
+	static growWalls(terrainType){
+		for( let i=0; i<numTiles; i++ ){
+      var floors = tiles[i].filter(t => t.constructor.name == 'Floor' && t.getAdjacentPassableNeighbors(true).length == 7);
+      if( floors.length ){
+        for( let f of floors ){
+					f.replace(terrainType);
+        }
+      }
+    }
+	}
+
+	static async crumbleWalls(){
+		for( let i=0; i<numTiles; i++ ){
+      var walls = tiles[i].filter(t => t.constructor.name == 'Wall' && t.getAdjacentPassableNeighbors(true).length && t.getAdjacentPassableNeighbors(true).length >= 7);
+      if( walls.length ){
+        for( let w of walls ){
+					w.replace(Floor);
+					summonMonster(Boulder, w);
         }
       }
     }
@@ -123,39 +232,49 @@ async function startLevel(playerHP, oneWay, directionDown) {
 
   Map.populate();
 	spawnPlayer(playerHP, playerLoc);
-	decorateLevel();
+	Map.chooseVariant();
 }
 
-async function decorateLevel(){
-	let seed_water = randomPassableTile('Floor').replace(Water);
-	await drunkWalker(seed_water, 25, Water, ['Water','Floor'], false);
-
-	let seed_water2 = randomPassableTile('Floor').replace(Water);
-	await drunkWalker(seed_water2, 25, Water, ['Water','Floor'], false);
-
-	randomPassableTile('Floor').replace(Pit);
-	randomPassableTile('Floor').replace(Trap);
-	randomPassableTile('Floor').replace(Trap);
-	randomPassableTile('Floor').replace(Trap);
-
-	let seed_mud = randomPassableTile('Floor').replace(Mud);
-	// THE SWAMP
-	//await drunkWalker(seed_mud, 1125, Mud, ['Mud','Floor'], true);
-
-	randomPassableTile('Floor').replace(Grass);
-	randomPassableTile('Floor').replace(Grass);
-	let seed_grass = randomPassableTile('Floor').replace(Grass);
-	await drunkWalker(seed_grass, 25, Grass, ['Grass','Floor'], true);
-
-	let seed_chest = randomPassableTile('Floor').replace(Chest);
+function seedChest( tile, loot ){
+	tile = tile || randomPassableTile();
+	let seed_chest = tile.replace(Chest);
+	// TODO: loot.iname, loot.amount
 	new Drop(seed_chest.x, seed_chest.y, 'copper', Math.floor(Math.random()*10101));
-
-	let seed_crypt = randomPassableTile('Floor').replace(Crypt);
-	new Drop(seed_crypt.x, seed_crypt.y, 'copper', Math.floor(Math.random()*10101));
-
-	Map.placeMud();
-	Map.createGenerator(0.25);
 }
+
+// The OLD decorateLevel();
+// deprecated for Map.chooseVariant();
+// async function _decorateLevel(){
+
+// 	let seed_water = randomPassableTile('Floor').replace(Water);
+// 	await drunkWalker(seed_water, 25, Water, ['Water','Floor'], false);
+
+// 	let seed_water2 = randomPassableTile('Floor').replace(Water);
+// 	await drunkWalker(seed_water2, 25, Water, ['Water','Floor'], false);
+
+// 	randomPassableTile('Floor').replace(Pit);
+// 	randomPassableTile('Floor').replace(Trap);
+// 	randomPassableTile('Floor').replace(Trap);
+// 	randomPassableTile('Floor').replace(Trap);
+
+// 	let seed_mud = randomPassableTile('Floor').replace(Mud);
+// 	// THE SWAMP
+// 	//await drunkWalker(seed_mud, 1125, Mud, ['Mud','Floor'], true);
+
+// 	randomPassableTile('Floor').replace(Grass);
+// 	randomPassableTile('Floor').replace(Grass);
+// 	let seed_grass = randomPassableTile('Floor').replace(Grass);
+// 	await drunkWalker(seed_grass, 25, Grass, ['Grass','Floor'], true);
+
+// 	let seed_chest = randomPassableTile('Floor').replace(Chest);
+// 	new Drop(seed_chest.x, seed_chest.y, 'copper', Math.floor(Math.random()*10101));
+
+// 	let seed_crypt = randomPassableTile('Floor').replace(Crypt);
+// 	new Drop(seed_crypt.x, seed_crypt.y, 'copper', Math.floor(Math.random()*10101));
+
+// 	Map.placeMud();
+// 	Map.createGenerator(0.25);
+// }
 
 // Former drunkWalk function
 // async function _drunkWalk(tile, diagonals, allowedType){

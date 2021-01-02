@@ -44,6 +44,21 @@ game_state = {
   interact_mode: "player",
   allow_inputs: true,
 
+  dungeon: {
+    mapgen: {
+      //ice_cave: 0.1,
+      forest: 0.1,
+      grass: 0.1,
+      water: 0.1,
+      mud_corridors: 0.1,
+      swamp: 0.1,
+      graveyard: 0.1,
+      narrow: 0.1,
+      generator: 0.1,
+      sokoban: 0.1
+    }
+  },
+
   depth: 1,
   depth_max: 1,
   initial_spawn: -1,
