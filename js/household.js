@@ -69,8 +69,90 @@ function debounce(callback, wait) {
 
 function drawTitleScreen(){
   ctx.save();
-  ctx.fillText( 'Spuzlike', (numTiles/2)*tileSize.x + 0.5*tileSize.x, (numTiles/2)*tileSize.y);
-  ctx.fillText( 'Press any key to play', (numTiles/2)*tileSize.x + 0.5*tileSize.x, (2+numTiles/2)*tileSize.y);
+
+  ctx.fillText( 'Spuzlike', 
+                (numTiles/2)*tileSize.x + 0.5*tileSize.x, 
+                //(numTiles/2)*tileSize.y
+                2*tileSize.y
+              );
+  ctx.fillText( 'Press any key to play', 
+                (numTiles/2)*tileSize.x + 0.5*tileSize.x, 
+                //(2+numTiles/2)*tileSize.y
+                4*tileSize.y
+              );
+  
+  ctx.font = 4*game_state.fontSize.size+"px ega";
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'top';
+
+  ctx.fillText( '@', 
+                (numTiles/2)*tileSize.x + 0.5*tileSize.x, 
+                (numTiles/2)*tileSize.y
+              );
+
+
+  ctx.font = 1.5*game_state.fontSize.size+"px ega";
+  ctx.textAlign = 'left';
+  ctx.textBaseline = 'top';
+
+  ctx.strokeStyle = COLOR_YELLOW;
+  ctx.lineWidth = 0.75*game_state.fontSize.size;
+  ctx.strokeText( '3', 
+                  (-2+(numTiles/2))*tileSize.x + 0.5*tileSize.x, 
+                  (-1+numTiles/2)*tileSize.y
+                );
+  ctx.fillText( '3', 
+                (-2+(numTiles/2))*tileSize.x + 0.5*tileSize.x, 
+                (-1+numTiles/2)*tileSize.y
+              );
+
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'top';
+
+  ctx.font = 0.75*game_state.fontSize.size+"px ega";
+  ctx.fillText( 'You', 
+                (numTiles/2)*tileSize.x + 0.5*tileSize.x, 
+                (3+numTiles/2)*tileSize.y
+              );
+  ctx.fillText( 'health', 
+                (1+(numTiles/2))*tileSize.x + 0.5*tileSize.x, 
+                (-1+numTiles/2)*tileSize.y
+              );
+
+  ctx.fillText( `W / ${String.fromCharCode(9650)}`, 
+                (numTiles/2)*tileSize.x + 0.5*tileSize.x, 
+                (-3+numTiles/2)*tileSize.y
+              );
+  ctx.fillText( `S / ${String.fromCharCode(9660)}`, 
+                (numTiles/2)*tileSize.x + 0.5*tileSize.x, 
+                (5+numTiles/2)*tileSize.y
+              );
+  ctx.fillText( `A / ${String.fromCharCode(9668)}`, 
+                (-5+numTiles/2)*tileSize.x + 0.5*tileSize.x, 
+                (1+numTiles/2)*tileSize.y
+              );
+  ctx.fillText( `D / ${String.fromCharCode(9658)}`, 
+                (5+numTiles/2)*tileSize.x + 0.5*tileSize.x, 
+                (1+numTiles/2)*tileSize.y
+              );
+  
+  ctx.fillText( `U`, 
+                (-5+numTiles/2)*tileSize.x + 0.5*tileSize.x, 
+                (-3+numTiles/2)*tileSize.y
+              );
+  ctx.fillText( `I`, 
+                (5+numTiles/2)*tileSize.x + 0.5*tileSize.x, 
+                (-3+numTiles/2)*tileSize.y
+              );
+  ctx.fillText( `J`, 
+                (-5+numTiles/2)*tileSize.x + 0.5*tileSize.x, 
+                (5+numTiles/2)*tileSize.y
+              );
+  ctx.fillText( `K`, 
+                (5+numTiles/2)*tileSize.x + 0.5*tileSize.x, 
+                (5+numTiles/2)*tileSize.y
+              );
+
   ctx.restore();
 }
 
