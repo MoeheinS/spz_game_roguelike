@@ -168,6 +168,10 @@ function debug_toggle(p, v){
     case 'mapper':
       game_state.debug_mapper = v;
       break;
+    case 'resizeCanvas':
+      game_state.resizeCanvas = v;
+      setupCanvas();
+      break;
     default:
       break;
   }
