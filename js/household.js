@@ -65,41 +65,7 @@ function debounce(callback, wait) {
   };
 }
 
-function draw(){
-  if( !game_state.activeDraw ){
-    return window.requestAnimationFrame(draw);
-  }
-  ctx.resetTransform();
-  ctx.clearRect(0,0,canvas.width,canvas.height);
 
-  if( game_state.mode == "running" || game_state.mode == "dead" ){
-    if( game_state.scrollCamera ){
-      ctx.transform(1, 0, 0, 1, 
-        ((numTiles/2) - player.getDisplayX())*tileSize.x - game_state.camera_offset.x*tileSize.x, 
-        ((numTiles/2) - player.getDisplayY())*tileSize.y - game_state.camera_offset.y*tileSize.y);
-    }
-    for(let i=0;i<numTiles;i++){
-      for(let j=0;j<numTiles;j++){
-        getTile(i,j).draw();
-      }
-    }
-    for(let i=0;i<monsters.length;i++){
-      monsters[i].draw();
-    }
-    player.draw();
-
-    // TODO: may move this to ui render function later
-    if( game_state.interact_mode == 'camera' ){
-      drawCamera();
-    }
-    if( game_state.debug_mapper ){
-      render_mouse();
-    }
-  }else if( game_state.mode == "title" || game_state.mode == "loading" ){
-    drawTitleScreen();
-  }
-  window.requestAnimationFrame(draw);
-}
 
 function drawTitleScreen(){
   ctx.save();
@@ -160,33 +126,6 @@ function drawSprite(coords, x, y) {
     ( coords.dx ? coords.dx : tileSize.x ),
     ( coords.dy ? coords.dy : tileSize.y )
   );
-}
-
-function tick() {
-  // update player last
-  Promise.all(
-    monsters.map(function(monster){
-      if(!monster.dead){
-        console.log(`${monster.uid} acting`);
-        return monster.update();
-      }
-    })
-  )
-  .then(function(){
-    if( monsters.length ){
-      console.warn('All monsters have acted');
-    }
-    player.update().then(function(){
-      console.log('Player has acted');
-    });
-  })
-  .finally(function(){
-    if(player.dead){    
-      return game_state.mode = "dead";
-    }else{
-      spawnTicker();
-    }
-  });
 }
 
 function flowControl(state) {
@@ -353,4 +292,67 @@ class Message {
         p.innerText = m.message;
     dom_messageWindow.querySelector('.window__body').append(p);
   }
+}
+
+function draw(){
+  if( !game_state.activeDraw ){
+    return window.requestAnimationFrame(draw);
+  }
+  ctx.resetTransform();
+  ctx.clearRect(0,0,canvas.width,canvas.height);
+
+  if( game_state.mode == "running" || game_state.mode == "dead" ){
+    if( game_state.scrollCamera ){
+      ctx.transform(1, 0, 0, 1, 
+        ((numTiles/2) - player.getDisplayX())*tileSize.x - game_state.camera_offset.x*tileSize.x, 
+        ((numTiles/2) - player.getDisplayY())*tileSize.y - game_state.camera_offset.y*tileSize.y);
+    }
+    for(let i=0;i<numTiles;i++){
+      for(let j=0;j<numTiles;j++){
+        getTile(i,j).draw();
+      }
+    }
+    for(let i=0;i<monsters.length;i++){
+      monsters[i].draw();
+    }
+    player.draw();
+
+    // TODO: may move this to ui render function later
+    if( game_state.interact_mode == 'camera' ){
+      drawCamera();
+    }
+    if( game_state.debug_mapper ){
+      render_mouse();
+    }
+  }else if( game_state.mode == "title" || game_state.mode == "loading" ){
+    drawTitleScreen();
+  }
+  window.requestAnimationFrame(draw);
+}
+
+function tick() {
+  // update player last
+  Promise.all(
+    monsters.map(function(monster){
+      if(!monster.dead){
+        console.log(`${monster.uid} acting`);
+        return monster.update();
+      }
+    })
+  )
+  .then(function(){
+    if( monsters.length ){
+      console.warn('All monsters have acted');
+    }
+    player.update().then(function(){
+      console.log('Player has acted');
+    });
+  })
+  .finally(function(){
+    if(player.dead){    
+      return game_state.mode = "dead";
+    }else{
+      spawnTicker();
+    }
+  });
 }
