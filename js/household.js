@@ -432,6 +432,7 @@ function tick() {
     }
     player.update().then(function(){
       console.log('Player has acted');
+      player.updateDOM();
     });
   })
   .finally(function(){

@@ -87,6 +87,7 @@ function createWindow(id, title) {
   return clone;
 }
 dom_messageWindow = createWindow('window__messages', 'Message history');
+dom_characterWindow = createWindow('window__player', 'Character');
 
 function initWindowDragging(){
   for( let d of document.querySelectorAll('.draggable') ){

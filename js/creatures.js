@@ -282,6 +282,40 @@ class Player extends Monster {
 		//this.hidden = false;
 	}
 
+	updateDOM(clear) {
+    if( clear ){
+      return dom_characterWindow.querySelector('.window__body').innerHTML = '';
+		}
+		dom_characterWindow.querySelector('.window__body').innerHTML = '';
+    var p = document.createElement('p');
+        p.innerHTML = `<b>health</b> :${player.hp}`;
+		dom_characterWindow.querySelector('.window__body').append(p);
+
+		var p = document.createElement('p');
+        p.innerHTML = `<b>moves</b> :${player.moves} (${player.moves_base})[${player.moves_inc}]`;
+		dom_characterWindow.querySelector('.window__body').append(p);
+
+		var p = document.createElement('p');
+        p.innerHTML = `<b>attacks</b> :${player.attacks} (${player.attacks_base})[${player.attacks_inc}]`;
+		dom_characterWindow.querySelector('.window__body').append(p);
+
+		var p = document.createElement('p');
+        p.innerHTML = `<b>attack bonus</b> :${player.bonusAttack}`;
+		dom_characterWindow.querySelector('.window__body').append(p);
+
+		var p = document.createElement('p');
+        p.innerHTML = `<b>stamina</b> :${player.stamina} (${player.stamina_base})`;
+		dom_characterWindow.querySelector('.window__body').append(p);
+
+		dom_characterWindow.querySelector('.window__body').append(document.createElement('hr'));
+
+		for (let i = 0; i < player.inventory.length; i++) {
+			var p = document.createElement('p');
+        	p.innerHTML = `${( player.inventory[i].amount ? player.inventory[i].amount : '')} <b>${player.inventory[i].name}</b>`;
+			dom_characterWindow.querySelector('.window__body').append(p);
+		}
+  }
+
 	inputHandler(e){
 		// can add diagonals, menu keys etc
 		if( game_state.interact_mode == 'player' ){
@@ -702,10 +736,12 @@ async function summonMonster(type, tile) {
 
 function spawnPlayer(hp, coordinate){
   player = new Player(( coordinate ? coordinate : randomPassableTile() )); // {x: 0, y: 0}
-  player.hp = hp;
+	player.hp = hp;
+	// FIXME: the player's a phoenix, constantly reborn. Loss of inventory is unfortunate...
   if( game_state.fov_enabled ){
     player.calcFov();
-  }
+	}
+	player.updateDOM();
 }
 
 function spawnTicker() {
