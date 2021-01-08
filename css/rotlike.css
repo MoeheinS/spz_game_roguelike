@@ -66,7 +66,7 @@ html {
 	outline: 1px dotted red;
 }
 
-body{
+body {
 	background-color: var(--eo__yellow);
 	color: var(--eo__black);
 	display: flex;
@@ -81,4 +81,9 @@ a {
 }
 a {
 	text-decoration: none;
+}
+
+hr {
+	border: 1px solid black;
+	margin: 0.5rem 0;
 }

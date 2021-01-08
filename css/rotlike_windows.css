@@ -100,3 +100,7 @@
 #window__messages {
   top: 28vh;
 }
+
+#window__player {
+  left: 80vw;
+}
