@@ -34,6 +34,26 @@ class Terrain {
 		new Message(`You spot a ${this.constructor.name}.`);
 	}
 
+	repaint(prop){
+		if( !this.passable ){
+			return;
+		}
+		switch (prop) {
+			case 'hazard': //this.glyph = 9617;
+				this[prop] = true;
+				this.fillStyle = COLOR_FUCHSIA;
+				this.renderOverride = { fillStyle: COLOR_GREEN_NEON };
+				break;
+			case 'reset':
+				this.hazard = false;
+				var templateTile = new this.constructor;
+				this.fillStyle = templateTile.fillStyle;
+				this.renderOverride = templateTile.renderOverride;
+			default:
+				break;
+		}
+	}
+
 	// pass a class as arg
 	replace(newTileType){
 		tiles[this.x][this.y] = new newTileType(this.x, this.y);
