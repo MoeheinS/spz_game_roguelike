@@ -242,7 +242,7 @@ async function startLevel(playerHP, oneWay, directionDown) {
 }
 
 function seedChest( tile, loot ){
-	tile = tile || randomPassableTile();
+	tile = tile || randomPassableTile('Floor');
 	let seed_chest = tile.replace(Chest);
 	// TODO: loot.iname, loot.amount
 	new Drop(seed_chest.x, seed_chest.y, 'copper', Math.floor(Math.random()*10101));
