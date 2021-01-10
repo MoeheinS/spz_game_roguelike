@@ -216,6 +216,7 @@ function flowControl(state) {
       game_state.mode = "title";
       break;
     case 'start':
+      player = new Player({x: 0, y: 0});
       Message.wipe();
       game_state.mode = "running";
       game_state.depth = 1;

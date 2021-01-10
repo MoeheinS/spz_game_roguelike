@@ -735,9 +735,10 @@ async function summonMonster(type, tile) {
 }
 
 function spawnPlayer(hp, coordinate){
+	oldInv = player.inventory;
   player = new Player(( coordinate ? coordinate : randomPassableTile() )); // {x: 0, y: 0}
 	player.hp = hp;
-	// FIXME: the player's a phoenix, constantly reborn. Loss of inventory is unfortunate...
+	player.inventory = oldInv;
   if( game_state.fov_enabled ){
     player.calcFov();
 	}
