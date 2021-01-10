@@ -215,12 +215,15 @@ class Generator extends Terrain {
     ];
     for(let k=0;k<directions.length;k++){
 			let newTile = this;
+			var paintStyle = 'hazard';
 			while(true){
 				let testTile = newTile.getNeighbor(directions[k][0], directions[k][1]);
-				if(testTile.passable ){
+				if(testTile.passable){
+				//if( inBounds(testTile.x, testTile.y) ){
 					newTile = testTile;
-					if( newTile.constructor.name != 'Hazard' && !newTile.monster ){
-						newTile.replace(Hazard);
+					newTile.repaint(paintStyle);
+					if(newTile.monster){
+						paintStyle = 'reset';
 					}
 				}else{
 					break;
