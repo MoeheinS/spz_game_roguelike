@@ -396,43 +396,12 @@ class Trap extends Terrain { // different kinds of traps? Rock fall trap, explos
 	}
 }
 
-class Hazard extends Terrain {
-  constructor(x, y){
+class MapperEnt extends Floor {
+  constructor(x, y, repaintType){
 		super(x, y, {x: 0, y: 176}, true); // ░
-		this.glyph = 9617;
-		this.fillStyle = COLOR_FUCHSIA;
-		this.renderOverride = { fillStyle: COLOR_GREEN_NEON };
-	}
-	draw(){
-		ctx.save();
-		
-		ctx.fillStyle = this.renderOverride.fillStyle;
-		ctx.fillRect(this.x*tileSize.x,this.y*tileSize.y,tileSize.x,tileSize.y);
-		super.draw();
-
-		ctx.restore();
-	}
-	stepOn(monster){
-		if(monster.isPlayer){
-			new Message('You are overcome with pain!');
-		}else{
-			// TODO: add silent intrinsic?
-			if( monster.constructor.name != 'Boulder' ){
-				new Message(`A ${monster.constructor.name} hisses in pain!`);
-			}
-		}
-		if( monster.hp > 1 ){
-			monster.swing(1); // this could be a different effect
-		}
-		// Bug zapper. TODO: split Hazard into Hazard and Forcefield
-		// if( monster.hp > 1 ){
-		// 	monster.hp = 1;
-		// }else{
-		// 	monster.swing(1);
-		// }
+		this.repaint(repaintType);
 	}
 }
-// class Hazard extends modifyHP ?
 
 class Mud extends Terrain {
   constructor(x, y){

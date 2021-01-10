@@ -314,7 +314,7 @@ function debug_painter(e){
     //   tiles[i][j] = new Generator(i,j);
     //   break;
     case 'h': 
-      tiles[i][j] = new Hazard(i,j);
+      tiles[i][j] = new MapperEnt(i,j,'hazard');
       break;
     case 'm': 
       tiles[i][j] = new Mud(i,j);
