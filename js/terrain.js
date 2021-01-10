@@ -426,7 +426,7 @@ class Trap extends Terrain { // different kinds of traps? Rock fall trap, explos
 	}
 	stepOn(monster){
 		if( !this.trap || monster.fly ){
-			return;
+			return super.stepOn(monster);
 		}
 		if(monster.isPlayer){ // should traps also trigger for monsters?
 			new Message('You are engulfed in a fiery explosion!');
@@ -439,6 +439,7 @@ class Trap extends Terrain { // different kinds of traps? Rock fall trap, explos
 			this.trap = false;
 			//this.replace(Floor); // TODO: this replace Water + degrade armor -> rust trap
 		}
+		super.stepOn(monster);
 	}
 }
 
@@ -466,7 +467,7 @@ class Mud extends Terrain {
 	}
 	stepOn(monster){
 		if( monster.fly ){
-			return;
+			return super.stepOn(monster);
 		}
 		if(monster.isPlayer){
 			new Message(`You are slowed down by the mud.`);
@@ -474,6 +475,7 @@ class Mud extends Terrain {
 		}else{
 			new Message('You hear a wet squelching sound...');
 		}
+		super.stepOn(monster);
 	}
 }
 class Water extends Terrain { // fuck
@@ -494,12 +496,13 @@ class Water extends Terrain { // fuck
 	}
 	stepOn(monster){
 		if( monster.fly ){
-			return;
+			return super.stepOn(monster);
 		}
 		if(monster.isPlayer){
 			new Message('You move through the water.');
 		}else{
 			new Message('You hear the sound of water splashing...');
 		}
+		super.stepOn(monster);
 	}
 }
