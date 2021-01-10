@@ -401,7 +401,10 @@ class Hazard extends Terrain {
 		if(monster.isPlayer){
 			new Message('You are overcome with pain!');
 		}else{
-			new Message(`A ${monster.constructor.name} hisses in pain!`);
+			// TODO: add silent intrinsic?
+			if( monster.constructor.name != 'Boulder' ){
+				new Message(`A ${monster.constructor.name} hisses in pain!`);
+			}
 		}
 		if( monster.hp > 1 ){
 			monster.swing(1); // this could be a different effect
