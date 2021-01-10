@@ -743,6 +743,7 @@ function spawnPlayer(hp, coordinate){
   if( game_state.fov_enabled ){
     player.calcFov();
 	}
+	// player[shuffle(['attacks_base','attacks_inc','moves_base','moves_inc'])[0]] += 0.5;
 	player.updateDOM();
 }
 
