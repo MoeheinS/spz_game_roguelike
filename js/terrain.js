@@ -10,9 +10,32 @@ class Terrain {
 		this.inventory = [];
 		// FIXME: this interferes with fog of war
 		//this.renderOverride = { fillStyle: COLOR_YELLOW };
+
+		this.hazard = false;
 	}
 	
 	stepOn(monster){
+
+		if( this.hazard ){
+			if(monster.isPlayer){
+				new Message('You are overcome with pain!');
+			}else{
+				// TODO: add silent intrinsic?
+				if( monster.constructor.name != 'Boulder' ){
+					new Message(`A ${monster.constructor.name} hisses in pain!`);
+				}
+			}
+			if( monster.hp > 1 ){
+				monster.swing(1); // this could be a different effect
+			}
+			// Bug zapper. TODO: split Hazard into Hazard and Forcefield
+			// if( monster.hp > 1 ){
+			// 	monster.hp = 1;
+			// }else{
+			// 	monster.swing(1);
+			// }
+		}
+
 		if( monster.isPlayer ){
 			let hiddenNeighbors = this.getAdjacentNeighbors().filter(t => t.hidden);
 			for (let i = 0; i < hiddenNeighbors.length; i++) {
