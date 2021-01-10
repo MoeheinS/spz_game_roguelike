@@ -108,7 +108,8 @@ class Map { // new Room(0,0,tileMap); // instead of tileMap use tileMap_down onc
 				})
 			)
 		})
-		.finally(function(){
+		.finally(async function(){
+			await Generator.rebeam();
 			// after all others are done, seed traps
 			randomPassableTile('Floor').replace(Pit);
 			randomPassableTile('Floor').replace(Trap);

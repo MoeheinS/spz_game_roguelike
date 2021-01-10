@@ -263,6 +263,7 @@ class Boulder extends Monster {
 			if( !newTile.monster ){
 				new Message(`The ${this.constructor.name} moves.`);
 				this.move(newTile);
+				await Generator.rebeam();
 			}
 			return true;
 		}else{ // this entire else is so you can bump into walls and pass a turn

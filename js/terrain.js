@@ -197,11 +197,26 @@ class Generator extends Terrain {
 			let newTile = this;
 			while(true){
 				let testTile = newTile.getNeighbor(directions[k][0], directions[k][1]);
-				if(testTile.passable){
+				if(testTile.passable ){
 					newTile = testTile;
-					newTile.replace(Hazard);
+					if( newTile.constructor.name != 'Hazard' && !newTile.monster ){
+						newTile.replace(Hazard);
+					}
 				}else{
 					break;
+				}
+			}
+		}
+	}
+
+	static async rebeam(){
+		if( game_state.dungeon.mapgen.generator != 0.1 ){
+			return false;
+		}
+		for( let i=0; i<numTiles; i++ ){
+			for( let j=0; j<numTiles; j++ ){
+				if( getTile(i,j).constructor.name == 'Generator' ){
+					return getTile(i,j).replace(Generator);
 				}
 			}
 		}
