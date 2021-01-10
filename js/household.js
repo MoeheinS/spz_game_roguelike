@@ -387,7 +387,8 @@ function tick() {
       }
     })
   )
-  .then(function(){
+  .then(async function(){
+    await Generator.rebeam();
     if( monsters.length ){
       console.warn('All monsters have acted');
     }

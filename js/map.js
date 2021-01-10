@@ -104,12 +104,12 @@ class Map { // new Room(0,0,tileMap); // instead of tileMap use tileMap_down onc
 						default:
 							break;
 					}
+					await Generator.rebeam();
 					return true;
 				})
 			)
 		})
 		.finally(async function(){
-			await Generator.rebeam();
 			// after all others are done, seed traps
 			randomPassableTile('Floor').replace(Pit);
 			randomPassableTile('Floor').replace(Trap);
@@ -117,6 +117,8 @@ class Map { // new Room(0,0,tileMap); // instead of tileMap use tileMap_down onc
 			randomPassableTile('Floor').replace(Trap);
 
 			seedChest();
+
+			await Generator.rebeam();
 
 			return true;
 		});
