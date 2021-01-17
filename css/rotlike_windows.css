@@ -98,6 +98,42 @@
   font-weight: bold;
 }
 
+#tooltip {
+  user-select: none;
+
+  position: absolute;
+  top: 0px;
+  right: 0px;
+}
+
+#tooltip .tooltip__info {
+  display: none;
+}
+#tooltip:hover .tooltip__info {
+  display: block;
+  position: relative;
+  left: 100%;
+  background: var(--eo__black);
+  color: var(--eo__yellow);
+  width: fit-content;
+  padding: 0.5rem;
+  border: 0.125rem solid var(--eo__yellow);
+  margin: 0px 0.35rem;
+}
+
+/* A lot of magic numbers */
+#tooltip:hover .tooltip__info:after {
+  content: '';
+  width: 0;
+  height: 0;
+  border-style: solid;
+  border-width: 0.25rem 0.5rem 0.25rem 0;
+  border-color: transparent var(--eo__yellow) transparent transparent;
+  position: absolute;
+  left: -0.55rem;
+  top: 0.45rem;
+}
+
 /* temporary rules */
 #w2 {
   top: 85vh;

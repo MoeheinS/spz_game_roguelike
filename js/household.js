@@ -395,6 +395,7 @@ function tick() {
     player.update().then(function(){
       console.log('Player has acted');
       player.updateDOM();
+      dom_tooltip.resetDOM();
     });
   })
   .finally(function(){

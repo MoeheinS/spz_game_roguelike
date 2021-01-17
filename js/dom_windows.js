@@ -95,3 +95,36 @@ function initWindowDragging(){
   }
 }
 initWindowDragging();
+
+class Tooltip {
+  constructor() {
+    var el = document.querySelector('#tooltip');
+     
+    el.style.width = `${tileSize.x}px`;
+    el.style.height = `${tileSize.y}px`;
+
+    this.el = el;
+  }
+
+  updateDOM(tile) {
+    this.el.style.top = `${tile.y * tileSize.y}px`;
+    this.el.style.left = `${tile.x * tileSize.x}px`;
+
+    let monsterInfo = false;
+    if(tile.monster){
+      monsterInfo = ( tile.monster.isPlayer ? 'You' : tile.monster.constructor.name );
+    }
+
+    this.el.querySelector('.tooltip__info').innerHTML = 
+    `${( monsterInfo ? monsterInfo : '')}
+    ${( monsterInfo ? '<hr>' : '')}
+    ${tile.constructor.name}`;
+  }
+
+  resetDOM() {
+    this.el.style.top = `${-tileSize.y}px`;
+    this.el.style.left = `${-tileSize.x}px`;
+    this.el.querySelector('.tooltip__info').innerHTML = '';
+  }
+}
+const dom_tooltip = new Tooltip();
