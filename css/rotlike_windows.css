@@ -93,6 +93,11 @@
   max-height: 90vh;
 }
 
+#window__messages .window__body p[data-repeat]:after {
+  content: '  (x' attr(data-repeat) ')';
+  font-weight: bold;
+}
+
 /* temporary rules */
 #w2 {
   top: 85vh;

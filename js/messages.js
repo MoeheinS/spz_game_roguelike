@@ -35,6 +35,13 @@ class Message {
     dom_messageWindow.querySelector('.window__title__text').innerText = Message.latest(false);
     let p = document.createElement('p');
         p.innerText = m.message;
-    dom_messageWindow.querySelector('.window__body').append(p);
+        //p.dataset.repeat = 0;
+    let latestMessage = dom_messageWindow.querySelector('.window__body').lastChild;
+    if( latestMessage && latestMessage.innerText == m.message ){
+      let repeatAttrib = ( latestMessage.dataset.repeat ? parseInt(latestMessage.dataset.repeat)+1 : 1 );
+      latestMessage.dataset.repeat = repeatAttrib;
+    }else{
+      dom_messageWindow.querySelector('.window__body').append(p);
+    }
   }
 }
