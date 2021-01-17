@@ -122,7 +122,9 @@ document.querySelector("canvas").onmousemove = function(e){
   }
 };
 document.querySelector("canvas").onmouseup = function(e){
-  console.table(getTile(game_state.debug_mouseCoords.x, game_state.debug_mouseCoords.y));
+  if( tiles.length ){
+    console.table(getTile(game_state.debug_mouseCoords.x, game_state.debug_mouseCoords.y));
+  }
 };
 
 function setupCanvas() {
