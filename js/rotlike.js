@@ -20,7 +20,6 @@ COLOR_WATER = COLOR_BLUE;
 TREASURE_HOLDERS = ['Chest','Crypt','Tomb','Jar','Barrel'];
 
 tileSize = {x: 24, y: 24};
-numTiles = 26;
 
 game_state = {
 
@@ -42,6 +41,10 @@ game_state = {
   allow_inputs: true,
 
   dungeon: {
+    dim: {
+      x: 26,
+      y: 26
+    },
     mapgen: {
       //ice_cave: 0.1,
       forest: 0.1,
@@ -71,7 +74,7 @@ monsters = [];
 spawners = [];
 tiles = [];
 
-const fov = new Mrpas(numTiles, numTiles, (x, y) => tiles[x][y].transparent);
+const fov = new Mrpas(game_state.dungeon.dim.x, game_state.dungeon.dim.y, (x, y) => tiles[x][y].transparent);
 
 spritesheet = new Image();
 spritesheet.src = './assets/12x16_b.png';
@@ -131,8 +134,8 @@ function setupCanvas() {
   ctx = canvas.getContext("2d");
   ctx.fillStyle = COLOR_FILLSTYLE;
 
-  canvas.width = tileSize.x*numTiles;
-  canvas.height = tileSize.y*numTiles;
+  canvas.width = tileSize.x*game_state.dungeon.dim.x;
+  canvas.height = tileSize.y*game_state.dungeon.dim.y;
 
   canvas.style.width = canvas.width + 'px';
   canvas.style.height = canvas.height + 'px';

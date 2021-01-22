@@ -7,9 +7,9 @@ class Map { // new Room(0,0,tileMap); // instead of tileMap use tileMap_down onc
 
   static flood(tileType){
     tiles = [];
-    for( let i=0; i<numTiles; i++ ){
+    for( let i=0; i<game_state.dungeon.dim.x; i++ ){
       tiles[i] = [];
-      for( let j=0; j<numTiles; j++ ){
+      for( let j=0; j<game_state.dungeon.dim.y; j++ ){
         tiles[i][j] = new tileType(i,j);
       }
     }
@@ -17,7 +17,7 @@ class Map { // new Room(0,0,tileMap); // instead of tileMap use tileMap_down onc
 
   static createSpawners(probability){
     spawners = [];
-    for( let i=0; i<numTiles; i++ ){
+    for( let i=0; i<game_state.dungeon.dim.x; i++ ){
       var walls = tiles[i].filter(t => t.constructor.name == 'Wall' && t.getAdjacentPassableNeighbors().length && t.getAdjacentPassableNeighbors().length < 3);
       if( walls.length ){
         for( let w of walls ){
@@ -53,7 +53,7 @@ class Map { // new Room(0,0,tileMap); // instead of tileMap use tileMap_down onc
 						case 'forest':
 							console.log(`%cCan't see the forest for the trees!`,'color:#c33399;font-family:Comic Sans MS;');
 							var seed_grass = randomPassableTile('Floor').replace(Grass);
-							await drunkWalker(seed_grass, numTiles*numTiles, Grass, ['Grass','Floor'], true);
+							await drunkWalker(seed_grass, game_state.dungeon.dim.x*game_state.dungeon.dim.y, Grass, ['Grass','Floor'], true);
 							Map.growWalls(Tree);
 							break;
 						case 'grass':
@@ -125,7 +125,7 @@ class Map { // new Room(0,0,tileMap); // instead of tileMap use tileMap_down onc
 	}
 	
 	static createGenerator(probability){
-    for( let i=0; i<numTiles; i++ ){
+    for( let i=0; i<game_state.dungeon.dim.x; i++ ){
       var walls = tiles[i].filter(t => t.constructor.name == 'Wall' && t.getAdjacentPassableNeighbors().length && t.getAdjacentPassableNeighbors().length == 3);
       if( walls.length ){
         for( let w of walls ){
@@ -139,7 +139,7 @@ class Map { // new Room(0,0,tileMap); // instead of tileMap use tileMap_down onc
 
 	// Maze building. Works nice with IceWall, too
 	static growWalls(terrainType){
-		for( let i=0; i<numTiles; i++ ){
+		for( let i=0; i<game_state.dungeon.dim.x; i++ ){
       var floors = tiles[i].filter(t => t.constructor.name == 'Floor' && t.getAdjacentPassableNeighbors(true).length == 7);
       if( floors.length ){
         for( let f of floors ){
@@ -150,7 +150,7 @@ class Map { // new Room(0,0,tileMap); // instead of tileMap use tileMap_down onc
 	}
 
 	static async crumbleWalls(){
-		for( let i=0; i<numTiles; i++ ){
+		for( let i=0; i<game_state.dungeon.dim.x; i++ ){
       var walls = tiles[i].filter(t => t.constructor.name == 'Wall' && t.getAdjacentPassableNeighbors(true).length && t.getAdjacentPassableNeighbors(true).length >= 7);
       if( walls.length ){
         for( let w of walls ){
@@ -163,7 +163,7 @@ class Map { // new Room(0,0,tileMap); // instead of tileMap use tileMap_down onc
 	
 	// THE SWAMP
 	static placeMud(){
-    for( let i=0; i<numTiles; i++ ){
+    for( let i=0; i<game_state.dungeon.dim.x; i++ ){
       var floors = tiles[i].filter(t => t.constructor.name == 'Floor' && t.getAdjacentPassableNeighbors().length == 0);
       if( floors.length ){
         for( let f of floors ){
@@ -175,7 +175,7 @@ class Map { // new Room(0,0,tileMap); // instead of tileMap use tileMap_down onc
 	
 	// THE CEMETARY
 	static placeCrypt(){
-		for( let i=0; i<numTiles; i++ ){
+		for( let i=0; i<game_state.dungeon.dim.x; i++ ){
       var floors = tiles[i].filter(t => t.constructor.name == 'Floor' && t.getAdjacentPassableNeighbors(true).length == 6);
       if( floors.length ){
         for( let f of floors ){
@@ -223,14 +223,15 @@ async function startLevel(playerHP, oneWay, directionDown) {
   spawnRateReset(15);
 
   if( game_state.debug_mapper ){
-    numTiles = Math.floor( ( numTiles-2 ) / 3 )+2;
+		game_state.dungeon.dim.x = Math.floor( ( game_state.dungeon.dim.x-2 ) / 3 )+2;
+		game_state.dungeon.dim.y = Math.floor( ( game_state.dungeon.dim.y-2 ) / 3 )+2;
     Map.flood(Floor);
     return spawnPlayer(playerHP, false);
   }
 
 	let playerLoc = ( game_state.depth_max > 1 ? {x: player.tile.x, y: player.tile.y} : false );
   await levelgen_dw( //target, seed, canReturn, directionDown
-		numTiles*numTiles, 
+		game_state.dungeon.dim.x*game_state.dungeon.dim.y, 
 		( game_state.depth_max > 1 ? player.tile : false ),
 		!oneWay, //( oneWay ? false : true ), //(game_state.depth > 1) ), 
 		directionDown

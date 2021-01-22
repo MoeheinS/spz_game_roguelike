@@ -254,8 +254,8 @@ class Generator extends Terrain {
 		if( game_state.dungeon.mapgen.generator != 0.1 ){
 			return false;
 		}
-		for( let i=0; i<numTiles; i++ ){
-			for( let j=0; j<numTiles; j++ ){
+		for( let i=0; i<game_state.dungeon.dim.x; i++ ){
+			for( let j=0; j<game_state.dungeon.dim.y; j++ ){
 				if( getTile(i,j).constructor.name == 'Generator' ){
 					return getTile(i,j).replace(Generator);
 				}

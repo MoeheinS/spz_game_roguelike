@@ -1,5 +1,5 @@
 function inBounds(x,y){
-  return x>0 && y>0 && x<numTiles-1 && y<numTiles-1;
+  return x>0 && y>0 && x<game_state.dungeon.dim.x-1 && y<game_state.dungeon.dim.y-1;
 }
 
 function getTile(x, y){
@@ -13,8 +13,8 @@ function getTile(x, y){
 function randomPassableTile(className){
   let tile;
   tryTo('get random passable tile', function(){
-    let x = randomRange(0,numTiles-1);
-    let y = randomRange(0,numTiles-1);
+    let x = randomRange(0,game_state.dungeon.dim.x-1);
+    let y = randomRange(0,game_state.dungeon.dim.y-1);
     tile = getTile(x, y);
     return tile.passable && !tile.monster && ( className ? tile.constructor.name == className : true );
   });
@@ -24,8 +24,8 @@ function randomPassableTile(className){
 function randomTile(className){
   let tile;
   tryTo('get random tile', function(){
-    let x = randomRange(1,numTiles-1);
-    let y = randomRange(1,numTiles-1);
+    let x = randomRange(1,game_state.dungeon.dim.x-1);
+    let y = randomRange(1,game_state.dungeon.dim.y-1);
     tile = getTile(x, y);
     return ( className ? tile.constructor.name == className : true );
   });
@@ -71,11 +71,11 @@ function drawTitleScreen(){
   ctx.save();
 
   ctx.fillText( 'Spuzlike', 
-                (numTiles/2)*tileSize.x + 0.5*tileSize.x, 
+                (game_state.dungeon.dim.x/2)*tileSize.x + 0.5*tileSize.x, 
                 2*tileSize.y
               );
   ctx.fillText( 'Press any key to play', 
-                (numTiles/2)*tileSize.x + 0.5*tileSize.x, 
+                (game_state.dungeon.dim.x/2)*tileSize.x + 0.5*tileSize.x, 
                 4*tileSize.y
               );
   
@@ -83,8 +83,8 @@ function drawTitleScreen(){
   ctx.textAlign = 'center';
 
   ctx.fillText( '@', 
-                (numTiles/2)*tileSize.x + 0.5*tileSize.x, 
-                (numTiles/2)*tileSize.y
+                (game_state.dungeon.dim.x/2)*tileSize.x + 0.5*tileSize.x, 
+                (game_state.dungeon.dim.y/2)*tileSize.y
               );
 
 
@@ -94,58 +94,58 @@ function drawTitleScreen(){
   ctx.strokeStyle = COLOR_YELLOW;
   ctx.lineWidth = 0.75*game_state.fontSize.size;
   ctx.strokeText( '3', 
-                  (-2+(numTiles/2))*tileSize.x + 0.5*tileSize.x, 
-                  (-1+numTiles/2)*tileSize.y
+                  (-2+(game_state.dungeon.dim.x/2))*tileSize.x + 0.5*tileSize.x, 
+                  (-1+game_state.dungeon.dim.y/2)*tileSize.y
                 );
   ctx.fillText( '3', 
-                (-2+(numTiles/2))*tileSize.x + 0.5*tileSize.x, 
-                (-1+numTiles/2)*tileSize.y
+                (-2+(game_state.dungeon.dim.x/2))*tileSize.x + 0.5*tileSize.x, 
+                (-1+game_state.dungeon.dim.y/2)*tileSize.y
               );
 
   ctx.textAlign = 'center';
 
   ctx.font = 0.75*game_state.fontSize.size+"px ega";
   ctx.fillText( 'You', 
-                (numTiles/2)*tileSize.x + 0.5*tileSize.x, 
-                (3+numTiles/2)*tileSize.y
+                (game_state.dungeon.dim.x/2)*tileSize.x + 0.5*tileSize.x, 
+                (3+game_state.dungeon.dim.y/2)*tileSize.y
               );
   ctx.fillText( 'health', 
-                (1+(numTiles/2))*tileSize.x + 0.5*tileSize.x, 
-                (-1+numTiles/2)*tileSize.y
+                (1+(game_state.dungeon.dim.x/2))*tileSize.x + 0.5*tileSize.x, 
+                (-1+game_state.dungeon.dim.y/2)*tileSize.y
               );
 
   ctx.fillText( `W / ${String.fromCharCode(9650)}`, 
-                (numTiles/2)*tileSize.x + 0.5*tileSize.x, 
-                (-3+numTiles/2)*tileSize.y
+                (game_state.dungeon.dim.x/2)*tileSize.x + 0.5*tileSize.x, 
+                (-3+game_state.dungeon.dim.y/2)*tileSize.y
               );
   ctx.fillText( `S / ${String.fromCharCode(9660)}`, 
-                (numTiles/2)*tileSize.x + 0.5*tileSize.x, 
-                (5+numTiles/2)*tileSize.y
+                (game_state.dungeon.dim.x/2)*tileSize.x + 0.5*tileSize.x, 
+                (5+game_state.dungeon.dim.y/2)*tileSize.y
               );
   ctx.fillText( `A / ${String.fromCharCode(9668)}`, 
-                (-5+numTiles/2)*tileSize.x + 0.5*tileSize.x, 
-                (1+numTiles/2)*tileSize.y
+                (-5+game_state.dungeon.dim.x/2)*tileSize.x + 0.5*tileSize.x, 
+                (1+game_state.dungeon.dim.y/2)*tileSize.y
               );
   ctx.fillText( `D / ${String.fromCharCode(9658)}`, 
-                (5+numTiles/2)*tileSize.x + 0.5*tileSize.x, 
-                (1+numTiles/2)*tileSize.y
+                (5+game_state.dungeon.dim.x/2)*tileSize.x + 0.5*tileSize.x, 
+                (1+game_state.dungeon.dim.y/2)*tileSize.y
               );
   
   ctx.fillText( `U`, 
-                (-5+numTiles/2)*tileSize.x + 0.5*tileSize.x, 
-                (-3+numTiles/2)*tileSize.y
+                (-5+game_state.dungeon.dim.x/2)*tileSize.x + 0.5*tileSize.x, 
+                (-3+game_state.dungeon.dim.y/2)*tileSize.y
               );
   ctx.fillText( `I`, 
-                (5+numTiles/2)*tileSize.x + 0.5*tileSize.x, 
-                (-3+numTiles/2)*tileSize.y
+                (5+game_state.dungeon.dim.x/2)*tileSize.x + 0.5*tileSize.x, 
+                (-3+game_state.dungeon.dim.y/2)*tileSize.y
               );
   ctx.fillText( `J`, 
-                (-5+numTiles/2)*tileSize.x + 0.5*tileSize.x, 
-                (5+numTiles/2)*tileSize.y
+                (-5+game_state.dungeon.dim.x/2)*tileSize.x + 0.5*tileSize.x, 
+                (5+game_state.dungeon.dim.y/2)*tileSize.y
               );
   ctx.fillText( `K`, 
-                (5+numTiles/2)*tileSize.x + 0.5*tileSize.x, 
-                (5+numTiles/2)*tileSize.y
+                (5+game_state.dungeon.dim.x/2)*tileSize.x + 0.5*tileSize.x, 
+                (5+game_state.dungeon.dim.y/2)*tileSize.y
               );
 
   ctx.restore();
@@ -316,11 +316,11 @@ function draw(){
   if( game_state.mode == "running" || game_state.mode == "dead" ){
     if( game_state.scrollCamera ){
       ctx.transform(1, 0, 0, 1, 
-        ((numTiles/2) - player.getDisplayX())*tileSize.x - game_state.camera_offset.x*tileSize.x, 
-        ((numTiles/2) - player.getDisplayY())*tileSize.y - game_state.camera_offset.y*tileSize.y);
+        ((game_state.dungeon.dim.x/2) - player.getDisplayX())*tileSize.x - game_state.camera_offset.x*tileSize.x, 
+        ((game_state.dungeon.dim.y/2) - player.getDisplayY())*tileSize.y - game_state.camera_offset.y*tileSize.y);
     }
-    for(let i=0;i<numTiles;i++){
-      for(let j=0;j<numTiles;j++){
+    for(let i=0;i<game_state.dungeon.dim.x;i++){
+      for(let j=0;j<game_state.dungeon.dim.y;j++){
         getTile(i,j).draw();
       }
     }
