@@ -306,6 +306,16 @@ function randomUID() {
   return '_' + Math.random().toString(36).substr(2, 9);
 }
 
+function cfm(x,y) { // checkForMonster
+  // TODO: move x and y into creature stats, go from there?
+  var mons = game_state.dungeon.monsters.filter( t => t.tile.x == x && t.tile.y == y );
+  if( mons.length ){
+    return mons;
+  }else{
+    return ( player.tile.x == x && player.tile.y == y ? [player] : false );
+  }
+}
+
 function draw(){
   if( !game_state.activeDraw ){
     return window.requestAnimationFrame(draw);
