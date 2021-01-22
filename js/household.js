@@ -316,8 +316,8 @@ function draw(){
   if( game_state.mode == "running" || game_state.mode == "dead" ){
     if( game_state.scrollCamera ){
       ctx.transform(1, 0, 0, 1, 
-        ((game_state.dungeon.dim.x/2) - player.getDisplayX())*tileSize.x - game_state.camera_offset.x*tileSize.x, 
-        ((game_state.dungeon.dim.y/2) - player.getDisplayY())*tileSize.y - game_state.camera_offset.y*tileSize.y);
+        ((game_state.dungeon.dim.x/2) - player.getDisplayX())*tileSize.x - game_state.camera_offset.x*tileSize.x - (game_state.render.crop.x*tileSize.x / 2), 
+        ((game_state.dungeon.dim.y/2) - player.getDisplayY())*tileSize.y - game_state.camera_offset.y*tileSize.y - (game_state.render.crop.y*tileSize.y / 2));
     }
     for(let i=0;i<game_state.dungeon.dim.x;i++){
       for(let j=0;j<game_state.dungeon.dim.y;j++){

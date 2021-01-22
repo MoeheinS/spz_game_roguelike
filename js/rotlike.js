@@ -62,6 +62,13 @@ game_state = {
     monsters: []
   },
 
+  render: {
+    crop: { // positive value crops the drawn screen
+      x: 0,
+      y: 0
+    }
+  },
+
   depth: 1,
   depth_max: 1,
   initial_spawn: -1,
@@ -133,8 +140,12 @@ function setupCanvas() {
   ctx = canvas.getContext("2d");
   ctx.fillStyle = COLOR_FILLSTYLE;
 
-  canvas.width = tileSize.x*game_state.dungeon.dim.x;
-  canvas.height = tileSize.y*game_state.dungeon.dim.y;
+  // TODO: this resizes the canvas to cover as much of the screen as possible, resets crop params
+  // game_state.render.crop.x = -Math.floor(((window.innerWidth / (tileSize.x*(game_state.dungeon.dim.x-game_state.render.crop.x)))*tileSize.x)-game_state.dungeon.dim.x);
+  // game_state.render.crop.y = -Math.floor(((window.innerHeight / (tileSize.y*(game_state.dungeon.dim.y-game_state.render.crop.y)))*tileSize.y)-game_state.dungeon.dim.y);
+
+  canvas.width = tileSize.x*(game_state.dungeon.dim.x-game_state.render.crop.x);
+  canvas.height = tileSize.y*(game_state.dungeon.dim.y-game_state.render.crop.y);
 
   canvas.style.width = canvas.width + 'px';
   canvas.style.height = canvas.height + 'px';
