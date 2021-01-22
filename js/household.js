@@ -167,8 +167,7 @@ function drawCamera(){
 }
 
 function drawChar(ent, x, y, rect) {
-  ctx.save();
-
+  let refillStyle = ctx.fillStyle;
   if( rect ){
     ctx.fillStyle = rect.fillStyle;
     ctx.fillRect(
@@ -181,7 +180,7 @@ function drawChar(ent, x, y, rect) {
 
   ctx.fillStyle = ent.fillStyle;
   ctx.fillText( String.fromCharCode(ent.glyph), x*tileSize.x + 0.5*tileSize.x, y*tileSize.y+game_state.fontSize.offset, tileSize.y);
-  ctx.restore();
+  ctx.fillStyle = refillStyle;
 }
 
 function flowControl(state) {

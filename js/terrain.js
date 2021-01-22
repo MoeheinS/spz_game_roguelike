@@ -453,13 +453,11 @@ class Mud extends Terrain {
 		this.renderOverride = { fillStyle: COLOR_BLUE };
 	}
 	draw(){
-		ctx.save();
-		
+		let refillStyle = ctx.fillStyle;
 		ctx.fillStyle = this.renderOverride.fillStyle;
 		ctx.fillRect(this.x*tileSize.x,this.y*tileSize.y,tileSize.x,tileSize.y);
+		ctx.fillStyle = refillStyle;
 		super.draw();
-
-		ctx.restore();
 	}
 	stepOn(monster){
 		if( monster.fly ){
@@ -482,13 +480,11 @@ class Water extends Terrain { // fuck
 		this.renderOverride = { fillStyle: COLOR_BLUE };
 	}
 	draw(){
-		ctx.save();
-		
+		let refillStyle = ctx.fillStyle;
 		ctx.fillStyle = this.renderOverride.fillStyle;
 		ctx.fillRect(this.x*tileSize.x,this.y*tileSize.y,tileSize.x,tileSize.y);
+		ctx.fillStyle = refillStyle;
 		super.draw();
-
-		ctx.restore();
 	}
 	stepOn(monster){
 		if( monster.fly ){
