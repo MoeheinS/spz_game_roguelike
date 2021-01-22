@@ -31,7 +31,11 @@ class Monster {
 
 		this.inventory = [];
 		this.move(getTile(tile.x, tile.y), true, true); // to prevent ouroboros shenanigans
+
+		Monster.all.push(this);
 	}
+
+	static all = [];
 
 	getDisplayX(){                     
 		return this.tile.x + this.offsetX;
@@ -168,6 +172,10 @@ class Monster {
 		let myIndex = game_state.dungeon.monsters.findIndex( t => t.uid == this.uid );
 		game_state.dungeon.monsters.splice(myIndex, 1);
 		this.tile.monster = null;
+
+		// NEW: void from the Monster.all array;
+		let i = Monster.all.indexOf(this);
+		Monster.all.splice(i, 1);
 	}
 
 	move(tile, instant, debug_teleport){
