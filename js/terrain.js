@@ -155,12 +155,11 @@ class Terrain {
 					if( this.visible || game_state.truesight || !game_state.fov_enabled ){
 						ctx.save();
 
-						ctx.textBaseline = 'top';
 						ctx.font = '8px ega';
 						ctx.textAlign = 'right';
 						ctx.fillStyle = COLOR_BLACK;
 						ctx.strokeStyle = COLOR_YELLOW;
-						ctx.lineWidth = 4;
+						ctx.lineWidth = 2;
 						ctx.strokeText( String.fromCharCode(( this.inventory.length == 1 ? this.inventory[0].glyph : 42)), 
 							this.monster.getDisplayX()*tileSize.x+1*tileSize.x, this.monster.getDisplayY()*tileSize.y);
 						ctx.fillText( String.fromCharCode(( this.inventory.length == 1 ? this.inventory[0].glyph : 42)), 

@@ -68,24 +68,23 @@ class Monster {
 
 			ctx.font = '8px ega';
 			ctx.textAlign = 'left';
-			ctx.textBaseline = 'top';
 
 			ctx.strokeStyle = COLOR_YELLOW;
-			ctx.lineWidth = 4;
+			ctx.lineWidth = 2;
 			ctx.strokeText( this.hp, this.getDisplayX()*tileSize.x, this.getDisplayY()*tileSize.y);
 			ctx.fillText( this.hp, this.getDisplayX()*tileSize.x, this.getDisplayY()*tileSize.y);
 			
 			// To render the tile you're standing on in the corner;
 			// ctx.textAlign = 'right';
 			// ctx.strokeStyle = COLOR_YELLOW;
-			// ctx.lineWidth = 4;
+			// ctx.lineWidth = 2;
 			// ctx.strokeText( String.fromCharCode(this.tile.glyph), this.getDisplayX()*tileSize.x+1*tileSize.x, this.getDisplayY()*tileSize.y);
 			// ctx.fillText( String.fromCharCode(this.tile.glyph), this.getDisplayX()*tileSize.x+1*tileSize.x, this.getDisplayY()*tileSize.y);
 
 			// if( this.alerted ){
 			// 	ctx.textAlign = 'right';
 			// 	ctx.strokeStyle = COLOR_YELLOW;
-			// 	ctx.lineWidth = 4;
+			// 	ctx.lineWidth = 2;
 			// 	ctx.strokeText( '!', this.getDisplayX()*tileSize.x+1*tileSize.x, this.getDisplayY()*tileSize.y);
 			// 	ctx.fillText( '!', this.getDisplayX()*tileSize.x+1*tileSize.x, this.getDisplayY()*tileSize.y);
 			// }

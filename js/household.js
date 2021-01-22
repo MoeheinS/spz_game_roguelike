@@ -81,7 +81,6 @@ function drawTitleScreen(){
   
   ctx.font = 4*game_state.fontSize.size+"px ega";
   ctx.textAlign = 'center';
-  ctx.textBaseline = 'top';
 
   ctx.fillText( '@', 
                 (numTiles/2)*tileSize.x + 0.5*tileSize.x, 
@@ -91,7 +90,6 @@ function drawTitleScreen(){
 
   ctx.font = 1.5*game_state.fontSize.size+"px ega";
   ctx.textAlign = 'left';
-  ctx.textBaseline = 'top';
 
   ctx.strokeStyle = COLOR_YELLOW;
   ctx.lineWidth = 0.75*game_state.fontSize.size;
@@ -105,7 +103,6 @@ function drawTitleScreen(){
               );
 
   ctx.textAlign = 'center';
-  ctx.textBaseline = 'top';
 
   ctx.font = 0.75*game_state.fontSize.size+"px ega";
   ctx.fillText( 'You', 
