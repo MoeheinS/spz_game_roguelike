@@ -17,7 +17,7 @@ class Drop {
         let tryTile = getTile(x,y);
         // TODO: Either identify the treasure-holding Terrain types by name or add a flag...
         if( tryTile && ( tryTile.passable || TREASURE_HOLDERS.includes(tryTile.constructor.name) ) ){
-            tiles[x][y].inventory.push(this);
+            game_state.dungeon.tiles[x][y].inventory.push(this);
         }else{
           console.error(`Could not drop ${name} on impassable tile`);
         }

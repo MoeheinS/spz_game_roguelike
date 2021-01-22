@@ -73,9 +73,7 @@ game_state = {
   message_history: []
 };
 
-tiles = game_state.dungeon.tiles;
-
-const fov = new Mrpas(game_state.dungeon.dim.x, game_state.dungeon.dim.y, (x, y) => tiles[x][y].transparent);
+const fov = new Mrpas(game_state.dungeon.dim.x, game_state.dungeon.dim.y, (x, y) => game_state.dungeon.tiles[x][y].transparent);
 
 spritesheet = new Image();
 spritesheet.src = './assets/12x16_b.png';
@@ -122,7 +120,7 @@ document.querySelector("canvas").onmousemove = function(e){
   }
 };
 document.querySelector("canvas").onmouseup = function(e){
-  if( tiles.length ){
+  if( game_state.dungeon.tiles.length ){
     console.table(getTile(game_state.debug_mouseCoords.x, game_state.debug_mouseCoords.y));
     if( dom_tooltip ){
       dom_tooltip.updateDOM(getTile(game_state.debug_mouseCoords.x, game_state.debug_mouseCoords.y));

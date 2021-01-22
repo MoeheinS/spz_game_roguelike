@@ -4,7 +4,7 @@ function inBounds(x,y){
 
 function getTile(x, y){
   if( inBounds(x,y) ){
-		return tiles[x][y];
+		return game_state.dungeon.tiles[x][y];
   }else{
 		return new Wall(x,y);
   }
@@ -242,12 +242,12 @@ function debug_painter(e){
   switch (e.key) {
     case 'x': // export
       var tileExport = [];
-      //console.log(tiles);
-      for (let c = 1; c < tiles.length-1; c++) {
+      //console.log(game_state.dungeon.tiles);
+      for (let c = 1; c < game_state.dungeon.tiles.length-1; c++) {
         tileExport[c-1] = [];
-        for (let r = 1; r < tiles[c].length-1; r++) {
-          tileExport[c-1].push(tiles[c][r].constructor.name);
-          //console.log(tiles[c][r])
+        for (let r = 1; r < game_state.dungeon.tiles[c].length-1; r++) {
+          tileExport[c-1].push(game_state.dungeon.tiles[c][r].constructor.name);
+          //console.log(game_state.dungeon.tiles[c][r])
         }
         //console.warn('end of column!');
       }
@@ -255,40 +255,40 @@ function debug_painter(e){
       document.querySelector('.container__json').value = JSON.stringify(tileExport);
       break;
     case 'w': // wall
-      tiles[i][j] = new Wall(i,j);
+      game_state.dungeon.tiles[i][j] = new Wall(i,j);
       break;
     case 's': 
-      tiles[i][j] = new SpawnerWall(i,j);
+      game_state.dungeon.tiles[i][j] = new SpawnerWall(i,j);
       break;
     case 'c': 
-      tiles[i][j] = new Chest(i,j);
+      game_state.dungeon.tiles[i][j] = new Chest(i,j);
       break;
     case '.': 
-      tiles[i][j] = new Stairs_down(i,j);
+      game_state.dungeon.tiles[i][j] = new Stairs_down(i,j);
       break;
     case ',': 
-      tiles[i][j] = new Stairs_up(i,j);
+      game_state.dungeon.tiles[i][j] = new Stairs_up(i,j);
       break;
     case 'p': 
-      tiles[i][j] = new Pit(i,j);
+      game_state.dungeon.tiles[i][j] = new Pit(i,j);
       break;
     case 't': 
-      tiles[i][j] = new Trap(i,j);
+      game_state.dungeon.tiles[i][j] = new Trap(i,j);
       break;
     // case 'g': 
-    //   tiles[i][j] = new Generator(i,j);
+    //   game_state.dungeon.tiles[i][j] = new Generator(i,j);
     //   break;
     case 'h': 
-      tiles[i][j] = new MapperEnt(i,j,'hazard');
+      game_state.dungeon.tiles[i][j] = new MapperEnt(i,j,'hazard');
       break;
     case 'm': 
-      tiles[i][j] = new Mud(i,j);
+      game_state.dungeon.tiles[i][j] = new Mud(i,j);
       break;
     case 'a': // AQUA
-      tiles[i][j] = new Water(i,j);
+      game_state.dungeon.tiles[i][j] = new Water(i,j);
       break;
     default:
-      tiles[i][j] = new Floor(i,j);
+      game_state.dungeon.tiles[i][j] = new Floor(i,j);
       break;
   }
 }

@@ -475,8 +475,8 @@ class Player extends Monster {
 		let x = this.tile.x;
 		let y = this.tile.y;
 		fov.compute(x, y, 6, 
-			function(x, y){ tiles[x][y].passable },
-			function(x, y){ if( tiles[x][y].monster && !tiles[x][y].monster.isPlayer ){ tiles[x][y].monster.alerted = true; } }
+			function(x, y){ game_state.dungeon.tiles[x][y].passable },
+			function(x, y){ if( game_state.dungeon.tiles[x][y].monster && !game_state.dungeon.tiles[x][y].monster.isPlayer ){ game_state.dungeon.tiles[x][y].monster.alerted = true; } }
 		);
 	}
 
@@ -489,8 +489,8 @@ class Player extends Monster {
 		if( game_state.truesight || !game_state.fov_enabled ){
 			return;
 		}
-		for (let i = 0; i < tiles.length; i++) {
-			let visibleTiles = tiles[i].filter( t=>t.visible );
+		for (let i = 0; i < game_state.dungeon.tiles.length; i++) {
+			let visibleTiles = game_state.dungeon.tiles[i].filter( t=>t.visible );
 			for ( let j = 0; j < visibleTiles.length; j++ ){
 				visibleTiles[j].visible = false;
 			}
@@ -499,8 +499,8 @@ class Player extends Monster {
 		let x = this.tile.x;
 		let y = this.tile.y;
 		fov.compute(x, y, 3, // 7 is a high end light source. 11+ gives issues with edges on large blocks 
-			(x, y) => tiles[x][y].passable,
-    	function(x, y){ tiles[x][y].visible = true; tiles[x][y].spotted = true; }
+			(x, y) => game_state.dungeon.tiles[x][y].passable,
+    	function(x, y){ game_state.dungeon.tiles[x][y].visible = true; game_state.dungeon.tiles[x][y].spotted = true; }
 		);
 	}
 }

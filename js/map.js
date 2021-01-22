@@ -6,11 +6,11 @@ class Map { // new Room(0,0,tileMap); // instead of tileMap use tileMap_down onc
   }
 
   static flood(tileType){
-    tiles = [];
+    game_state.dungeon.tiles = [];
     for( let i=0; i<game_state.dungeon.dim.x; i++ ){
-      tiles[i] = [];
+      game_state.dungeon.tiles[i] = [];
       for( let j=0; j<game_state.dungeon.dim.y; j++ ){
-        tiles[i][j] = new tileType(i,j);
+        game_state.dungeon.tiles[i][j] = new tileType(i,j);
       }
     }
   }
@@ -18,7 +18,7 @@ class Map { // new Room(0,0,tileMap); // instead of tileMap use tileMap_down onc
   static createSpawners(probability){
     game_state.dungeon.spawners = [];
     for( let i=0; i<game_state.dungeon.dim.x; i++ ){
-      var walls = tiles[i].filter(t => t.constructor.name == 'Wall' && t.getAdjacentPassableNeighbors().length && t.getAdjacentPassableNeighbors().length < 3);
+      var walls = game_state.dungeon.tiles[i].filter(t => t.constructor.name == 'Wall' && t.getAdjacentPassableNeighbors().length && t.getAdjacentPassableNeighbors().length < 3);
       if( walls.length ){
         for( let w of walls ){
           if( Math.random() < probability ){
@@ -126,7 +126,7 @@ class Map { // new Room(0,0,tileMap); // instead of tileMap use tileMap_down onc
 	
 	static createGenerator(probability){
     for( let i=0; i<game_state.dungeon.dim.x; i++ ){
-      var walls = tiles[i].filter(t => t.constructor.name == 'Wall' && t.getAdjacentPassableNeighbors().length && t.getAdjacentPassableNeighbors().length == 3);
+      var walls = game_state.dungeon.tiles[i].filter(t => t.constructor.name == 'Wall' && t.getAdjacentPassableNeighbors().length && t.getAdjacentPassableNeighbors().length == 3);
       if( walls.length ){
         for( let w of walls ){
           if( Math.random() < probability ){
@@ -140,7 +140,7 @@ class Map { // new Room(0,0,tileMap); // instead of tileMap use tileMap_down onc
 	// Maze building. Works nice with IceWall, too
 	static growWalls(terrainType){
 		for( let i=0; i<game_state.dungeon.dim.x; i++ ){
-      var floors = tiles[i].filter(t => t.constructor.name == 'Floor' && t.getAdjacentPassableNeighbors(true).length == 7);
+      var floors = game_state.dungeon.tiles[i].filter(t => t.constructor.name == 'Floor' && t.getAdjacentPassableNeighbors(true).length == 7);
       if( floors.length ){
         for( let f of floors ){
 					f.replace(terrainType);
@@ -151,7 +151,7 @@ class Map { // new Room(0,0,tileMap); // instead of tileMap use tileMap_down onc
 
 	static async crumbleWalls(){
 		for( let i=0; i<game_state.dungeon.dim.x; i++ ){
-      var walls = tiles[i].filter(t => t.constructor.name == 'Wall' && t.getAdjacentPassableNeighbors(true).length && t.getAdjacentPassableNeighbors(true).length >= 7);
+      var walls = game_state.dungeon.tiles[i].filter(t => t.constructor.name == 'Wall' && t.getAdjacentPassableNeighbors(true).length && t.getAdjacentPassableNeighbors(true).length >= 7);
       if( walls.length ){
         for( let w of walls ){
 					w.replace(Floor);
@@ -164,7 +164,7 @@ class Map { // new Room(0,0,tileMap); // instead of tileMap use tileMap_down onc
 	// THE SWAMP
 	static placeMud(){
     for( let i=0; i<game_state.dungeon.dim.x; i++ ){
-      var floors = tiles[i].filter(t => t.constructor.name == 'Floor' && t.getAdjacentPassableNeighbors().length == 0);
+      var floors = game_state.dungeon.tiles[i].filter(t => t.constructor.name == 'Floor' && t.getAdjacentPassableNeighbors().length == 0);
       if( floors.length ){
         for( let f of floors ){
 					f.replace(Mud);
@@ -176,7 +176,7 @@ class Map { // new Room(0,0,tileMap); // instead of tileMap use tileMap_down onc
 	// THE CEMETARY
 	static placeCrypt(){
 		for( let i=0; i<game_state.dungeon.dim.x; i++ ){
-      var floors = tiles[i].filter(t => t.constructor.name == 'Floor' && t.getAdjacentPassableNeighbors(true).length == 6);
+      var floors = game_state.dungeon.tiles[i].filter(t => t.constructor.name == 'Floor' && t.getAdjacentPassableNeighbors(true).length == 6);
       if( floors.length ){
         for( let f of floors ){
 					f.replace(Crypt);
@@ -378,8 +378,8 @@ class Room { // new Room(0,0,tileMap); // instead of tileMap use tileMap_down on
 				// NOTE: if roomType == 'Gimme a Boulder yo', place monster boulder else eval
 				// also if Spawner wall, add to spawners list then eval and place
 				// optionally replace Walls for SpawnerWalls here?
-				//tiles[i][j] = new roomType(i,j);
-				tiles[start_x+i][start_y+j].replace(roomType);
+				//game_state.dungeon.tiles[i][j] = new roomType(i,j);
+				game_state.dungeon.tiles[start_x+i][start_y+j].replace(roomType);
 			}
 		}
 	}
