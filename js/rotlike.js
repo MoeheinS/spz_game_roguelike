@@ -73,7 +73,6 @@ game_state = {
   message_history: []
 };
 
-monsters = game_state.dungeon.monsters;
 tiles = game_state.dungeon.tiles;
 
 const fov = new Mrpas(game_state.dungeon.dim.x, game_state.dungeon.dim.y, (x, y) => tiles[x][y].transparent);

@@ -13,7 +13,7 @@ abilities = {
     monster.move(randomPassableTile(), true); // instant movement
   },
   QUAKE: function(monster){                  
-    for( monster of monsters ){
+    for( monster of game_state.dungeon.monsters ){
       let numWalls = 4 - monster.tile.getAdjacentPassableNeighbors().length;
       monster.swing(numWalls*2);
       new Message(`The walls cave in on the ${monster.constructor.name}, dealing ${numWalls*2} damage!`);
@@ -30,10 +30,10 @@ abilities = {
     startLevel(1, false, true); // to remember spells; , monster.spells);
   },
   MAELSTROM: function(monster){
-    for(let i=0;i<monsters.length;i++){
-      abilities.WOOP(monsters[i]);
-      monsters[i].moves = -2;
-      monsters[i].attacks = -2;
+    for(let i=0;i<game_state.dungeon.monsters.length;i++){
+      abilities.WOOP(game_state.dungeon.monsters[i]);
+      game_state.dungeon.monsters[i].moves = -2;
+      game_state.dungeon.monsters[i].attacks = -2;
     }
   },
   MEND: function(monster){

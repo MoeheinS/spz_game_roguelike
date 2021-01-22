@@ -193,24 +193,15 @@ class Map { // new Room(0,0,tileMap); // instead of tileMap use tileMap_down onc
   }
 
   static descend(hp, oneWay){ // player.hp
-    // Promise.all(
-    //   monsters.map(function(monster){
-    //     monster.void();
-    //   })
-    // )
-    // .then(function(){
-		//   console.table(monsters);
-			
-			game_state.depth++;
-			let hp_bonus = ( game_state.depth > game_state.depth_max ? 1 : 0 );
-			game_state.depth_max = Math.max( game_state.depth, game_state.depth_max );
-			startLevel(Math.min(game_state.maxHp, hp+hp_bonus), oneWay, true);
-			// TODO: track max depth so the +1 hp only happens when exceeding that
-			/* 
-				TODO: Pit now lands you in a level which doesn't have an Up Stairs, making it one-way down.
-				Perhaps we need a Rope ladder -> a one-way UP
-			*/
-    // });
+		game_state.depth++;
+		let hp_bonus = ( game_state.depth > game_state.depth_max ? 1 : 0 );
+		game_state.depth_max = Math.max( game_state.depth, game_state.depth_max );
+		startLevel(Math.min(game_state.maxHp, hp+hp_bonus), oneWay, true);
+		// TODO: track max depth so the +1 hp only happens when exceeding that
+		/* 
+			TODO: Pit now lands you in a level which doesn't have an Up Stairs, making it one-way down.
+			Perhaps we need a Rope ladder -> a one-way UP
+		*/
   }
 
   static ascend(hp, oneWay){ // player.hp
