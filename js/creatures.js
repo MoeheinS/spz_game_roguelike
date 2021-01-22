@@ -681,15 +681,15 @@ function generateMonsters() {
 	}
 }
 
-//for(let s of spawners){spawnMonster(Centipede)}
+//for(let s of game_state.dungeon.spawners){spawnMonster(Centipede)}
 function spawnMonster(type) {
 	let monsterType = type || shuffle([Goblin, Kobold, Zombie, Ghost, Quickling, Samurai])[0];
 	// spawn from air
 	//let monster = new monsterType(randomPassableTile());
 	// spawn from next to a spawner wall
 	var spawnSpots = [];
-	if( spawners.length ){
-		for( spawner of spawners ){
+	if( game_state.dungeon.spawners.length ){
+		for( spawner of game_state.dungeon.spawners ){
 			var openSpots = spawner.getAdjacentPassableNeighbors().filter(t => !t.monster);
 			if( openSpots.length ){
 				for( spot of openSpots ){

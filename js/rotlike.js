@@ -56,7 +56,10 @@ game_state = {
       narrow: 0.1,
       generator: 0.1,
       sokoban: 0.1
-    }
+    },
+    tiles: [],
+    spawners: [],
+    monsters: []
   },
 
   depth: 1,
@@ -70,9 +73,8 @@ game_state = {
   message_history: []
 };
 
-monsters = [];
-spawners = [];
-tiles = [];
+monsters = game_state.dungeon.monsters;
+tiles = game_state.dungeon.tiles;
 
 const fov = new Mrpas(game_state.dungeon.dim.x, game_state.dungeon.dim.y, (x, y) => tiles[x][y].transparent);
 

@@ -16,14 +16,14 @@ class Map { // new Room(0,0,tileMap); // instead of tileMap use tileMap_down onc
   }
 
   static createSpawners(probability){
-    spawners = [];
+    game_state.dungeon.spawners = [];
     for( let i=0; i<game_state.dungeon.dim.x; i++ ){
       var walls = tiles[i].filter(t => t.constructor.name == 'Wall' && t.getAdjacentPassableNeighbors().length && t.getAdjacentPassableNeighbors().length < 3);
       if( walls.length ){
         for( let w of walls ){
           if( Math.random() < probability ){
             w.replace(SpawnerWall);
-            spawners.push(w);
+            game_state.dungeon.spawners.push(w);
           }
         }
       }
