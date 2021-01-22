@@ -20,9 +20,6 @@ COLOR_WATER = COLOR_BLUE;
 TREASURE_HOLDERS = ['Chest','Crypt','Tomb','Jar','Barrel'];
 
 tileSize = {x: 24, y: 24};
-// for tiled mode
-SCALE_FACTOR = 3;
-
 numTiles = 26;
 
 game_state = {
@@ -38,7 +35,6 @@ game_state = {
   fov_enabled: false,
   scrollCamera: false,
   camera_offset: {x: 0, y: 0},
-  text_mode: true,
   fontSize: {size: tileSize.y*0.75, offset: tileSize.y*0.25},
 
   mode: "loading",

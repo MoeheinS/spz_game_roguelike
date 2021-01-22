@@ -42,11 +42,7 @@ class Monster {
 	draw(){
 		if( ( game_state.fov_enabled && this.tile.visible ) || !game_state.fov_enabled || game_state.truesight ){
 			// NOTE: moved rendering creatures to Terrain logic
-			if( game_state.text_mode ){
-				drawChar(this, this.getDisplayX(), this.getDisplayY());
-			}else{
-				drawSprite(this.sprite, this.getDisplayX(), this.getDisplayY());
-			}
+			drawChar(this, this.getDisplayX(), this.getDisplayY());
 
 			this.drawHp();
 
@@ -238,11 +234,7 @@ class Boulder extends Monster {
 
 	draw(){
 		if( ( game_state.fov_enabled && this.tile.visible ) || !game_state.fov_enabled || game_state.truesight ){
-			if( game_state.text_mode ){
-				drawChar(this, this.getDisplayX(), this.getDisplayY());
-			}else{
-				drawSprite(this.sprite, this.getDisplayX(), this.getDisplayY());
-			}
+			drawChar(this, this.getDisplayX(), this.getDisplayY());
 			this.offsetX -= Math.sign(this.offsetX)*(1/8);     
 			this.offsetY -= Math.sign(this.offsetY)*(1/8);
 		}

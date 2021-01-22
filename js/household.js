@@ -186,29 +186,6 @@ function drawChar(ent, x, y, rect) {
   // char.charCodeAt(0)
   ctx.restore();
 }
-function drawSprite(coords, x, y) {
-  //(image, sx, sy, sWidth, sHeight, dx, dy, dWidth, dHeight);
-  // if background is already part of the spritesheet, and the glyphs are transparent
-  // you can use this to color the glyphs
-  // ctx.fillStyle = COLOR_BLACK;
-  // ctx.fillRect(
-  //   x*tileSize.x,
-  //   y*tileSize.y,
-  //   tileSize.x,
-  //   tileSize.y
-  // );
-  ctx.drawImage(
-    ( coords.spritesheet ? coords.spritesheet : spritesheet ),
-    coords.x,
-    coords.y,
-    ( coords.sx ? coords.sx : tileSize.x / SCALE_FACTOR ),
-    ( coords.sy ? coords.sy : tileSize.y / SCALE_FACTOR ),
-    x*tileSize.x,
-    y*tileSize.y,
-    ( coords.dx ? coords.dx : tileSize.x ),
-    ( coords.dy ? coords.dy : tileSize.y )
-  );
-}
 
 function flowControl(state) {
   switch (state) {
@@ -242,11 +219,6 @@ function debug_toggle(p, v){
       break;
     case 'scroll':
       game_state.scrollCamera = v;
-      break;
-    case 'tiles':
-      game_state.text_mode = v;
-      tileSize = {x: ( v ? 24 : 24 ), y: ( v ? 24 : 32 )};
-      SCALE_FACTOR = ( v ? 3 : 2 );
       break;
     case 'mapper':
       game_state.debug_mapper = v;
