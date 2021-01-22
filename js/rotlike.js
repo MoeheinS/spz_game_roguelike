@@ -141,8 +141,8 @@ function setupCanvas() {
   ctx.fillStyle = COLOR_FILLSTYLE;
 
   // TODO: this resizes the canvas to cover as much of the screen as possible, resets crop params
-  // game_state.render.crop.x = -Math.floor(((window.innerWidth / (tileSize.x*(game_state.dungeon.dim.x-game_state.render.crop.x)))*tileSize.x)-game_state.dungeon.dim.x);
-  // game_state.render.crop.y = -Math.floor(((window.innerHeight / (tileSize.y*(game_state.dungeon.dim.y-game_state.render.crop.y)))*tileSize.y)-game_state.dungeon.dim.y);
+  // game_state.render.crop.x = -(Math.floor(window.innerWidth/tileSize.x)-game_state.dungeon.dim.x-1);
+  // game_state.render.crop.y = -(Math.floor(window.innerHeight/tileSize.y)-game_state.dungeon.dim.y-1);
 
   canvas.width = tileSize.x*(game_state.dungeon.dim.x-game_state.render.crop.x);
   canvas.height = tileSize.y*(game_state.dungeon.dim.y-game_state.render.crop.y);
