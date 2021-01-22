@@ -155,8 +155,8 @@ class Terrain {
 					if( this.visible || game_state.truesight || !game_state.fov_enabled ){
 						ctx.save();
 
-						ctx.font = '8px ega'; // calibri
 						ctx.textBaseline = 'top';
+						ctx.font = '8px ega';
 						ctx.textAlign = 'right';
 						ctx.fillStyle = COLOR_BLACK;
 						ctx.strokeStyle = COLOR_YELLOW;

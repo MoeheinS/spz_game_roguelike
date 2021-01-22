@@ -147,7 +147,7 @@ function setupCanvas() {
   }
 
   // https://int10h.org/oldschool-pc-fonts/fontlist/font?ibm_ega_8x14#-
-  ctx.font = game_state.fontSize.size+"px ega"; //calibri
+  ctx.font = game_state.fontSize.size+"px ega";
   ctx.textAlign = 'center';
   ctx.textBaseline = 'top';
 

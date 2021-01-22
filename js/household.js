@@ -72,12 +72,10 @@ function drawTitleScreen(){
 
   ctx.fillText( 'Spuzlike', 
                 (numTiles/2)*tileSize.x + 0.5*tileSize.x, 
-                //(numTiles/2)*tileSize.y
                 2*tileSize.y
               );
   ctx.fillText( 'Press any key to play', 
                 (numTiles/2)*tileSize.x + 0.5*tileSize.x, 
-                //(2+numTiles/2)*tileSize.y
                 4*tileSize.y
               );
   
@@ -183,7 +181,6 @@ function drawChar(ent, x, y, rect) {
 
   ctx.fillStyle = ent.fillStyle;
   ctx.fillText( String.fromCharCode(ent.glyph), x*tileSize.x + 0.5*tileSize.x, y*tileSize.y+game_state.fontSize.offset, tileSize.y);
-  // char.charCodeAt(0)
   ctx.restore();
 }
 
