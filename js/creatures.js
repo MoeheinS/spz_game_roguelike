@@ -1,7 +1,6 @@
 class Monster {
 	constructor(tile, sprite, hp){
 		this.uid = randomUID();
-		this.move(tile);
 		this.sprite = sprite;
 		this.fillStyle = COLOR_BLACK;
 		this.bloodColor = COLOR_RED;
@@ -9,6 +8,9 @@ class Monster {
 		this.hp = hp;
 		this.offsetX = 0;                                                   
 		this.offsetY = 0;
+
+		this.x = tile.x;
+		this.y = tile.y;
 
 		//this.hidden = true;
 		this.moves = 1;
@@ -38,13 +40,16 @@ class Monster {
 	static all = [];
 
 	getDisplayX(){                     
-		return this.tile.x + this.offsetX;
+		return this.x + this.offsetX;
 	}
 	getDisplayY(){                                                                  
-		return this.tile.y + this.offsetY;
+		return this.y + this.offsetY;
 	} 
+	monTile(){
+		return getTile(this.x, this.y);
+	}
 	draw(){
-		if( ( game_state.fov_enabled && this.tile.visible ) || !game_state.fov_enabled || game_state.truesight ){
+		if( ( game_state.fov_enabled && this.monTile().visible ) || !game_state.fov_enabled || game_state.truesight ){
 			// NOTE: moved rendering creatures to Terrain logic
 			drawChar(this, this.getDisplayX(), this.getDisplayY());
 
@@ -78,13 +83,6 @@ class Monster {
 			ctx.strokeText( this.hp, this.getDisplayX()*tileSize.x, this.getDisplayY()*tileSize.y);
 			ctx.fillText( this.hp, this.getDisplayX()*tileSize.x, this.getDisplayY()*tileSize.y);
 			
-			// To render the tile you're standing on in the corner;
-			// ctx.textAlign = 'right';
-			// ctx.strokeStyle = COLOR_YELLOW;
-			// ctx.lineWidth = 2;
-			// ctx.strokeText( String.fromCharCode(this.tile.glyph), this.getDisplayX()*tileSize.x+1*tileSize.x, this.getDisplayY()*tileSize.y);
-			// ctx.fillText( String.fromCharCode(this.tile.glyph), this.getDisplayX()*tileSize.x+1*tileSize.x, this.getDisplayY()*tileSize.y);
-
 			// if( this.alerted ){
 			// 	ctx.textAlign = 'right';
 			// 	ctx.strokeStyle = COLOR_YELLOW;
@@ -95,12 +93,12 @@ class Monster {
 
 			// bottom left ; attack value?
 			// ctx.textBaseline = 'bottom';
-			// ctx.fillText( this.hp, this.tile.x*tileSize.x, this.tile.y*tileSize.y+1*tileSize.y);
+			// ctx.fillText( this.hp, this.x*tileSize.x, this.y*tileSize.y+1*tileSize.y);
 
 			// bottom right ; defense value?
 			// ctx.textAlign = 'right';
 			// ctx.textBaseline = 'bottom';
-			// ctx.fillText( this.hp, this.tile.x*tileSize.x+1*tileSize.x, this.tile.y*tileSize.y+1*tileSize.y);
+			// ctx.fillText( this.hp, this.x*tileSize.x+1*tileSize.x, this.y*tileSize.y+1*tileSize.y);
 
 			ctx.restore();
 		}
@@ -110,7 +108,7 @@ class Monster {
 		// if( !this.alerted && !this.isPlayer ){
 		// 	return true;
 		// }
-		let newTile = this.tile.getNeighbor(dx,dy);
+		let newTile = this.monTile().getNeighbor(dx,dy);
 		if(newTile.passable || this.phaseWalls){
 			this.lastMove = [dx,dy];
 			if( Math.floor(this.moves) > 0 && !newTile.monster ){
@@ -123,8 +121,8 @@ class Monster {
 					newTile.monster.swing(1 + this.bonusAttack, this);
 					this.bonusAttack = 0;
 
-					this.offsetX = (newTile.x - this.tile.x)/2;         
-					this.offsetY = (newTile.y - this.tile.y)/2; 
+					this.offsetX = (newTile.x - this.x)/2;         
+					this.offsetY = (newTile.y - this.y)/2; 
 				}
 			}
 			if( !this.isPlayer && this.checkActions() ){
@@ -135,8 +133,8 @@ class Monster {
 		}else{ // this entire else is so you can bump into walls and pass a turn
 			this.moves--;
 			// TODO: this might be where you bump a chest to open it, or try to push a boulder
-			this.offsetX = (newTile.x - this.tile.x)/2;         
-			this.offsetY = (newTile.y - this.tile.y)/2; 
+			this.offsetX = (newTile.x - this.x)/2;         
+			this.offsetY = (newTile.y - this.y)/2; 
 			if( TREASURE_HOLDERS.includes(newTile.constructor.name) ){
 				await Drop.loot(newTile, this);
 			}
@@ -159,7 +157,7 @@ class Monster {
 
 	die(){
 		// BLEED
-		this.tile.renderOverride = { fillStyle: this.bloodColor };
+		this.monTile().renderOverride = { fillStyle: this.bloodColor };
 		this.dead = true;
 		this.glyph = 37; // %
 		new Message(`The ${this.constructor.name} ${shuffle(['dies.','perishes.','chokes on its own teeth.','is mangled.'])[0]}`);
@@ -171,23 +169,18 @@ class Monster {
 		console.log(`A ${this.constructor.name} (${this.uid}) is destroyed`);
 		let myIndex = game_state.dungeon.monsters.findIndex( t => t.uid == this.uid );
 		game_state.dungeon.monsters.splice(myIndex, 1);
-		this.tile.monster = null;
-
 		// NEW: void from the Monster.all array;
 		let i = Monster.all.indexOf(this);
 		Monster.all.splice(i, 1);
 	}
 
 	move(tile, instant, debug_teleport){
-		if( this.tile ){
-			this.tile.monster = null;
-			if( !instant ){
-				this.offsetX = this.tile.x - tile.x;
-				this.offsetY = this.tile.y - tile.y;
-			}
+		if( !instant ){
+			this.offsetX = this.x - tile.x;
+			this.offsetY = this.y - tile.y;
 		}
-		this.tile = tile;
-		tile.monster = this;
+		this.x = tile.x;
+		this.y = tile.y;
 
 		if( typeof tile.stepOn === 'function' && !debug_teleport){ // this is necessary because LOL ouroboros
 			tile.stepOn(this);
@@ -209,17 +202,17 @@ class Monster {
 	act(){
 		let neighbors = [];
 		if( this.phaseWalls ){
-			neighbors = this.tile.getAdjacentNeighbors(this.canDiagonal);
+			neighbors = this.monTile().getAdjacentNeighbors(this.canDiagonal);
 		}else{
-			neighbors = this.tile.getAdjacentPassableNeighbors(this.canDiagonal);
+			neighbors = this.monTile().getAdjacentPassableNeighbors(this.canDiagonal);
 		}
 	 
-	 	neighbors = neighbors.filter(t => !t.monster || t.monster.isPlayer);
+	 	neighbors = neighbors.filter(t => cfm(t.x, t.y) == false || cfm(t.x, t.y)[0].isPlayer);
 
 	 	if( neighbors.length ){
-			neighbors.sort((a,b) => a.dist(player.tile) - b.dist(player.tile));
+			neighbors.sort((a,b) => a.dist(player.monTile()) - b.dist(player.monTile()));
 			let newTile = neighbors[0];
-			this.tryMove(newTile.x - this.tile.x, newTile.y - this.tile.y);
+			this.tryMove(newTile.x - this.x, newTile.y - this.y);
 		}
 	}
 
@@ -240,7 +233,7 @@ class Boulder extends Monster {
 	}
 
 	draw(){
-		if( ( game_state.fov_enabled && this.tile.visible ) || !game_state.fov_enabled || game_state.truesight ){
+		if( ( game_state.fov_enabled && this.monTile().visible ) || !game_state.fov_enabled || game_state.truesight ){
 			drawChar(this, this.getDisplayX(), this.getDisplayY());
 			this.offsetX -= Math.sign(this.offsetX)*(1/8);     
 			this.offsetY -= Math.sign(this.offsetY)*(1/8);
@@ -249,25 +242,25 @@ class Boulder extends Monster {
 
 	swing(){
 		// move when struck; might work for creatures as well if followed up with super.swing()?
-		let nx = this.tile.x - player.tile.x;
-		let ny = this.tile.y - player.tile.y;
+		let nx = this.x - player.x;
+		let ny = this.y - player.y;
 		if( Math.abs(nx) == 1 || Math.abs(ny) == 1 ){
 			this.tryMove(nx, ny);
 		}
 	}
 
 	async tryMove(dx, dy){
-		let newTile = this.tile.getNeighbor(dx,dy);
+		let newTile = this.monTile().getNeighbor(dx,dy);
 		if(newTile.passable){
-			if( !newTile.monster ){
+			if( !cfm(newTile.x, newTile.y) ){
 				new Message(`The ${this.constructor.name} moves.`);
 				this.move(newTile);
 				await Generator.rebeam();
 			}
 			return true;
 		}else{ // this entire else is so you can bump into walls and pass a turn
-			this.offsetX = (newTile.x - this.tile.x)/2;         
-			this.offsetY = (newTile.y - this.tile.y)/2; 
+			this.offsetX = (newTile.x - this.x)/2;         
+			this.offsetY = (newTile.y - this.y)/2; 
 			return true;
 		}
 	}
@@ -357,7 +350,7 @@ class Player extends Monster {
 					game_state.interact_mode = 'camera';
 					break;
 				case 'g':
-					Drop.pickup(player.tile.x, player.tile.y, player);
+					Drop.pickup(player.x, player.y, player);
 					break;
 				default:
 					break;
@@ -409,7 +402,7 @@ class Player extends Monster {
 				default:
 					break;
 			}
-			var inspectedTile = getTile(player.tile.x + game_state.camera_offset.x, player.tile.y + game_state.camera_offset.y);
+			var inspectedTile = getTile(player.x + game_state.camera_offset.x, player.y + game_state.camera_offset.y);
 			console.log(inspectedTile);
 			console.log(`spotted:${inspectedTile.spotted}, visible:${inspectedTile.visible}`);
 		}else if( game_state.interact_mode == 'input' ){
@@ -468,7 +461,7 @@ class Player extends Monster {
 
 	die(){
 		// BLEED
-		this.tile.renderOverride = { fillStyle: this.bloodColor };
+		this.monTile().renderOverride = { fillStyle: this.bloodColor };
 		this.dead = true;
 		this.glyph = 37; // %
 		new Message('You have died...');
@@ -480,11 +473,11 @@ class Player extends Monster {
 	// 	for( let i=0; i<game_state.dungeon.monsters.length; i++ ){
 	// 		game_state.dungeon.monsters[i].hidden = ( game_state.dungeon.monsters[i].tile.dist(player.tile) < 6 ? false : true);
 	// 	}
-		let x = this.tile.x;
-		let y = this.tile.y;
+		let x = this.x;
+		let y = this.y;
 		fov.compute(x, y, 6, 
 			function(x, y){ game_state.dungeon.tiles[x][y].passable },
-			function(x, y){ if( game_state.dungeon.tiles[x][y].monster && !game_state.dungeon.tiles[x][y].monster.isPlayer ){ game_state.dungeon.tiles[x][y].monster.alerted = true; } }
+			function(x, y){ if( cfm(x,y) && !cfm(x,y)[0].isPlayer ){ cfm(x,y)[0].alerted = true; } }
 		);
 	}
 
@@ -504,8 +497,8 @@ class Player extends Monster {
 			}
 		}
 
-		let x = this.tile.x;
-		let y = this.tile.y;
+		let x = this.x;
+		let y = this.y;
 		fov.compute(x, y, 3, // 7 is a high end light source. 11+ gives issues with edges on large blocks 
 			(x, y) => game_state.dungeon.tiles[x][y].passable,
     	function(x, y){ game_state.dungeon.tiles[x][y].visible = true; game_state.dungeon.tiles[x][y].spotted = true; }
@@ -578,7 +571,6 @@ class Ghost extends Monster {
 	}
 	die(){ // copied because ghosts don't bleed
 		this.dead = true;
-		this.tile.monster = null;
 		this.glyph = 37; // %
 		// TODO: optionally some creatures could turn into something else on death...
 		let myIndex = game_state.dungeon.monsters.findIndex( t => t.uid == this.uid );
@@ -640,7 +632,7 @@ class Centipede extends Monster {
 	= ninja ; teleports away when hit, or teleports next to the player -> or swap places with another monster!
 	= clown ; spawns looking like something else, reveals true shape on taking damage -> 2 hp, Math.random glyph on constructor
 	= wyvern / bull ; if it has clean line of sight, mark that direction, then teleport in a line until it hits monster or terrain -> BOLT_travel / dash
-		-> if this.tile.x / y == player.tile.x / y ; check for ability
+		-> if this.x / y == player.tile.x / y ; check for ability
 		-> YELL, then dash, so if you move away it YELLS again, building up its damage. But it'll DASH regardless of other monsters in the way, so you can use it to kill monsters
 	= mummy ; if on fire, move randomly and become able to attack anything -> very zelda-poi, pass
 	= hydra ; gains hp from regular attacks
@@ -709,7 +701,7 @@ function spawnMonster(type) {
 			let monster = new monsterType(shuffle(spawnSpots)[0]);
 			abilities.endTurn(monster);
 			game_state.dungeon.monsters.push(monster);
-			new Message(`Spawned a ${monster.constructor.name} (${monster.uid}) at ${monster.tile.x},${monster.tile.y}.`, true);
+			new Message(`Spawned a ${monster.constructor.name} (${monster.uid}) at ${monster.x},${monster.y}.`, true);
 		}else{
 			new Message('Could not spawn more monsters; no or no open spawn spots.', true);
 			new Message('The dungeon overflows with creatures!');
@@ -726,7 +718,7 @@ async function summonMonster(type, tile) {
 		let monster = new monsterType(tryTile);
 		abilities.endTurn(monster);
 		game_state.dungeon.monsters.push(monster);
-		new Message(`Spawned a ${monster.constructor.name} (${monster.uid}) at ${monster.tile.x},${monster.tile.y}.`, true);
+		new Message(`Spawned a ${monster.constructor.name} (${monster.uid}) at ${monster.x},${monster.y}.`, true);
 		return monster;
 	}else{
 		new Message('Could not summon monster; spot is occupied.', true);
