@@ -364,6 +364,7 @@ class Stairs_down extends Terrain {
 		this.glyph = 62;
 	}
 	stepOn(monster){
+		return;
 		if(monster.isPlayer){
 			Map.descend(player.hp);
 		}
@@ -376,6 +377,7 @@ class Stairs_up extends Terrain {
 		this.glyph = 60;
 	}
 	stepOn(monster){
+		return;
 		if(monster.isPlayer){
 			Map.ascend(player.hp);
 		}

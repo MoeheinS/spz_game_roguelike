@@ -224,6 +224,15 @@ abilities = {
     game_state.callback = callback;
   },
   //TARGET: function(monster, callback){}
+  STAIRS: function(monster, direction){
+    if( direction == '>' && player.monTile().constructor.name == 'Stairs_down' ){
+      Map.descend(player.hp);
+    }else if( direction == '<' && player.monTile().constructor.name == 'Stairs_up' ){
+      Map.ascend(player.hp);
+    }else{
+      console.warn('Nothing happened');
+    }
+  }
 };
 
 /*

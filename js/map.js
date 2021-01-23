@@ -220,10 +220,10 @@ async function startLevel(playerHP, oneWay, directionDown) {
     return spawnPlayer(playerHP, false);
   }
 
-	let playerLoc = ( game_state.depth_max > 1 ? {x: player.tile.x, y: player.tile.y} : false );
+	let playerLoc = ( game_state.depth_max > 1 ? player.monTile() : false );
   await levelgen_dw( //target, seed, canReturn, directionDown
 		game_state.dungeon.dim.x*game_state.dungeon.dim.y, 
-		( game_state.depth_max > 1 ? player.tile : false ),
+		( game_state.depth_max > 1 ? player.monTile() : false ),
 		!oneWay, //( oneWay ? false : true ), //(game_state.depth > 1) ), 
 		directionDown
 	)
@@ -285,7 +285,9 @@ function seedChest( tile, loot ){
 
 async function drunkWalk(tile, diagonals, allowedTypes){
 	// && !t.monster added to avoid the sokoban problem
-	var attempt = tile.getAdjacentNeighbors(diagonals).filter( t => allowedTypes.includes(t.constructor.name) && !t.monster );
+	// FIXME: checking for monster here introduces the mother of all infinite loops, so I took it out haha
+	// FIXME: actually caused by repeatedly spawning on top of the stairs, confirm and restore
+	var attempt = tile.getAdjacentNeighbors(diagonals).filter( t => allowedTypes.includes(t.constructor.name));// && !cfm(t.x, t.y) );
 	if( attempt[0] ){
 		return ( inBounds(attempt[0].x,attempt[0].y) ? attempt[0] : false );
 	}else{

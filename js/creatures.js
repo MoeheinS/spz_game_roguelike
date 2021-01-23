@@ -32,7 +32,7 @@ class Monster {
 		this.phaseWalls = false; // lets ghost pass walls, lets player phase walls when DASHing, then set back to false
 
 		this.inventory = [];
-		this.move(getTile(tile.x, tile.y), true, true); // to prevent ouroboros shenanigans
+		//this.move(getTile(tile.x, tile.y), true, true); // to prevent ouroboros shenanigans
 
 		Monster.all.push(this);
 	}
@@ -351,6 +351,10 @@ class Player extends Monster {
 					break;
 				case 'g':
 					Drop.pickup(player.x, player.y, player);
+					break;
+				case '>':
+				case '<':
+					abilities.STAIRS(player, e.key);
 					break;
 				default:
 					break;
