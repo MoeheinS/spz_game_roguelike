@@ -111,8 +111,8 @@ class Tooltip {
     this.el.style.left = `${tile.x * tileSize.x}px`;
 
     let monsterInfo = false;
-    if(tile.monster){
-      monsterInfo = ( tile.monster.isPlayer ? 'You' : tile.monster.constructor.name );
+    if(cfm(tile.x, tile.y)){
+      monsterInfo = ( cfm(tile.x, tile.y)[0].isPlayer ? 'You' : cfm(tile.x, tile.y)[0].constructor.name );
     }
 
     this.el.querySelector('.tooltip__info').innerHTML = 
