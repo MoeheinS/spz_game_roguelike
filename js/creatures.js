@@ -111,14 +111,14 @@ class Monster {
 		let newTile = this.monTile().getNeighbor(dx,dy);
 		if(newTile.passable || this.phaseWalls){
 			this.lastMove = [dx,dy];
-			if( Math.floor(this.moves) > 0 && !newTile.monster ){
+			if( Math.floor(this.moves) > 0 && !cfm(newTile.x, newTile.y) ){
 				this.moves--;
 				this.move(newTile);
 			}else{
-				if( Math.floor(this.attacks) > 0 && newTile.monster && this.isPlayer != newTile.monster.isPlayer ){
+				if( Math.floor(this.attacks) > 0 && cfm(newTile.x, newTile.y) && this.isPlayer != cfm(newTile.x, newTile.y)[0].isPlayer ){
 					this.attacks--;
 					// TODO: use this.attack instead of hard 1?
-					newTile.monster.swing(1 + this.bonusAttack, this);
+					cfm(newTile.x, newTile.y)[0].swing(1 + this.bonusAttack, this);
 					this.bonusAttack = 0;
 
 					this.offsetX = (newTile.x - this.x)/2;         
