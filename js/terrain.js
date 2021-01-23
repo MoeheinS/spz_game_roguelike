@@ -53,6 +53,7 @@ class Terrain {
 	}
 
 	reveal(){
+		// TODO: reveal skill check optional, param in a DC?
 		this.hidden = false;
 		new Message(`You spot a ${this.constructor.name}.`);
 	}
@@ -81,8 +82,8 @@ class Terrain {
 	replace(newTileType){
 		game_state.dungeon.tiles[this.x][this.y] = new newTileType(this.x, this.y);
 		// experimental
-		if( game_state.dungeon.tiles[this.x][this.y].monster ){
-			game_state.dungeon.tiles[this.x][this.y].monster.move(getTile(this.x, this.y));
+		if( cfm(this.x, this.y) ){
+			cfm(this.x, this.y)[0].move(getTile(this.x, this.y));
 		}
 		return game_state.dungeon.tiles[this.x][this.y];
 	}
@@ -137,21 +138,23 @@ class Terrain {
 
 	draw(){
 		if( !this.visible && !game_state.truesight && game_state.fov_enabled ){
-			ctx.save();
+			//ctx.save();
 	
+			var refillStyle = ctx.fillStyle;
 			ctx.fillStyle = ( inBounds(this.x, this.y) ? COLOR_FOW : COLOR_BLACK );
 			ctx.fillRect(this.x*tileSize.x,this.y*tileSize.y,tileSize.x,tileSize.y);
 		
-			ctx.restore();
+			ctx.fillStyle = refillStyle;
+			//ctx.restore();
 		}
 
 		if( this.spotted || game_state.truesight || !game_state.fov_enabled ){
 
 			drawChar( this, this.x, this.y, this.renderOverride);
 			if( this.inventory.length && this.passable ){
-				if( !this.monster ){
+				if( !cfm(this.x, this.y) ){
 					drawChar( {glyph: ( this.inventory.length == 1 ? this.inventory[0].glyph : 42), fillStyle: COLOR_BLACK}, this.x, this.y, this.renderOverride);
-				}else if( this.monster ){
+				}else if( cfm(this.x, this.y) ){
 					if( this.visible || game_state.truesight || !game_state.fov_enabled ){
 						ctx.save();
 
@@ -161,9 +164,9 @@ class Terrain {
 						ctx.strokeStyle = COLOR_YELLOW;
 						ctx.lineWidth = 2;
 						ctx.strokeText( String.fromCharCode(( this.inventory.length == 1 ? this.inventory[0].glyph : 42)), 
-							this.monster.getDisplayX()*tileSize.x+1*tileSize.x, this.monster.getDisplayY()*tileSize.y);
+							cfm(this.x, this.y)[0].getDisplayX()*tileSize.x+1*tileSize.x, cfm(this.x, this.y)[0].getDisplayY()*tileSize.y);
 						ctx.fillText( String.fromCharCode(( this.inventory.length == 1 ? this.inventory[0].glyph : 42)), 
-							this.monster.getDisplayX()*tileSize.x+1*tileSize.x, this.monster.getDisplayY()*tileSize.y);
+							cfm(this.x, this.y)[0].getDisplayX()*tileSize.x+1*tileSize.x, cfm(this.x, this.y)[0].getDisplayY()*tileSize.y);
 	
 						ctx.restore();
 					}else{
@@ -240,7 +243,7 @@ class Generator extends Terrain {
 				//if( inBounds(testTile.x, testTile.y) ){
 					newTile = testTile;
 					newTile.repaint(paintStyle);
-					if(newTile.monster){
+					if( cfm(newTile.x, newTile.y) ){
 						paintStyle = 'reset';
 					}
 				}else{
