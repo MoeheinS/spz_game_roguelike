@@ -4,7 +4,7 @@ abilities = {
     monster.attacks = 0;
   },
   placeTrap: function(monster){
-    let freeSpace = shuffle(monster.tile.getAdjacentPassableNeighbors().filter(t=>!t.monster && t.constructor.name == 'Floor'))[0];
+    let freeSpace = shuffle(monster.monTile().getAdjacentPassableNeighbors().filter(t=>!cfm(t.x, t.y) && t.constructor.name == 'Floor'))[0];
     if( freeSpace ){
       freeSpace.replace(Trap);
     }
@@ -14,7 +14,7 @@ abilities = {
   },
   QUAKE: function(monster){                  
     for( monster of game_state.dungeon.monsters ){
-      let numWalls = 4 - monster.tile.getAdjacentPassableNeighbors().length;
+      let numWalls = 4 - monster.monTile().getAdjacentPassableNeighbors().length;
       monster.swing(numWalls*2);
       new Message(`The walls cave in on the ${monster.constructor.name}, dealing ${numWalls*2} damage!`);
     }
@@ -22,7 +22,7 @@ abilities = {
       player.moves = 0;
 		  player.tryMove(0, 0);
     }else{
-      player.swing((4 - player.tile.getAdjacentPassableNeighbors().length)*2);
+      player.swing((4 - player.monTile().getAdjacentPassableNeighbors().length)*2);
       abilities.endTurn(monster);
     }
   },
@@ -37,27 +37,27 @@ abilities = {
     }
   },
   MEND: function(monster){
-    monster.tile.setEffect(9834, COLOR_BLUE, COLOR_GREEN_NEON);
+    monster.monTile().setEffect(9834, COLOR_BLUE, COLOR_GREEN_NEON);
     monster.hp++;
   },
   AURA: function(monster){
-    monster.tile.getAdjacentNeighbors().forEach(function(t){
+    monster.monTile().getAdjacentNeighbors().forEach(function(t){
       t.setEffect(9834, COLOR_BLUE, COLOR_GREEN_NEON); // ☼
-      if(t.monster){
-        t.monster.hp++;
+      if(cfm(t.x, t.y)){
+        cfm(t.x, t.y)[0].hp++;
       }
     });
-    monster.tile.setEffect(9834, COLOR_BLUE, COLOR_GREEN_NEON);
-    monster.hp++;
+    monster.monTile().setEffect(9834, COLOR_BLUE, COLOR_GREEN_NEON);
+    cfm(t.x, t.y)[0].hp++;
   },
   DASH: function(monster){
     if( monster.lastMove[0] == 0 && monster.lastMove[1] == 0 ){
       return;
     }
-    let newTile = monster.tile;
+    let newTile = monster.monTile();
     while(true){
       let testTile = newTile.getNeighbor(monster.lastMove[0],monster.lastMove[1]);
-      if(testTile.passable && !testTile.monster){
+      if(testTile.passable && !cfm(testTile.x, testTile.y)){
         // play an effect on the tile
         testTile.setEffect(monster.glyph, COLOR_BLACK, COLOR_FUCHSIA);
         newTile = testTile;
@@ -65,32 +65,32 @@ abilities = {
         break;
       }
     }
-    if(monster.tile != newTile){
+    if(monster.monTile() != newTile){
       monster.move(newTile, true);
       newTile.getAdjacentNeighbors().forEach(t => {
-        if(t.monster){
+        if(cfm(t.x, t.y)){
           t.setEffect(monster.glyph, COLOR_BLACK, COLOR_FUCHSIA);
           //t.monster.stunned = true;
-          t.monster.swing(1);
+          cfm(t.x, t.y)[0].swing(1);
         }
       });
     }
   },
   POWER: function(monster){
     monster.bonusAttack=5;
-    monster.tile.setEffect(monster.glyph, COLOR_WHITE, COLOR_FUCHSIA);
+    monster.monTile().setEffect(monster.glyph, COLOR_WHITE, COLOR_FUCHSIA);
   },
   BOLT_RAY(monster, damage){
     if( monster.lastMove[0] == 0 && monster.lastMove[1] == 0 ){
       return;
     }
-    let newTile = monster.tile;
+    let newTile = monster.monTile();
     while(true){
       let testTile = newTile.getNeighbor(monster.lastMove[0], monster.lastMove[1]);
       if(testTile.passable){
         newTile = testTile;
-        if(newTile.monster){
-          newTile.monster.swing(damage);
+        if(cfm(newTile.x, newTile.y)){
+          cfm(newTile.x, newTile.y)[0].swing(damage);
         }
         newTile.setEffect(950, COLOR_WHITE, COLOR_BLUE);
       }else{
@@ -154,22 +154,22 @@ abilities = {
     if( monster.lastMove[0] == 0 && monster.lastMove[1] == 0 ){
       return;
     }
-    let newTile = monster.tile;
+    let newTile = monster.monTile();
     newTile.setEffect(9788, COLOR_FUCHSIA, COLOR_GREEN_NEON);
     let testTile = newTile.getNeighbor(monster.lastMove[0],monster.lastMove[1]).getNeighbor(monster.lastMove[0],monster.lastMove[1]);
     if(!testTile.passable && !monster.phaseWall){
       // teleport into a wall? That's YASD
       new Message(`The ${monster.constructor.name} was lost forever.`);
       monster.die();
-    }else if( testTile.monster ){
+    }else if( cfm(testTile.x, testTile.y) ){
       // teleport into a monster? Healthier one survives
       let myHP = monster.hp;
-      let thyHP = testTile.monster.hp;
-      testTile.monster.swing(myHP);
+      let thyHP = cfm(testTile.x, testTile.y)[0].hp;
+      cfm(testTile.x, testTile.y)[0].swing(myHP);
       monster.swing(thyHP);
     }
     newTile = testTile;
-    if(monster.tile != newTile){
+    if(monster.monTile() != newTile){
       monster.move(newTile, true);
       testTile.setEffect(9788, COLOR_FUCHSIA, COLOR_GREEN_NEON);
     }
@@ -189,9 +189,9 @@ abilities = {
     originalDirection.x = monster.lastMove[0];
     originalDirection.y = monster.lastMove[1];
     for(let k=0;k<directions.length;k++){
-      var testTile = monster.tile.getNeighbor(directions[k][0],directions[k][1]);
-      if( testTile.monster ){
-        testTile.monster.swing(1);
+      var testTile = monster.monTile().getNeighbor(directions[k][0],directions[k][1]);
+      if( cfm(testTile.x, testTile.y) ){
+        cfm(testTile.x, testTile.y)[0].swing(1);
       }
     }
     monster.lastMove = [originalDirection.x, originalDirection.y];
@@ -204,16 +204,16 @@ abilities = {
       new Message(`The ${monster.constructor.name} is exhausted.`);
       return;
     }
-    let newTile = monster.tile;
+    let newTile = monster.monTile();
     let testTile = newTile.getNeighbor(monster.lastMove[0],monster.lastMove[1]);
-    if(testTile.passable && !testTile.monster){
+    if(testTile.passable && !cfm(testTile.x, testTile.y)){
       // play an effect on the tile
       testTile.setEffect(monster.glyph, COLOR_BLACK, COLOR_FUCHSIA);
       newTile = testTile;
     }else{
       new Message(`The ${monster.constructor.name} couldn't roll due to an obstacle.`);
     }
-    if(monster.tile != newTile){
+    if(monster.monTile() != newTile){
       monster.move(newTile, true);
       monster.stamina--;
     }
