@@ -16,7 +16,7 @@ function randomPassableTile(className){
     let x = randomRange(0,game_state.dungeon.dim.x-1);
     let y = randomRange(0,game_state.dungeon.dim.y-1);
     tile = getTile(x, y);
-    return tile.passable && !tile.monster && ( className ? tile.constructor.name == className : true );
+    return tile.passable && !cfm(tile.x, tile.y) && ( className ? tile.constructor.name == className : true );
   });
   return tile;
 }
@@ -308,11 +308,11 @@ function randomUID() {
 
 function cfm(x,y) { // checkForMonster
   // TODO: move x and y into creature stats, go from there?
-  var mons = game_state.dungeon.monsters.filter( t => t.tile.x == x && t.tile.y == y );
+  var mons = game_state.dungeon.monsters.filter( t => t.x == x && t.y == y );
   if( mons.length ){
     return mons;
   }else{
-    return ( player.tile.x == x && player.tile.y == y ? [player] : false );
+    return ( player.x == x && player.y == y ? [player] : false );
   }
 }
 
