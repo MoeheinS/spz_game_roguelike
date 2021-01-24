@@ -21,6 +21,7 @@ class Monster {
 		this.attacks_inc = 1;
 		//this.alerted = false;
 		this.bonusAttack = 0; // TODO: this ties into the TSL-like combat system
+		this.damage = 1;
 
 		this.stamina = 3;
 		this.stamina_base = 3;
