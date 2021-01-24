@@ -58,8 +58,7 @@ game_state = {
       sokoban: 0.1
     },
     tiles: [],
-    spawners: [],
-    monsters: []
+    spawners: []
   },
 
   render: {

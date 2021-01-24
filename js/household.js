@@ -307,7 +307,7 @@ function randomUID() {
 }
 
 function cfm(x,y) { // checkForMonster
-  var mons = game_state.dungeon.monsters.filter( t => t.x == x && t.y == y );
+  var mons = Monster.all.filter( t => t.x == x && t.y == y );
   if( mons.length ){
     return mons[0];
   }else{
@@ -333,8 +333,8 @@ function draw(){
         getTile(i,j).draw();
       }
     }
-    for(let i=0;i<game_state.dungeon.monsters.length;i++){
-      game_state.dungeon.monsters[i].draw();
+    for(let i=0;i<Monster.all.length;i++){
+      Monster.all[i].draw();
     }
     player.draw();
 
@@ -354,7 +354,7 @@ function draw(){
 function tick() {
   // update player last
   Promise.all(
-    game_state.dungeon.monsters.map(function(monster){
+    Monster.all.map(function(monster){
       if(!monster.dead){
         console.log(`${monster.uid} acting`);
         return monster.update();
@@ -363,7 +363,7 @@ function tick() {
   )
   .then(async function(){
     await Generator.rebeam();
-    if( game_state.dungeon.monsters.length ){
+    if( Monster.all.length ){
       console.warn('All monsters have acted');
     }
     player.update().then(function(){

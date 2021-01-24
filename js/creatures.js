@@ -166,8 +166,6 @@ class Monster {
 
 	void(){
 		console.log(`A ${this.constructor.name} (${this.uid}) is destroyed`);
-		let myIndex = game_state.dungeon.monsters.findIndex( t => t.uid == this.uid );
-		game_state.dungeon.monsters.splice(myIndex, 1);
 		// NEW: void from the Monster.all array;
 		let i = Monster.all.indexOf(this);
 		Monster.all.splice(i, 1);
@@ -473,8 +471,8 @@ class Player extends Monster {
 
 	calcLos(){
 	// proximity based trigger
-	// 	for( let i=0; i<game_state.dungeon.monsters.length; i++ ){
-	// 		game_state.dungeon.monsters[i].hidden = ( game_state.dungeon.monsters[i].tile.dist(player.tile) < 6 ? false : true);
+	// 	for( let i=0; i<Monster.all.length; i++ ){
+	// 		Monster.all[i].hidden = ( Monster.all[i].monTile().dist(player.monTile()) < 6 ? false : true);
 	// 	}
 		let x = this.x;
 		let y = this.y;
@@ -575,9 +573,7 @@ class Ghost extends Monster {
 	die(){ // copied because ghosts don't bleed
 		this.dead = true;
 		this.glyph = 37; // %
-		// TODO: optionally some creatures could turn into something else on death...
-		let myIndex = game_state.dungeon.monsters.findIndex( t => t.uid == this.uid );
-		game_state.dungeon.monsters.splice(myIndex, 1);
+		this.void();
 	}
 }
 
@@ -677,7 +673,7 @@ class Centipede extends Monster {
 */
 
 function generateMonsters() {
-	game_state.dungeon.monsters = [];
+	Monster.all = [];
 	let numMonsters = game_state.depth+game_state.initial_spawn;
 	for(let i=0;i<numMonsters;i++){
 		spawnMonster();
@@ -703,7 +699,6 @@ function spawnMonster(type) {
 		if( spawnSpots.length ){
 			let monster = new monsterType(shuffle(spawnSpots)[0]);
 			abilities.endTurn(monster);
-			game_state.dungeon.monsters.push(monster);
 			new Message(`Spawned a ${monster.constructor.name} (${monster.uid}) at ${monster.x},${monster.y}.`, true);
 		}else{
 			new Message('Could not spawn more monsters; no or no open spawn spots.', true);
@@ -720,7 +715,6 @@ async function summonMonster(type, tile) {
 	if( !tryTile.monster ){
 		let monster = new monsterType(tryTile);
 		abilities.endTurn(monster);
-		game_state.dungeon.monsters.push(monster);
 		new Message(`Spawned a ${monster.constructor.name} (${monster.uid}) at ${monster.x},${monster.y}.`, true);
 		return monster;
 	}else{
