@@ -83,7 +83,7 @@ class Terrain {
 		game_state.dungeon.tiles[this.x][this.y] = new newTileType(this.x, this.y);
 		// experimental
 		if( cfm(this.x, this.y) ){
-			cfm(this.x, this.y)[0].move(getTile(this.x, this.y));
+			cfm(this.x, this.y).move(getTile(this.x, this.y));
 		}
 		return game_state.dungeon.tiles[this.x][this.y];
 	}
@@ -164,9 +164,9 @@ class Terrain {
 						ctx.strokeStyle = COLOR_YELLOW;
 						ctx.lineWidth = 2;
 						ctx.strokeText( String.fromCharCode(( this.inventory.length == 1 ? this.inventory[0].glyph : 42)), 
-							cfm(this.x, this.y)[0].getDisplayX()*tileSize.x+1*tileSize.x, cfm(this.x, this.y)[0].getDisplayY()*tileSize.y);
+							cfm(this.x, this.y).getDisplayX()*tileSize.x+1*tileSize.x, cfm(this.x, this.y).getDisplayY()*tileSize.y);
 						ctx.fillText( String.fromCharCode(( this.inventory.length == 1 ? this.inventory[0].glyph : 42)), 
-							cfm(this.x, this.y)[0].getDisplayX()*tileSize.x+1*tileSize.x, cfm(this.x, this.y)[0].getDisplayY()*tileSize.y);
+							cfm(this.x, this.y).getDisplayX()*tileSize.x+1*tileSize.x, cfm(this.x, this.y).getDisplayY()*tileSize.y);
 	
 						ctx.restore();
 					}else{

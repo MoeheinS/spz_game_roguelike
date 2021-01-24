@@ -112,7 +112,7 @@ class Tooltip {
 
     let monsterInfo = false;
     if(cfm(tile.x, tile.y)){
-      monsterInfo = ( cfm(tile.x, tile.y)[0].isPlayer ? 'You' : cfm(tile.x, tile.y)[0].constructor.name );
+      monsterInfo = ( cfm(tile.x, tile.y).isPlayer ? 'You' : cfm(tile.x, tile.y).constructor.name );
     }
 
     this.el.querySelector('.tooltip__info').innerHTML = 

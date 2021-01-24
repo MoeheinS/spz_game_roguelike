@@ -115,10 +115,9 @@ class Monster {
 				this.moves--;
 				this.move(newTile);
 			}else{
-				if( Math.floor(this.attacks) > 0 && cfm(newTile.x, newTile.y) && this.isPlayer != cfm(newTile.x, newTile.y)[0].isPlayer ){
+				if( Math.floor(this.attacks) > 0 && cfm(newTile.x, newTile.y) && this.isPlayer != cfm(newTile.x, newTile.y).isPlayer ){
 					this.attacks--;
-					// TODO: use this.attack instead of hard 1?
-					cfm(newTile.x, newTile.y)[0].swing(1 + this.bonusAttack, this);
+					cfm(newTile.x, newTile.y).swing(this.damage + this.bonusAttack, this);
 					this.bonusAttack = 0;
 
 					this.offsetX = (newTile.x - this.x)/2;         
@@ -207,7 +206,7 @@ class Monster {
 			neighbors = this.monTile().getAdjacentPassableNeighbors(this.canDiagonal);
 		}
 	 
-	 	neighbors = neighbors.filter(t => cfm(t.x, t.y) == false || cfm(t.x, t.y)[0].isPlayer);
+	 	neighbors = neighbors.filter(t => cfm(t.x, t.y) == false || cfm(t.x, t.y).isPlayer);
 
 	 	if( neighbors.length ){
 			neighbors.sort((a,b) => a.dist(player.monTile()) - b.dist(player.monTile()));
@@ -481,7 +480,7 @@ class Player extends Monster {
 		let y = this.y;
 		fov.compute(x, y, 6, 
 			function(x, y){ game_state.dungeon.tiles[x][y].passable },
-			function(x, y){ if( cfm(x,y) && !cfm(x,y)[0].isPlayer ){ cfm(x,y)[0].alerted = true; } }
+			function(x, y){ if( cfm(x,y) && !cfm(x,y).isPlayer ){ cfm(x,y).alerted = true; } }
 		);
 	}
 

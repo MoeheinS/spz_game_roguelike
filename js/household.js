@@ -307,12 +307,11 @@ function randomUID() {
 }
 
 function cfm(x,y) { // checkForMonster
-  // TODO: move x and y into creature stats, go from there?
   var mons = game_state.dungeon.monsters.filter( t => t.x == x && t.y == y );
   if( mons.length ){
-    return mons;
+    return mons[0];
   }else{
-    return ( player.x == x && player.y == y ? [player] : false );
+    return ( player.x == x && player.y == y ? player : false );
   }
 }
 

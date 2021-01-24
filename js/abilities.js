@@ -44,11 +44,11 @@ abilities = {
     monster.monTile().getAdjacentNeighbors().forEach(function(t){
       t.setEffect(9834, COLOR_BLUE, COLOR_GREEN_NEON); // ☼
       if(cfm(t.x, t.y)){
-        cfm(t.x, t.y)[0].hp++;
+        cfm(t.x, t.y).hp++;
       }
     });
     monster.monTile().setEffect(9834, COLOR_BLUE, COLOR_GREEN_NEON);
-    cfm(t.x, t.y)[0].hp++;
+    cfm(t.x, t.y).hp++;
   },
   DASH: function(monster){
     if( monster.lastMove[0] == 0 && monster.lastMove[1] == 0 ){
@@ -71,7 +71,7 @@ abilities = {
         if(cfm(t.x, t.y)){
           t.setEffect(monster.glyph, COLOR_BLACK, COLOR_FUCHSIA);
           //t.monster.stunned = true;
-          cfm(t.x, t.y)[0].swing(1);
+          cfm(t.x, t.y).swing(1);
         }
       });
     }
@@ -90,7 +90,7 @@ abilities = {
       if(testTile.passable){
         newTile = testTile;
         if(cfm(newTile.x, newTile.y)){
-          cfm(newTile.x, newTile.y)[0].swing(damage);
+          cfm(newTile.x, newTile.y).swing(damage);
         }
         newTile.setEffect(950, COLOR_WHITE, COLOR_BLUE);
       }else{
@@ -164,8 +164,8 @@ abilities = {
     }else if( cfm(testTile.x, testTile.y) ){
       // teleport into a monster? Healthier one survives
       let myHP = monster.hp;
-      let thyHP = cfm(testTile.x, testTile.y)[0].hp;
-      cfm(testTile.x, testTile.y)[0].swing(myHP);
+      let thyHP = cfm(testTile.x, testTile.y).hp;
+      cfm(testTile.x, testTile.y).swing(myHP);
       monster.swing(thyHP);
     }
     newTile = testTile;
@@ -191,7 +191,7 @@ abilities = {
     for(let k=0;k<directions.length;k++){
       var testTile = monster.monTile().getNeighbor(directions[k][0],directions[k][1]);
       if( cfm(testTile.x, testTile.y) ){
-        cfm(testTile.x, testTile.y)[0].swing(1);
+        cfm(testTile.x, testTile.y).swing(1);
       }
     }
     monster.lastMove = [originalDirection.x, originalDirection.y];
