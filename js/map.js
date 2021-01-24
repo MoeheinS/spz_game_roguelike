@@ -285,9 +285,7 @@ function seedChest( tile, loot ){
 
 async function drunkWalk(tile, diagonals, allowedTypes){
 	// && !t.monster added to avoid the sokoban problem
-	// FIXME: checking for monster here introduces the mother of all infinite loops, so I took it out haha
-	// FIXME: actually caused by repeatedly spawning on top of the stairs, confirm and restore
-	var attempt = tile.getAdjacentNeighbors(diagonals).filter( t => allowedTypes.includes(t.constructor.name));// && !cfm(t.x, t.y) );
+	var attempt = tile.getAdjacentNeighbors(diagonals).filter( t => allowedTypes.includes(t.constructor.name) && !cfm(t.x, t.y) );
 	if( attempt[0] ){
 		return ( inBounds(attempt[0].x,attempt[0].y) ? attempt[0] : false );
 	}else{

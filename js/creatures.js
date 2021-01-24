@@ -131,7 +131,6 @@ class Monster {
 			}
 		}else{ // this entire else is so you can bump into walls and pass a turn
 			this.moves--;
-			// TODO: this might be where you bump a chest to open it, or try to push a boulder
 			this.offsetX = (newTile.x - this.x)/2;         
 			this.offsetY = (newTile.y - this.y)/2; 
 			if( TREASURE_HOLDERS.includes(newTile.constructor.name) ){
