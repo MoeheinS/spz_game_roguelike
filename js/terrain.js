@@ -150,7 +150,7 @@ class Terrain {
 
 		if( this.spotted || game_state.truesight || !game_state.fov_enabled ){
 
-			drawChar( this, this.x, this.y, this.renderOverride);
+			drawChar( ( !cfm(this.x, this.y) ? this : false ), this.x, this.y, this.renderOverride);
 			if( this.inventory.length && this.passable ){
 				if( !cfm(this.x, this.y) ){
 					drawChar( {glyph: ( this.inventory.length == 1 ? this.inventory[0].glyph : 42), fillStyle: COLOR_BLACK}, this.x, this.y, this.renderOverride);
