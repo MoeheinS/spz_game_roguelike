@@ -133,19 +133,19 @@ function drawTitleScreen(){
                 (1+game_state.dungeon.dim.y/2)*tileSize.y
               );
   
-  ctx.fillText( `U`, 
+  ctx.fillText( `U / 7`, 
                 (-5+game_state.dungeon.dim.x/2)*tileSize.x + 0.5*tileSize.x, 
                 (-3+game_state.dungeon.dim.y/2)*tileSize.y
               );
-  ctx.fillText( `I`, 
+  ctx.fillText( `I / 9`, 
                 (5+game_state.dungeon.dim.x/2)*tileSize.x + 0.5*tileSize.x, 
                 (-3+game_state.dungeon.dim.y/2)*tileSize.y
               );
-  ctx.fillText( `J`, 
+  ctx.fillText( `J / 1`, 
                 (-5+game_state.dungeon.dim.x/2)*tileSize.x + 0.5*tileSize.x, 
                 (5+game_state.dungeon.dim.y/2)*tileSize.y
               );
-  ctx.fillText( `K`, 
+  ctx.fillText( `K / 3`, 
                 (5+game_state.dungeon.dim.x/2)*tileSize.x + 0.5*tileSize.x, 
                 (5+game_state.dungeon.dim.y/2)*tileSize.y
               );

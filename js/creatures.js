@@ -312,34 +312,43 @@ class Player extends Monster {
 			switch (e.key) {
 				case 'w':
 				case 'ArrowUp':
+				case '8':
 					player.tryMove(0, -1);
 					break;
 				case 's':
 				case 'ArrowDown':
+				case '2':
 					player.tryMove(0, 1);
 					break;
 				case 'a':
 				case 'ArrowLeft':
+				case '4':
 					player.tryMove(-1, 0);
 					break;
 				case 'd':
 				case 'ArrowRight':
+				case '6':
 					player.tryMove(1, 0);
 					break;
 				// diagonals
 				case 'u':
+				case '7':
 					player.tryMove(-1, -1);
 					break;
 				case 'i':
+				case '9':
 					player.tryMove(1, -1);
 					break;
 				case 'j':
+				case '1':
 					player.tryMove(-1, 1);
 					break;
 				case 'k':
+				case '3':
 					player.tryMove(1, 1);
 					break;
 				case '.':
+				case '5':
 					player.moves = 0;
 					player.tryMove(0, 0);
 					break;
@@ -360,38 +369,47 @@ class Player extends Monster {
 			switch (e.key) {
 				case 'w':
 				case 'ArrowUp':
+				case '8':
 					game_state.camera_offset.y--;
 					break;
 				case 's':
 				case 'ArrowDown':
+				case '2':
 					game_state.camera_offset.y++;
 					break;
 				case 'a':
 				case 'ArrowLeft':
+				case '4':
 					game_state.camera_offset.x--;
 					break;
 				case 'd':
 				case 'ArrowRight':
+				case '6':
 					game_state.camera_offset.x++;
 					break;
 				// diagonals
 				case 'u':
+				case '7':
 					game_state.camera_offset.x--;
 					game_state.camera_offset.y--;
 					break;
 				case 'i':
+				case '9':
 					game_state.camera_offset.x++;
 					game_state.camera_offset.y--;
 					break;
 				case 'j':
+				case '1':
 					game_state.camera_offset.x--;
 					game_state.camera_offset.y++;
 					break;
 				case 'k':
+				case '3':
 					game_state.camera_offset.x++;
 					game_state.camera_offset.y++;
 					break;
 				case '.':
+				case '5':
 					game_state.camera_offset.x = 0;
 					game_state.camera_offset.y = 0;
 					break;
@@ -410,34 +428,43 @@ class Player extends Monster {
 			switch (e.key) {
 				case 'w':
 				case 'ArrowUp':
+				case '8':
 					player.lastMove = [0, -1];
 					break;
 				case 's':
 				case 'ArrowDown':
+				case '2':
 					player.lastMove = [0, 1];
 					break;
 				case 'a':
 				case 'ArrowLeft':
+				case '4':
 					player.lastMove = [-1, 0];
 					break;
 				case 'd':
 				case 'ArrowRight':
+				case '6':
 					player.lastMove = [1, 0];
 					break;
 				// diagonals
 				case 'u':
+				case '7':
 					player.lastMove = [-1, -1];
 					break;
 				case 'i':
+				case '9':
 					player.lastMove = [1, -1];
 					break;
 				case 'j':
+				case '1':
 					player.lastMove = [-1, 1];
 					break;
 				case 'k':
+				case '3':
 					player.lastMove = [1, 1];
 					break;
 				case '.':
+				case '5':
 					player.lastMove = [0, 0];
 					break;
 				default:
