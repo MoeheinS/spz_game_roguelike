@@ -91,3 +91,52 @@ hr {
 .container__canvas {
 	position: relative;
 }
+
+.messages__background {
+	position: absolute;
+	left: 0;
+	bottom: 0;
+	width: 100%;
+	height: 100%;
+	display: flex;
+	flex-direction: column;
+	justify-content: flex-end;
+
+	font-family: 'ega';
+}
+
+.messages__background .messages__history {
+	overflow-y: auto;
+}
+
+.messages__background .messages__history p:last-child {
+	display: none;
+}
+
+.messages__background .messages__history p {
+	padding: 0.5rem;
+	opacity: 0.25;
+	
+	background-color: #f8b31200;
+
+	-webkit-mask-image: linear-gradient(to right, rgba(0,0,0,1), rgba(0,0,0,0) 20%, rgba(0,0,0,0));
+	-webkit-mask-repeat: no-repeat;
+	-webkit-mask-position: left top, left bottom;
+}
+.messages__background .messages__history p:hover {
+	z-index: 99;
+	opacity: 1;
+	background-color: #f8b312e6;
+
+	-webkit-mask-image: none;
+}
+.messages__background .messages__history p[data-repeat]:after {
+  content: '  (x' attr(data-repeat) ')';
+  font-weight: bold;
+}
+.messages__background .messages__latest {
+  background: var(--eo__black);
+  color: var(--eo__yellow);
+  padding: 0.5rem;
+  border: 0.125rem solid var(--eo__yellow);
+}

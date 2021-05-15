@@ -26,22 +26,22 @@ class Message {
   }
   static updateDOM(m, clear) {
     if( clear ){
-      dom_messageWindow.querySelector('.window__title__text').innerText = 'Message history';
-      return dom_messageWindow.querySelector('.window__body').innerHTML = '';
+      document.querySelector('.messages__latest').innerText = 'Message history';
+      return document.querySelector('.messages__history').innerHTML = '';
     }
     if( m.hidden ){ // TODO: implement wizardmode toggle which lets these messages get logged too
       return;
     }
-    dom_messageWindow.querySelector('.window__title__text').innerText = Message.latest(false);
+    document.querySelector('.messages__latest').innerText = Message.latest(false);
     let p = document.createElement('p');
         p.innerText = m.message;
         //p.dataset.repeat = 0;
-    let latestMessage = dom_messageWindow.querySelector('.window__body').lastChild;
+    let latestMessage = document.querySelector('.messages__history').lastChild;
     if( latestMessage && latestMessage.innerText == m.message ){
       let repeatAttrib = ( latestMessage.dataset.repeat ? parseInt(latestMessage.dataset.repeat)+1 : 1 );
       latestMessage.dataset.repeat = repeatAttrib;
     }else{
-      dom_messageWindow.querySelector('.window__body').append(p);
+      document.querySelector('.messages__history').append(p);
     }
   }
 }

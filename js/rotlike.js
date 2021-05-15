@@ -96,6 +96,7 @@ document.querySelector("html").onkeydown = function(e){
       flowControl('start');
       break;
     case 'dead':
+      Message.wipe();
       flowControl('title');
       break;
     case 'running':

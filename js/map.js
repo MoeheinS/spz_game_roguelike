@@ -211,6 +211,7 @@ class Map { // new Room(0,0,tileMap); // instead of tileMap use tileMap_down onc
 }
 
 async function startLevel(playerHP, oneWay, directionDown) {
+	Message.wipe();
   spawnRateReset(15);
 
   if( game_state.debug_mapper ){
