@@ -6,6 +6,36 @@ let itemCompendium = [
   }
 ];
 
+/*
+  Item TODO:s
+    Ladder: step over Lava / Pit terrain (TODO: add Lava terrain...)
+      In practice lava terrain becomes a los-transparent wall that you get to phase through. Lots of shenanigans for little payoff
+    Flute: Put certain monsters to sleep
+      All non-deaf, corporeal, non-undead monsters. Is it worth? What range?
+    Boomerang: Ranged attack (with stun?)
+      Consumable item ranged attack, that spawns a Boomerang item on the monsters square or adjacent
+    Mirrored Fullplate: reflect beam terrain
+    Potion: heal to full on death
+      Or other effects, such as + damage, + def, a burst of speed (5 actions / attacks)
+      Or a cursed effect such as poison (hp to 1), blindness, weakness (-damage)
+    Hammer: crush walls to boulders, boulders to dust
+      In theory you could crushwalk your way to a stairs, 2 actions at a time
+    Wad of cash: bribe certain monsters
+      corporeal non-undead. Ideally they would join your faction, but that means implementing some sort of faction AI
+      easy solution is to have them NOT attack you if they could; lasts until they take damage from any source
+    Tower shield: block 1 attack per action?
+      1v1 invincibility, makes a 2v1 a 1v1
+    Horned helmet: bullrush ability
+      Great for rapid traversal and/or paired with the lance
+    Genocidal dagger: attacking a monster deals damage to the species? Killing 1 deals damage to species? Killing 1 kills species?
+      Love it, should perhaps be the macguffin
+    Lance: gain +1 damage for each turn you move in the same direction, lost on attacking or changing directions
+    Ankh staff: place an ankh (wall?) that monsters cannot pass
+      wall is perpendicular to the cardinal direction you cast it in, max of 2 walls
+      Allows you to use pillars for some interesting plays
+      You stepping on any ankh tile destroys them all (behavior similar to Hazard tile)
+*/
+
 class Drop {
 	constructor(x, y, name, amount) {
     for( let i of itemCompendium ){
