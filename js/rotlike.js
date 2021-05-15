@@ -71,7 +71,7 @@ game_state = {
   depth: 1,
   depth_max: 1,
   initial_spawn: -1,
-  startHP: 3,
+  startHP: 6,
   maxHp: 6,
   spawnRate: 15,
   spawnCounter: 15,

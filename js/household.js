@@ -95,11 +95,11 @@ function drawTitleScreen(){
 
   ctx.strokeStyle = COLOR_YELLOW;
   ctx.lineWidth = 0.75*game_state.fontSize.size;
-  ctx.strokeText( '3', 
+  ctx.strokeText( '6', 
                   (-2+(game_state.dungeon.dim.x/2))*tileSize.x + 0.5*tileSize.x, 
                   (-1+game_state.dungeon.dim.y/2)*tileSize.y
                 );
-  ctx.fillText( '3', 
+  ctx.fillText( '6', 
                 (-2+(game_state.dungeon.dim.x/2))*tileSize.x + 0.5*tileSize.x, 
                 (-1+game_state.dungeon.dim.y/2)*tileSize.y
               );

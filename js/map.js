@@ -1,10 +1,6 @@
 class Map { // new Room(0,0,tileMap); // instead of tileMap use tileMap_down once and tileMap_up once
 	constructor(){}
 
-  static generate(){
-
-  }
-
   static flood(tileType){
     game_state.dungeon.tiles = [];
     for( let i=0; i<game_state.dungeon.dim.x; i++ ){
@@ -194,10 +190,10 @@ class Map { // new Room(0,0,tileMap); // instead of tileMap use tileMap_down onc
 
   static descend(hp, oneWay){ // player.hp
 		game_state.depth++;
-		let hp_bonus = ( game_state.depth > game_state.depth_max ? 1 : 0 );
+		let hp_refill = ( game_state.depth > game_state.depth_max ? 1 : 0 );
 		game_state.depth_max = Math.max( game_state.depth, game_state.depth_max );
-		startLevel(Math.min(game_state.maxHp, hp+hp_bonus), oneWay, true);
-		// TODO: track max depth so the +1 hp only happens when exceeding that
+		startLevel(( hp_refill ? game_state.maxHp : hp ), oneWay, true);
+		// HP refills to max each time you reach a new depth
 		/* 
 			TODO: Pit now lands you in a level which doesn't have an Up Stairs, making it one-way down.
 			Perhaps we need a Rope ladder -> a one-way UP
