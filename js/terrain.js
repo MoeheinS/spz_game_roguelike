@@ -207,7 +207,6 @@ class Tree extends Terrain {
   constructor(x, y){
 		super(x, y, {x: 132, y: 208}, false);
 		this.glyph = 165;
-		this.transparent = false;
 	}
 }
 class SpawnerWall extends Terrain {
