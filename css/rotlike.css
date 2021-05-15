@@ -119,6 +119,9 @@ hr {
 	
 	background-color: #f8b31200;
 
+	mask-image: linear-gradient(to right, rgba(0,0,0,1), rgba(0,0,0,0) 20%, rgba(0,0,0,0));
+	mask-repeat: no-repeat;
+	mask-position: left top, left bottom;
 	-webkit-mask-image: linear-gradient(to right, rgba(0,0,0,1), rgba(0,0,0,0) 20%, rgba(0,0,0,0));
 	-webkit-mask-repeat: no-repeat;
 	-webkit-mask-position: left top, left bottom;
@@ -128,6 +131,7 @@ hr {
 	opacity: 1;
 	background-color: #f8b312e6;
 
+	mask-image: none;
 	-webkit-mask-image: none;
 }
 .messages__background .messages__history p[data-repeat]:after {
