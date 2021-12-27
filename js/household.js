@@ -1,7 +1,5 @@
 function inBounds(x,y){
-  return x>0 && y>0 && x<game_state.dungeon.dim.x-1 && y<game_state.dungeon.dim.y-1;
-  // FIXME: inBounds can be improved, but we need to decide whether scale-to-fit canvas is a staple, because it breaks dom tooltip
-  //return x>=0 && y>=0 && x<game_state.dungeon.dim.x && y<game_state.dungeon.dim.y;
+  return x>=0 && y>=0 && x<game_state.dungeon.dim.x && y<game_state.dungeon.dim.y;
 }
 
 function getTile(x, y){

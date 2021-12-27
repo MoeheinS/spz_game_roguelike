@@ -90,6 +90,13 @@ hr {
 
 .container__canvas {
 	position: relative;
+	/* for unlocked map sizes, but interfered with by the background message history */
+	/* width: 100vw;
+	height: 100vh;
+	overflow: scroll; */
+}
+canvas {
+	outline: 3px solid var(--eo__black);
 }
 
 .messages__background {
